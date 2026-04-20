@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Server as HttpServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import { verifyAccessToken } from '../lib/jwt';

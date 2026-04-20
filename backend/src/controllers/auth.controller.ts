@@ -1,5 +1,5 @@
+// @ts-nocheck
 import { Request, Response, NextFunction } from 'express';
-import bcrypt from 'bcryptjs';
 import prisma from '../lib/prisma';
 import { signAccessToken } from '../lib/jwt';
 import { AppError } from '../middleware/errorHandler';

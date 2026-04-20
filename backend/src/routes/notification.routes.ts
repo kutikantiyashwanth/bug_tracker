@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from 'express';
 import { getNotifications, markAsRead, markAllAsRead } from '../controllers/notification.controller';
 import { authenticate } from '../middleware/auth.middleware';

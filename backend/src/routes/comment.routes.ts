@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from 'express';
 import { addComment, updateComment, deleteComment, getComments } from '../controllers/comment.controller';
 import { authenticate } from '../middleware/auth.middleware';

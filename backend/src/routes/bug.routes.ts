@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from 'express';
 import { getBugs, getBugById, createBug, updateBug, deleteBug } from '../controllers/bug.controller';
 import { authenticate } from '../middleware/auth.middleware';

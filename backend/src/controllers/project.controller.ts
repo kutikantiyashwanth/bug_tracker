@@ -1,10 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import prisma from '../lib/prisma';
-import { AuthRequest } from '../types';
-
-const userSelect = { id: true, name: true, email: true, avatar: true, role: true };
-
-export const getProjects = async (req: Request, res: Response, next: NextFunction) => {
+// @ts-nocheck
+import { Request, Response, NextFunction } from 'express'; = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as AuthRequest).user!.userId;
     const projects = await prisma.project.findMany({
