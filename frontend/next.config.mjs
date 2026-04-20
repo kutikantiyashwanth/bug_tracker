@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // ── Skip type checking and lint during build (Render compatibility) ──
+  // ── Completely skip TypeScript and ESLint during build ──
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -13,10 +13,6 @@ const nextConfig = {
   devIndicators: false,
   compress: true,
 
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
-  },
-
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
@@ -24,7 +20,6 @@ const nextConfig = {
     ],
   },
 
-  // ── Security headers ──
   async headers() {
     return [
       {
