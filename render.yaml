@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bug-tracker-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: npx ts-node --transpile-only --skip-project src/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001

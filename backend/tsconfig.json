@@ -8,21 +8,20 @@
     "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "strictBindCallApply": false,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-    "alwaysStrict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "forceConsistentCasingInFileNames": false,
+    "isolatedModules": true,
     "resolveJsonModule": true,
     "declaration": false,
     "sourceMap": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types"]
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
