@@ -1230,16 +1230,17 @@ app.get("/api/v1/projects/:projectId/analytics", authMiddleware, async (req: any
 // ─── Start Server ───
 const PORT = parseInt(process.env.PORT || "5000", 10);
 
+// Handle uncaught errors gracefully so server stays up
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err.message);
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled Rejection:", reason);
+});
+
 httpServer.listen(PORT, "0.0.0.0", () => {
-  console.log(`
-  🚀 Student Bug Tracker API
-  ──────────────────────────
-  🌐 Server:    http://0.0.0.0:${PORT}
-  📡 Socket.io: ws://0.0.0.0:${PORT}
-  🏥 Health:    http://0.0.0.0:${PORT}/api/v1/health
-  📚 Database:  PostgreSQL (Prisma)
-  ──────────────────────────
-  `);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🏥 Health: http://0.0.0.0:${PORT}/api/v1/health`);
 });
 
 export { io };
