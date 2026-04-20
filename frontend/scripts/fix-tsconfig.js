@@ -1,43 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 
-// ── Delete ALL TypeScript cache files that could restore NodeNext ──
-const filesToDelete = [
-  path.join(__dirname, '..', 'tsconfig.tsbuildinfo'),
-  path.join(__dirname, '..', '.next', 'tsconfig.tsbuildinfo'),
-  path.join(__dirname, '..', '.next', 'cache', 'tsbuildinfo.json'),
-];
-
-filesToDelete.forEach(f => {
-  try {
-    if (fs.existsSync(f)) {
-      fs.unlinkSync(f);
-      console.log(`🗑️  Deleted: ${f}`);
-    }
-  } catch (e) {}
+// Delete all cache
+['tsconfig.tsbuildinfo', '.next/tsconfig.tsbuildinfo'].forEach(f => {
+  const full = path.join(__dirname, '..', f);
+  try { if (fs.existsSync(full)) fs.unlinkSync(full); } catch(e) {}
 });
+try { fs.rmSync(path.join(__dirname, '..', '.next', 'cache'), { recursive: true, force: true }); } catch(e) {}
 
-// ── Delete entire .next/cache to prevent stale TypeScript state ──
-const nextCache = path.join(__dirname, '..', '.next', 'cache');
-try {
-  if (fs.existsSync(nextCache)) {
-    fs.rmSync(nextCache, { recursive: true, force: true });
-    console.log('🗑️  Deleted .next/cache');
-  }
-} catch (e) {}
-
-// ── Write correct tsconfig.json ──
+// Write tsconfig that matches what Next.js 14+ wants
+// Using NodeNext for BOTH module and moduleResolution to satisfy TS5109
 const tsconfig = {
   compilerOptions: {
-    target: 'es5',
+    target: 'ES2017',
     lib: ['dom', 'dom.iterable', 'esnext'],
     allowJs: true,
     skipLibCheck: true,
     strict: false,
     noEmit: true,
     esModuleInterop: true,
-    module: 'esnext',
-    moduleResolution: 'bundler',
+    module: 'NodeNext',
+    moduleResolution: 'NodeNext',
     resolveJsonModule: true,
     isolatedModules: true,
     jsx: 'preserve',
@@ -49,7 +32,8 @@ const tsconfig = {
   exclude: ['node_modules']
 };
 
-const tsconfigPath = path.join(__dirname, '..', 'tsconfig.json');
-fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
-console.log('✅ tsconfig.json written with moduleResolution: bundler');
-console.log('✅ All TypeScript cache cleared');
+fs.writeFileSync(
+  path.join(__dirname, '..', 'tsconfig.json'),
+  JSON.stringify(tsconfig, null, 2)
+);
+console.log('✅ tsconfig.json written with NodeNext/NodeNext');
