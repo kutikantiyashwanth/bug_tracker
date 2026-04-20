@@ -23,13 +23,30 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
   },
 });
 
 // ─── Middleware ───
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000" }));
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    // Allow localhost and any onrender.com domain
+    if (
+      origin.includes('localhost') ||
+      origin.includes('onrender.com') ||
+      origin === process.env.FRONTEND_URL
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Allow all for now
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(helmet());
 app.use(compression());
 app.use(morgan("dev"));
