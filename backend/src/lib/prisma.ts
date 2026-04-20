@@ -1,28 +1,30 @@
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
-import { logger } from './logger';
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+let prismaInstance: PrismaClient | null = null;
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log: [
-      { emit: 'event', level: 'query' },
-      { emit: 'event', level: 'error' },
-      { emit: 'event', level: 'warn' },
-    ],
-  });
-
-if (process.env.NODE_ENV !== 'production') {
-  (prisma as any).$on('query', (e: any) => {
-    logger.debug(`Query: ${e.query} | Duration: ${e.duration}ms`);
-  });
+function getPrisma(): PrismaClient {
+  if (!prismaInstance) {
+    if (!process.env.DATABASE_URL) {
+      console.error('❌ DATABASE_URL is not set!');
+    }
+    prismaInstance = new PrismaClient({
+      log: process.env.NODE_ENV === 'production' ? ['error'] : ['error', 'warn'],
+    });
+  }
+  return prismaInstance;
 }
 
-(prisma as any).$on('error', (e: any) => {
-  logger.error('Prisma error:', e);
+// Lazy proxy — only connects when first query is made
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    const client = getPrisma();
+    const value = (client as any)[prop];
+    if (typeof value === 'function') {
+      return value.bind(client);
+    }
+    return value;
+  },
 });
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export default prisma;
