@@ -1241,13 +1241,36 @@ process.on("unhandledRejection", (reason) => {
   console.error("Unhandled Rejection:", reason);
 });
 
-// Start listening IMMEDIATELY — before any DB connection
-// This ensures Render detects the open port
-httpServer.listen(PORT, "0.0.0.0", () => {
+httpServer.listen(PORT, "0.0.0.0", async () => {
   console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🏥 Health: http://0.0.0.0:${PORT}/api/v1/health`);
   console.log(`🗄️  DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
   console.log(`🔑 JWT_SECRET set: ${!!process.env.JWT_SECRET}`);
+
+  // ── Auto-seed demo accounts on startup ──
+  try {
+    const bcrypt = require("bcryptjs");
+    const hashedPassword = await bcrypt.hash("password123", 10);
+
+    // Upsert demo users
+    await prisma.user.upsert({
+      where: { email: "admin@test.com" },
+      update: {},
+      create: { name: "Admin User", email: "admin@test.com", password: hashedPassword, role: "ADMIN", skills: ["Project Management"] },
+    });
+    await prisma.user.upsert({
+      where: { email: "dev@test.com" },
+      update: {},
+      create: { name: "Developer User", email: "dev@test.com", password: hashedPassword, role: "DEVELOPER", skills: ["JavaScript", "React"] },
+    });
+    await prisma.user.upsert({
+      where: { email: "tester@test.com" },
+      update: {},
+      create: { name: "Tester User", email: "tester@test.com", password: hashedPassword, role: "TESTER", skills: ["QA", "Testing"] },
+    });
+    console.log("✅ Demo accounts ready: admin@test.com / dev@test.com / tester@test.com (password: password123)");
+  } catch (err) {
+    console.error("⚠️  Auto-seed failed (non-fatal):", err.message);
+  }
 });
 
 export { io };
