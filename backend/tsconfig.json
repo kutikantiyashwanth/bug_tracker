@@ -11,18 +11,17 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "isolatedModules": true,
     "resolveJsonModule": true,
     "declaration": false,
     "sourceMap": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "typeRoots": ["./node_modules/@types"]
+    "emitDecoratorMetadata": true
   },
   "ts-node": {
     "transpileOnly": true,
-    "files": true
+    "files": true,
+    "skipProject": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma/**/*"],
   "exclude": ["node_modules", "dist"]
 }

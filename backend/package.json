@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Backend API for Student Bug Tracker",
   "main": "src/index.ts",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "npx prisma generate && npx prisma migrate deploy && npx ts-node --transpile-only prisma/seed-simple.ts",
+    "build": "npx prisma generate && npx prisma migrate deploy && npx ts-node --transpile-only prisma/seed-simple.ts || true",
     "start": "npx ts-node --transpile-only --skip-project src/index.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate deploy",
