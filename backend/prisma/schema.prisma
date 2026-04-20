@@ -1,0 +1,265 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ───
+model User {
+  id            String          @id @default(uuid())
+  name          String
+  email         String          @unique
+  password      String
+  avatar        String?
+  role          Role            @default(DEVELOPER)
+  skills        String[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // Relations
+  ownedProjects Project[]       @relation("ProjectOwner")
+  memberships   ProjectMember[]
+  assignedTasks Task[]          @relation("TaskAssignee")
+  createdTasks  Task[]          @relation("TaskCreator")
+  assignedBugs  Bug[]           @relation("BugAssignee")
+  reportedBugs  Bug[]           @relation("BugReporter")
+  activities    ActivityLog[]
+  notifications Notification[]
+  comments      Comment[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  DEVELOPER
+  TESTER
+}
+
+// ─── Project ───
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  inviteCode  String          @unique @default(uuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relations
+  owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id])
+  ownerId     String
+  members     ProjectMember[]
+  tasks       Task[]
+  bugs        Bug[]
+  activities  ActivityLog[]
+  githubLinks GitHubLink[]
+  sprints     Sprint[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  role      Role     @default(DEVELOPER)
+  joinedAt  DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  @@unique([userId, projectId])
+  @@map("project_members")
+}
+
+// ─── Task ───
+model Task {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus  @default(BACKLOG)
+  priority    Priority    @default(MEDIUM)
+  dueDate     DateTime?
+  tags        String[]
+  position    Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  assignee    User?       @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  assigneeId  String?
+  createdBy   User        @relation("TaskCreator", fields: [createdById], references: [id])
+  createdById String
+  comments    Comment[]
+
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  TESTING
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ─── Bug ───
+model Bug {
+  id               String      @id @default(uuid())
+  title            String
+  description      String?
+  stepsToReproduce String?
+  severity         Severity    @default(MAJOR)
+  status           BugStatus   @default(OPEN)
+  screenshotUrl    String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  // Relations
+  project          Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId        String
+  assignee         User?       @relation("BugAssignee", fields: [assigneeId], references: [id])
+  assigneeId       String?
+  reporter         User        @relation("BugReporter", fields: [reporterId], references: [id])
+  reporterId       String
+  comments         Comment[]
+
+  @@map("bugs")
+}
+
+enum Severity {
+  MINOR
+  MAJOR
+  CRITICAL
+}
+
+enum BugStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+// ─── Activity Log ───
+model ActivityLog {
+  id          String       @id @default(uuid())
+  action      String
+  entityType  EntityType
+  entityId    String
+  details     String
+  createdAt   DateTime     @default(now())
+
+  // Relations
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@map("activity_logs")
+}
+
+enum EntityType {
+  TASK
+  BUG
+  PROJECT
+  MEMBER
+}
+
+// ─── Notification ───
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  DEADLINE_REMINDER
+  BUG_ASSIGNED
+  PROJECT_INVITE
+  TASK_MOVED
+  BUG_RESOLVED
+}
+
+// ─── GitHub Link ───
+model GitHubLink {
+  id        String   @id @default(uuid())
+  itemId    String   // task or bug id
+  itemType  String   // "task" | "bug"
+  linkType  String   // "issue" | "pr"
+  number    String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  @@unique([projectId, itemId])
+  @@map("github_links")
+}
+
+// ─── Sprint ───
+model Sprint {
+  id        String       @id @default(uuid())
+  name      String
+  goal      String?
+  startDate DateTime?
+  endDate   DateTime?
+  status    SprintStatus @default(PLANNED)
+  taskIds   String[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  @@map("sprints")
+}
+
+enum SprintStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+// ─── Comment ───
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    String?
+  bug       Bug?     @relation(fields: [bugId], references: [id], onDelete: Cascade)
+  bugId     String?
+
+  @@map("comments")
+}
