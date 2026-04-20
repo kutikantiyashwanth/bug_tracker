@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "npx prisma generate && (npx prisma migrate deploy || echo 'Migration skipped') && (npx ts-node --transpile-only prisma/seed-simple.ts || echo 'Seed skipped')",
-    "start": "npx ts-node --transpile-only --skip-project src/index.ts",
+    "start": "npx ts-node --transpile-only --skip-project src/server.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate deploy",
     "prisma:seed": "npx ts-node --transpile-only prisma/seed-simple.ts"
