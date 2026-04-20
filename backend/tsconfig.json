@@ -3,8 +3,6 @@
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020"],
-    "outDir": "./dist",
-    "rootDir": "./src",
     "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
@@ -12,16 +10,13 @@
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "declaration": false,
-    "sourceMap": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
   "ts-node": {
     "transpileOnly": true,
-    "files": true,
     "skipProject": true
   },
-  "include": ["src/**/*", "prisma/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
