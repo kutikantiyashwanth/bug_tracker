@@ -1,5 +1,8 @@
 // @ts-nocheck
 /* eslint-disable */
+// Load env vars FIRST before anything else
+require('dotenv').config();
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -1238,9 +1241,13 @@ process.on("unhandledRejection", (reason) => {
   console.error("Unhandled Rejection:", reason);
 });
 
+// Start listening IMMEDIATELY — before any DB connection
+// This ensures Render detects the open port
 httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🏥 Health: http://0.0.0.0:${PORT}/api/v1/health`);
+  console.log(`🗄️  DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
+  console.log(`🔑 JWT_SECRET set: ${!!process.env.JWT_SECRET}`);
 });
 
 export { io };
