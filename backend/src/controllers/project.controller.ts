@@ -1,17 +1,18 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import prisma from '../lib/prisma';
-import { AppError } from '../middleware/errorHandler';
 import { AuthRequest } from '../types';
 
-export const getProjects = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const userSelect = { id: true, name: true, email: true, avatar: true, role: true };
+
+export const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!.userId;
+    const userId = (req as AuthRequest).user!.userId;
     const projects = await prisma.project.findMany({
       where: { OR: [{ ownerId: userId }, { members: { some: { userId } } }] },
       include: {
-        owner: { select: { id: true, name: true, email: true, avatar: true } },
-        members: { include: { user: { select: { id: true, name: true, email: true, avatar: true, role: true } } } },
-        _count: { select: { bugs: true, members: true } },
+        owner: { select: userSelect },
+        members: { include: { user: { select: userSelect } } },
+        _count: { select: { bugs: true, members: true, tasks: true } },
       },
       orderBy: { updatedAt: 'desc' },
     });
@@ -19,31 +20,31 @@ export const getProjects = async (req: AuthRequest, res: Response, next: NextFun
   } catch (err) { next(err); }
 };
 
-export const getProjectById = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = (req as any).params;
     const project = await prisma.project.findUnique({
       where: { id },
       include: {
-        owner: { select: { id: true, name: true, email: true, avatar: true } },
-        members: { include: { user: { select: { id: true, name: true, email: true, avatar: true, role: true } } } },
-        _count: { select: { bugs: true } },
+        owner: { select: userSelect },
+        members: { include: { user: { select: userSelect } } },
+        _count: { select: { bugs: true, tasks: true } },
       },
     });
-    if (!project) throw new AppError('Project not found', 404);
+    if (!project) { res.status(404).json({ success: false, error: 'Project not found' }); return; }
     res.json({ success: true, data: project });
   } catch (err) { next(err); }
 };
 
-export const createProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createProject = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, description } = (req as any).body;
-    const ownerId = req.user!.userId;
+    const ownerId = (req as AuthRequest).user!.userId;
 
     const project = await prisma.project.create({
       data: { name, description, ownerId },
       include: {
-        owner: { select: { id: true, name: true, email: true, avatar: true } },
+        owner: { select: userSelect },
         _count: { select: { bugs: true, members: true } },
       },
     });
@@ -51,23 +52,23 @@ export const createProject = async (req: AuthRequest, res: Response, next: NextF
   } catch (err) { next(err); }
 };
 
-export const updateProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateProject = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = (req as any).params;
     const { name, description } = (req as any).body;
     const project = await prisma.project.update({
       where: { id },
-      data: { ...(name && { name }), ...(description !== undefined && { description }) },
-      include: {
-        owner: { select: { id: true, name: true, email: true, avatar: true } },
-        _count: { select: { bugs: true, members: true } },
+      data: {
+        ...(name && { name }),
+        ...(description !== undefined && { description }),
       },
+      include: { owner: { select: userSelect } },
     });
     res.json({ success: true, data: project });
   } catch (err) { next(err); }
 };
 
-export const deleteProject = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deleteProject = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = (req as any).params;
     await prisma.project.delete({ where: { id } });
@@ -75,22 +76,56 @@ export const deleteProject = async (req: AuthRequest, res: Response, next: NextF
   } catch (err) { next(err); }
 };
 
-export const addMember = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const joinProject = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { inviteCode } = (req as any).body;
+    const userId = (req as AuthRequest).user!.userId;
+    const userRole = (req as AuthRequest).user!.role;
+
+    const project = await prisma.project.findUnique({ where: { inviteCode } });
+    if (!project) { res.status(404).json({ success: false, error: 'Invalid invite code' }); return; }
+
+    // Check already member
+    const existing = await prisma.projectMember.findFirst({
+      where: { projectId: project.id, userId },
+    });
+    if (existing) { res.json({ success: true, data: project, message: 'Already a member' }); return; }
+
+    await prisma.projectMember.create({
+      data: { projectId: project.id, userId, role: userRole },
+    });
+
+    const updated = await prisma.project.findUnique({
+      where: { id: project.id },
+      include: {
+        owner: { select: userSelect },
+        members: { include: { user: { select: userSelect } } },
+        _count: { select: { bugs: true, members: true } },
+      },
+    });
+
+    res.json({ success: true, data: updated });
+  } catch (err) { next(err); }
+};
+
+export const addMember = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = (req as any).params;
     const { userId, role } = (req as any).body;
     const member = await prisma.projectMember.create({
       data: { projectId: id, userId, role },
-      include: { user: { select: { id: true, name: true, email: true, avatar: true } } },
+      include: { user: { select: userSelect } },
     });
     res.status(201).json({ success: true, data: member });
   } catch (err) { next(err); }
 };
 
-export const removeMember = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const removeMember = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, userId } = (req as any).params;
-    await prisma.projectMember.delete({ where: { projectId_userId: { projectId: id, userId } } });
+    await prisma.projectMember.deleteMany({
+      where: { projectId: id, userId },
+    });
     res.json({ success: true, message: 'Member removed' });
   } catch (err) { next(err); }
 };

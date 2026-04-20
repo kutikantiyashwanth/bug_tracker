@@ -1,77 +1,79 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import prisma from '../lib/prisma';
-import { cacheDel, CacheKeys } from '../lib/redis';
-import { AppError } from '../middleware/errorHandler';
 import { AuthRequest } from '../types';
-import { emitToBug } from '../socket';
 
-export const addComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const userSelect = { id: true, name: true, email: true, avatar: true, role: true };
+
+export const addComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { bugId } = req.params;
-    const { content, parentId } = req.body;
-
-    const bug = await prisma.bug.findUnique({ where: { id: bugId } });
-    if (!bug) throw new AppError('Bug not found', 404);
+    const { bugId, taskId } = (req as any).params;
+    const { content } = (req as any).body;
+    const userId = (req as AuthRequest).user!.userId;
 
     const comment = await prisma.comment.create({
-      data: { content, bugId, authorId: req.user!.userId, parentId },
-      include: {
-        author: { select: { id: true, name: true, username: true, avatarUrl: true } },
-        replies: { include: { author: { select: { id: true, name: true, username: true, avatarUrl: true } } } },
+      data: {
+        content,
+        userId,
+        ...(bugId && { bugId }),
+        ...(taskId && { taskId }),
       },
+      include: { user: { select: userSelect } },
     });
-
-    await cacheDel(CacheKeys.bug(bugId));
-    emitToBug(bugId, 'comment:new', comment);
-
-    if (bug.reporterId !== req.user!.userId) {
-      await prisma.notification.create({
-        data: {
-          userId: bug.reporterId, type: 'COMMENT_ADDED',
-          title: 'New comment on your bug',
-          message: `Someone commented on "${bug.title}"`,
-          metadata: { bugId, commentId: comment.id },
-        },
-      });
-    }
 
     res.status(201).json({ success: true, data: comment });
   } catch (err) { next(err); }
 };
 
-export const updateComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getComments = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
-    const { content } = req.body;
+    const { bugId, taskId } = (req as any).params;
+    const where: any = {};
+    if (bugId) where.bugId = bugId;
+    if (taskId) where.taskId = taskId;
+
+    const comments = await prisma.comment.findMany({
+      where,
+      include: { user: { select: userSelect } },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    res.json({ success: true, data: comments });
+  } catch (err) { next(err); }
+};
+
+export const updateComment = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = (req as any).params;
+    const { content } = (req as any).body;
+    const userId = (req as AuthRequest).user!.userId;
 
     const existing = await prisma.comment.findUnique({ where: { id } });
-    if (!existing) throw new AppError('Comment not found', 404);
-    if (existing.authorId !== req.user!.userId) throw new AppError('Forbidden', 403);
+    if (!existing) { res.status(404).json({ success: false, error: 'Comment not found' }); return; }
+    if (existing.userId !== userId) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
 
     const comment = await prisma.comment.update({
       where: { id },
-      data: { content, isEdited: true },
-      include: { author: { select: { id: true, name: true, username: true, avatarUrl: true } } },
+      data: { content },
+      include: { user: { select: userSelect } },
     });
 
-    await cacheDel(CacheKeys.bug(existing.bugId));
-    emitToBug(existing.bugId, 'comment:updated', comment);
     res.json({ success: true, data: comment });
   } catch (err) { next(err); }
 };
 
-export const deleteComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
+    const { id } = (req as any).params;
+    const userId = (req as AuthRequest).user!.userId;
+    const role = (req as AuthRequest).user!.role;
+
     const existing = await prisma.comment.findUnique({ where: { id } });
-    if (!existing) throw new AppError('Comment not found', 404);
-    if (existing.authorId !== req.user!.userId && req.user!.role !== 'ADMIN') {
-      throw new AppError('Forbidden', 403);
+    if (!existing) { res.status(404).json({ success: false, error: 'Comment not found' }); return; }
+    if (existing.userId !== userId && role !== 'ADMIN') {
+      res.status(403).json({ success: false, error: 'Forbidden' }); return;
     }
 
     await prisma.comment.delete({ where: { id } });
-    await cacheDel(CacheKeys.bug(existing.bugId));
-    emitToBug(existing.bugId, 'comment:deleted', { id });
     res.json({ success: true, message: 'Comment deleted' });
   } catch (err) { next(err); }
 };
