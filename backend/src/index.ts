@@ -1230,13 +1230,13 @@ app.get("/api/v1/projects/:projectId/analytics", authMiddleware, async (req: any
 // ─── Start Server ───
 const PORT = parseInt(process.env.PORT || "5000", 10);
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`
   🚀 Student Bug Tracker API
   ──────────────────────────
-  🌐 Server:    http://localhost:${PORT}
-  📡 Socket.io: ws://localhost:${PORT}
-  🏥 Health:    http://localhost:${PORT}/api/v1/health
+  🌐 Server:    http://0.0.0.0:${PORT}
+  📡 Socket.io: ws://0.0.0.0:${PORT}
+  🏥 Health:    http://0.0.0.0:${PORT}/api/v1/health
   📚 Database:  PostgreSQL (Prisma)
   ──────────────────────────
   `);
