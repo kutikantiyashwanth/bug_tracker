@@ -53,6 +53,6 @@ services:
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
       - key: NEXT_PUBLIC_API_URL
-        value: https://bug-tracker-api-uz41.onrender.com/api/v1
+        value: https://bug-tracker-api-d117.onrender.com/api/v1
       - key: NEXT_PUBLIC_SOCKET_URL
-        value: https://bug-tracker-api-uz41.onrender.com
+        value: https://bug-tracker-api-d117.onrender.com
