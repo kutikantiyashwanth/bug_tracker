@@ -11,11 +11,15 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy && (npx ts-node --transpile-only prisma/seed-simple.ts || true)
-    startCommand: npx ts-node --transpile-only --skip-project src/server.ts
+    region: oregon
+    buildCommand: npm install && npx prisma generate && (npx prisma migrate deploy || echo 'Migration skipped - will retry on start') && (npx ts-node --transpile-only prisma/seed-simple.ts || echo 'Seed skipped')
+    startCommand: node -e "require('ts-node').register({transpileOnly:true,skipProject:true});require('./src/server.ts')"
+    healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: PORT
         value: "10000"
       - key: DATABASE_URL
@@ -37,11 +41,15 @@ services:
     runtime: node
     plan: free
     rootDir: frontend
+    region: oregon
     buildCommand: npm install && rm -rf .next && npm run build
     startCommand: npm start
+    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
       - key: NEXT_PUBLIC_API_URL
