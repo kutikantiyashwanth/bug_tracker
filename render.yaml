@@ -12,8 +12,8 @@ services:
     plan: free
     rootDir: backend
     region: oregon
-    buildCommand: npm install && npx prisma generate && (npx prisma migrate deploy || echo 'Migration skipped - will retry on start') && (npx ts-node --transpile-only prisma/seed-simple.ts || echo 'Seed skipped')
-    startCommand: node -e "require('ts-node').register({transpileOnly:true,skipProject:true});require('./src/server.ts')"
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: npm start
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
@@ -42,7 +42,7 @@ services:
     plan: free
     rootDir: frontend
     region: oregon
-    buildCommand: npm install && rm -rf .next && npm run build
+    buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /
     envVars:
