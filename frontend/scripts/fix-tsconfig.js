@@ -1,15 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// Delete all cache
-['tsconfig.tsbuildinfo', '.next/tsconfig.tsbuildinfo'].forEach(f => {
-  const full = path.join(__dirname, '..', f);
-  try { if (fs.existsSync(full)) fs.unlinkSync(full); } catch(e) {}
-});
-try { fs.rmSync(path.join(__dirname, '..', '.next', 'cache'), { recursive: true, force: true }); } catch(e) {}
-
-// Write tsconfig that matches what Next.js 14+ wants
-// Using NodeNext for BOTH module and moduleResolution to satisfy TS5109
+// Write a tsconfig compatible with Next.js 15+ and static export
 const tsconfig = {
   compilerOptions: {
     target: 'ES2017',
@@ -19,8 +11,8 @@ const tsconfig = {
     strict: false,
     noEmit: true,
     esModuleInterop: true,
-    module: 'NodeNext',
-    moduleResolution: 'NodeNext',
+    module: 'esnext',
+    moduleResolution: 'bundler',
     resolveJsonModule: true,
     isolatedModules: true,
     jsx: 'preserve',
@@ -36,4 +28,4 @@ fs.writeFileSync(
   path.join(__dirname, '..', 'tsconfig.json'),
   JSON.stringify(tsconfig, null, 2)
 );
-console.log('✅ tsconfig.json written with NodeNext/NodeNext');
+console.log('tsconfig.json written with esnext/bundler');
