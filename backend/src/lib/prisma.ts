@@ -10,6 +10,16 @@ function getPrisma(): PrismaClient {
     }
     prismaInstance = new PrismaClient({
       log: process.env.NODE_ENV === 'production' ? ['error'] : ['error', 'warn'],
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    });
+
+    // Graceful disconnect on shutdown
+    process.on('beforeExit', async () => {
+      await prismaInstance?.$disconnect();
     });
   }
   return prismaInstance;

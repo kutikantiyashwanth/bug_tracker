@@ -34,6 +34,8 @@ services:
         value: ""
       - key: FRONTEND_URL
         value: https://bug-tracker-ui.onrender.com
+      - key: RENDER_EXTERNAL_URL
+        value: https://bug-tracker-api-d117.onrender.com
 
   # ── Frontend UI ──
   - type: web
