@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 export default function ProjectsPage() {
-  const { projects, activeProjectId, setActiveProject, createProject, joinProject, tasks, bugs, getUserById } = useStore();
+  const { projects, activeProjectId, setActiveProject, createProject, joinProject, tasks, bugs, getUserById, currentUser } = useStore();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [formName, setFormName] = useState("");
@@ -29,6 +29,8 @@ export default function ProjectsPage() {
   const [inviteCode, setInviteCode] = useState("");
   const [joinError, setJoinError] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const isAdmin = (currentUser?.role as string)?.toLowerCase() === "admin";
 
   const handleCreate = () => {
     if (!formName.trim()) return;
@@ -42,7 +44,7 @@ export default function ProjectsPage() {
     if (!inviteCode.trim()) return;
     setJoinError("");
     try {
-      const success = await joinProject(inviteCode.trim().toUpperCase());
+      const success = await joinProject(inviteCode.trim());
       if (success) {
         setShowJoinDialog(false);
         setInviteCode("");
@@ -61,7 +63,6 @@ export default function ProjectsPage() {
   };
 
   return (
-    <RoleGuard allowedRoles={["admin"]}>
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -72,9 +73,11 @@ export default function ProjectsPage() {
           <Button variant="outline" size="sm" onClick={() => setShowJoinDialog(true)}>
             <Users className="h-4 w-4 mr-1" /> Join Project
           </Button>
-          <Button variant="glow" size="sm" onClick={() => setShowCreateDialog(true)}>
-            <Plus className="h-4 w-4 mr-1" /> New Project
-          </Button>
+          {isAdmin && (
+            <Button variant="glow" size="sm" onClick={() => setShowCreateDialog(true)}>
+              <Plus className="h-4 w-4 mr-1" /> New Project
+            </Button>
+          )}
         </div>
       </div>
 
@@ -177,17 +180,18 @@ export default function ProjectsPage() {
                       </div>
                     )}
                   </div>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
-                    className="flex items-center gap-1.5 text-[11px] text-gray-500 hover:text-gray-900 transition-colors px-2 py-1 rounded-md hover:bg-gray-100"
-                  >
-                    {copiedId === project.id ? (
-                      <><Check className="h-3 w-3 text-emerald-400" /> Copied!</>
-                    ) : (
-                      <><Copy className="h-3 w-3" /> {project.inviteCode}</>
-                    )}
-                  </button>
-                </div>
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
+                      className="flex items-center gap-1.5 text-[11px] text-gray-500 hover:text-gray-900 transition-colors px-2 py-1 rounded-md hover:bg-gray-100"
+                    >
+                      {copiedId === project.id ? (
+                        <><Check className="h-3 w-3 text-emerald-400" /> Copied!</>
+                      ) : (
+                        <><Copy className="h-3 w-3" /> Copy Invite Code</>
+                      )}
+                    </button>
+                  )}                </div>
               </CardContent>
             </Card>
           );
@@ -234,12 +238,12 @@ export default function ProjectsPage() {
               <Input 
                 value={inviteCode} 
                 onChange={(e) => {
-                  setInviteCode(e.target.value.toUpperCase());
+                  setInviteCode(e.target.value);
                   setJoinError("");
                 }} 
-                placeholder="CC-2026-XK9" 
-                className="font-mono uppercase"
-                maxLength={20}
+                placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+                className="font-mono"
+                maxLength={36}
               />
               <p className="text-xs text-gray-500">
                 Ask your team lead for the project invite code
@@ -264,7 +268,6 @@ export default function ProjectsPage() {
         </DialogContent>
       </Dialog>
     </div>
-    </RoleGuard>
   );
 }
 
