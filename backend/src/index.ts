@@ -68,6 +68,43 @@ app.use((req, res, next) => {
   next();
 });
 
+// ─── In-Memory Cache ───
+// Lightweight TTL cache — avoids repeated DB hits for hot read endpoints.
+// Falls back gracefully: cache miss = DB query, no external dependency.
+interface CacheEntry { data: any; expiresAt: number }
+const memCache = new Map<string, CacheEntry>();
+
+const mc = {
+  get: <T>(key: string): T | null => {
+    const entry = memCache.get(key);
+    if (!entry) return null;
+    if (Date.now() > entry.expiresAt) { memCache.delete(key); return null; }
+    return entry.data as T;
+  },
+  set: (key: string, data: any, ttlMs = 30_000) => {
+    memCache.set(key, { data, expiresAt: Date.now() + ttlMs });
+  },
+  del: (...keys: string[]) => keys.forEach((k) => memCache.delete(k)),
+  delPrefix: (prefix: string) => {
+    for (const k of memCache.keys()) if (k.startsWith(prefix)) memCache.delete(k);
+  },
+};
+
+// Evict expired entries every 5 minutes to prevent memory leak
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of memCache.entries()) if (now > v.expiresAt) memCache.delete(k);
+}, 5 * 60 * 1000);
+
+// Helper: create notification + bust cache atomically
+const createNotification = async (data: {
+  userId: string; type: string; title: string; message: string; link?: string;
+}) => {
+  const notif = await prisma.notification.create({ data: data as any });
+  mc.del(`notifs:${data.userId}`);
+  return notif;
+};
+
 // ─── Auth Middleware ───
 const authMiddleware = async (req: any, res: any, next: any) => {
   try {
@@ -247,6 +284,10 @@ app.patch("/api/v1/auth/password", authMiddleware, async (req: any, res) => {
 // ─── Project Routes ───
 app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
   try {
+    const cacheKey = `projects:${req.user.userId}`;
+    const cached = mc.get(cacheKey);
+    if (cached) return res.json({ success: true, data: cached });
+
     const projects = await prisma.project.findMany({
       where: {
         OR: [
@@ -265,8 +306,10 @@ app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
           select: { tasks: true, bugs: true },
         },
       },
+      orderBy: { updatedAt: "desc" },
     });
 
+    mc.set(cacheKey, projects, 30_000); // 30s cache
     res.json({ success: true, data: projects });
   } catch (error: any) {
     console.error("Get projects error:", error);
@@ -304,6 +347,7 @@ app.post("/api/v1/projects", authMiddleware, async (req: any, res) => {
       },
     });
 
+    mc.del(`projects:${req.user.userId}`);
     res.status(201).json({
       success: true,
       message: "Project created successfully",
@@ -358,6 +402,7 @@ app.post("/api/v1/projects/join", authMiddleware, async (req: any, res) => {
       },
     });
 
+    mc.del(`projects:${req.user.userId}`);
     res.json({
       success: true,
       message: "Joined project successfully",
@@ -374,15 +419,20 @@ app.get("/api/v1/projects/:projectId/tasks", authMiddleware, async (req, res) =>
   try {
     const { projectId } = req.params;
 
+    const cacheKey = `tasks:${projectId}`;
+    const cached = mc.get(cacheKey);
+    if (cached) return res.json({ success: true, data: cached });
+
     const tasks = await prisma.task.findMany({
       where: { projectId },
       include: {
         assignee: { select: { id: true, name: true, email: true } },
         createdBy: { select: { id: true, name: true, email: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ status: "asc" }, { priority: "desc" }, { createdAt: "desc" }],
     });
 
+    mc.set(cacheKey, tasks, 20_000);
     res.json({ success: true, data: tasks });
   } catch (error: any) {
     console.error("Get tasks error:", error);
@@ -457,6 +507,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
       }
     }
 
+    mc.del(`tasks:${projectId}`);
     res.status(201).json({ success: true, message: "Task created successfully", data: task });
   } catch (error: any) {
     console.error("Create task error:", error);
@@ -482,6 +533,7 @@ app.patch("/api/v1/tasks/:taskId", authMiddleware, async (req: any, res) => {
       },
     });
 
+    mc.del(`tasks:${task.projectId}`);
     res.json({ success: true, message: "Task updated successfully", data: task });
   } catch (error: any) {
     console.error("Update task error:", error);
@@ -506,19 +558,29 @@ app.delete("/api/v1/tasks/:taskId", authMiddleware, async (req, res) => {
 });
 
 // ─── Bug Routes ───
-app.get("/api/v1/projects/:projectId/bugs", authMiddleware, async (req, res) => {
+app.get("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, res) => {
   try {
     const { projectId } = req.params;
+    const { status, severity } = req.query as any;
+
+    const cacheKey = `bugs:${projectId}:${status||""}:${severity||""}`;
+    const cached = mc.get(cacheKey);
+    if (cached) return res.json({ success: true, data: cached });
+
+    const where: any = { projectId };
+    if (status)   where.status   = status.toUpperCase();
+    if (severity) where.severity = severity.toUpperCase();
 
     const bugs = await prisma.bug.findMany({
-      where: { projectId },
+      where,
       include: {
         assignee: { select: { id: true, name: true, email: true } },
         reporter: { select: { id: true, name: true, email: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ severity: "desc" }, { createdAt: "desc" }],
     });
 
+    mc.set(cacheKey, bugs, 15_000);
     res.json({ success: true, data: bugs });
   } catch (error: any) {
     console.error("Get bugs error:", error);
@@ -594,6 +656,7 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
       }
     }
 
+    mc.delPrefix(`bugs:${projectId}:`);
     res.status(201).json({ success: true, message: "Bug reported successfully", data: bug });
   } catch (error: any) {
     console.error("Create bug error:", error);
@@ -665,6 +728,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
       });
     }
 
+    mc.delPrefix(`bugs:${bug.projectId}:`);
     res.json({ success: true, message: "Bug updated successfully", data: bug });
   } catch (error: any) {
     console.error("Update bug error:", error);
@@ -975,11 +1039,17 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
 // ─── Notification Routes ───
 app.get("/api/v1/notifications", authMiddleware, async (req: any, res) => {
   try {
+    const cacheKey = `notifs:${req.user.userId}`;
+    const cached = mc.get(cacheKey);
+    if (cached) return res.json({ success: true, data: cached });
+
     const notifications = await prisma.notification.findMany({
       where: { userId: req.user.userId },
       orderBy: { createdAt: "desc" },
       take: 50,
     });
+
+    mc.set(cacheKey, notifications, 10_000); // 10s — notifications need to feel fresh
     res.json({ success: true, data: notifications });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -993,6 +1063,7 @@ app.patch("/api/v1/notifications/read-all", authMiddleware, async (req: any, res
       where: { userId: req.user.userId, read: false },
       data: { read: true },
     });
+    mc.del(`notifs:${req.user.userId}`);
     res.json({ success: true });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -1005,6 +1076,7 @@ app.patch("/api/v1/notifications/:id/read", authMiddleware, async (req: any, res
       where: { id: req.params.id },
       data: { read: true },
     });
+    mc.del(`notifs:${req.user.userId}`);
     res.json({ success: true });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

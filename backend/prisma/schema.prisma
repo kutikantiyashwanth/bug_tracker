@@ -19,7 +19,6 @@ model User {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
-  // Relations
   ownedProjects Project[]       @relation("ProjectOwner")
   memberships   ProjectMember[]
   assignedTasks Task[]          @relation("TaskAssignee")
@@ -30,6 +29,8 @@ model User {
   notifications Notification[]
   comments      Comment[]
 
+  @@index([email])
+  @@index([role])
   @@map("users")
 }
 
@@ -48,7 +49,6 @@ model Project {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
-  // Relations
   owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id])
   ownerId     String
   members     ProjectMember[]
@@ -58,6 +58,8 @@ model Project {
   githubLinks GitHubLink[]
   sprints     Sprint[]
 
+  @@index([ownerId])
+  @@index([updatedAt])
   @@map("projects")
 }
 
@@ -66,13 +68,14 @@ model ProjectMember {
   role      Role     @default(DEVELOPER)
   joinedAt  DateTime @default(now())
 
-  // Relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
 
   @@unique([userId, projectId])
+  @@index([userId])
+  @@index([projectId])
   @@map("project_members")
 }
 
@@ -89,7 +92,6 @@ model Task {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  // Relations
   project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   assignee    User?       @relation("TaskAssignee", fields: [assigneeId], references: [id])
@@ -98,6 +100,12 @@ model Task {
   createdById String
   comments    Comment[]
 
+  // Core query indexes
+  @@index([projectId])
+  @@index([projectId, status])
+  @@index([assigneeId])
+  @@index([dueDate])
+  @@index([createdAt])
   @@map("tasks")
 }
 
@@ -128,7 +136,6 @@ model Bug {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
-  // Relations
   project          Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId        String
   assignee         User?       @relation("BugAssignee", fields: [assigneeId], references: [id])
@@ -137,6 +144,14 @@ model Bug {
   reporterId       String
   comments         Comment[]
 
+  // Core query indexes — covers filtering, sorting, and analytics
+  @@index([projectId])
+  @@index([projectId, status])
+  @@index([projectId, severity])
+  @@index([projectId, status, severity])
+  @@index([assigneeId])
+  @@index([reporterId])
+  @@index([createdAt])
   @@map("bugs")
 }
 
@@ -162,12 +177,15 @@ model ActivityLog {
   details     String
   createdAt   DateTime     @default(now())
 
-  // Relations
   project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   user        User         @relation(fields: [userId], references: [id])
   userId      String
 
+  // Covers the common "get recent activity for project" query
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@index([entityType, entityId])
   @@map("activity_logs")
 }
 
@@ -188,10 +206,12 @@ model Notification {
   link      String?
   createdAt DateTime         @default(now())
 
-  // Relations
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
+  // Covers "get unread notifications for user" — most common query
+  @@index([userId, read])
+  @@index([userId, createdAt(sort: Desc)])
   @@map("notifications")
 }
 
@@ -207,9 +227,9 @@ enum NotificationType {
 // ─── GitHub Link ───
 model GitHubLink {
   id        String   @id @default(uuid())
-  itemId    String   // task or bug id
-  itemType  String   // "task" | "bug"
-  linkType  String   // "issue" | "pr"
+  itemId    String
+  itemType  String
+  linkType  String
   number    String
   url       String
   createdAt DateTime @default(now())
@@ -219,6 +239,7 @@ model GitHubLink {
   projectId String
 
   @@unique([projectId, itemId])
+  @@index([projectId])
   @@map("github_links")
 }
 
@@ -237,6 +258,7 @@ model Sprint {
   project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
 
+  @@index([projectId, status])
   @@map("sprints")
 }
 
@@ -253,7 +275,6 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
@@ -261,5 +282,9 @@ model Comment {
   bug       Bug?     @relation(fields: [bugId], references: [id], onDelete: Cascade)
   bugId     String?
 
+  // Covers "get all comments for a bug/task" — sorted by time
+  @@index([bugId, createdAt])
+  @@index([taskId, createdAt])
+  @@index([userId])
   @@map("comments")
 }
