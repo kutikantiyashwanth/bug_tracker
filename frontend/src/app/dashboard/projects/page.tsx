@@ -87,18 +87,27 @@ export default function ProjectsPage() {
             <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-100 border border-violet-200 mb-4">
               <FolderOpen className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">No Projects Yet</h3>
-            <p className="text-sm text-gray-500 mb-6 max-w-md">
-              Get started by creating your first project or join an existing one using an invite code.
-            </p>
-            <div className="flex gap-3">
-              <Button variant="glow" onClick={() => setShowCreateDialog(true)}>
-                <Plus className="h-4 w-4 mr-2" /> Create Your First Project
-              </Button>
-              <Button variant="outline" onClick={() => setShowJoinDialog(true)}>
-                <Users className="h-4 w-4 mr-2" /> Join a Project
-              </Button>
-            </div>
+            {isAdmin ? (
+              <>
+                <h3 className="text-xl font-semibold mb-2">No Projects Yet</h3>
+                <p className="text-sm text-gray-500 mb-6 max-w-md">
+                  Get started by creating your first project. Share the invite code with your team.
+                </p>
+                <Button variant="glow" onClick={() => setShowCreateDialog(true)}>
+                  <Plus className="h-4 w-4 mr-2" /> Create Your First Project
+                </Button>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-semibold mb-2">Join a Project</h3>
+                <p className="text-sm text-gray-500 mb-6 max-w-md">
+                  You haven't joined any projects yet. Ask your Admin or Team Lead for an invite code.
+                </p>
+                <Button variant="glow" onClick={() => setShowJoinDialog(true)}>
+                  <Users className="h-4 w-4 mr-2" /> Join a Project
+                </Button>
+              </>
+            )}
           </CardContent>
         </Card>
       ) : (

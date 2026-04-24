@@ -37,7 +37,7 @@ const allNavGroups = [
       { href: "/dashboard",          label: "Overview",     iconKey: "LayoutDashboard", roles: ["admin","developer","tester"] },
       { href: "/dashboard/kanban",   label: "Kanban Board", iconKey: "Kanban",          roles: ["admin","developer"] },
       { href: "/dashboard/bugs",     label: "Bug Reports",  iconKey: "AlertTriangle",   roles: ["admin","developer","tester"] },
-      { href: "/dashboard/projects", label: "Projects",     iconKey: "FolderOpen",      roles: ["admin"] },
+      { href: "/dashboard/projects", label: "Projects",     iconKey: "FolderOpen",      roles: ["admin","developer","tester"] },
     ],
   },
   {
@@ -194,10 +194,18 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <span className="text-sm font-semibold text-purple-700">Create a Project</span>
             </Link>
           ) : (
-            <div className="px-3 py-2.5 rounded-xl" style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)" }}>
-              <p className="text-xs font-semibold neon-amber">No project yet</p>
-              <p className="text-[10px] mt-0.5" style={{ color: "rgba(253,230,138,0.5)" }}>Ask your Admin for an invite code</p>
-            </div>
+            <Link href="/dashboard/projects"
+              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all"
+              style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.3)" }}>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg, #f59e0b, #f97316)" }}>
+                <Plus className="h-3.5 w-3.5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-amber-700">Join a Project</p>
+                <p className="text-[10px] text-amber-600/70">Enter your invite code</p>
+              </div>
+            </Link>
           )
         ) : (
           <>
@@ -238,18 +246,20 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   </button>
                 ))}
                 <div style={{ borderTop: "1px solid rgba(109,40,217,0.15)" }}>
-                  <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2.5 text-sm transition-all"
-                    style={{ color: "#6b7280" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(109,40,217,0.04)"; e.currentTarget.style.color = "#e2e8f0"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6b7280"; }}>
-                    <Plus className="h-4 w-4" /><span>New Project</span>
-                  </Link>
+                  {permissions.createProject && (
+                    <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2.5 text-sm transition-all"
+                      style={{ color: "#6b7280" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(109,40,217,0.04)"; e.currentTarget.style.color = "#e2e8f0"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6b7280"; }}>
+                      <Plus className="h-4 w-4" /><span>New Project</span>
+                    </Link>
+                  )}
                 </div>
               </div>
             )}
 
-            {activeProject && (
+            {activeProject && permissions.createProject && (
               <button onClick={handleCopyInvite}
                 className="mt-1.5 w-full flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all text-xs"
                 style={{ color: "#9ca3af" }}

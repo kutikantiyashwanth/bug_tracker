@@ -60,7 +60,13 @@ export default function RegisterPage() {
     setError("");
     try {
       await register(name, email, password, role, skills);
-      router.push("/dashboard");
+      // Admins go straight to dashboard to create a project
+      // Developers/Testers go to projects page to join via invite code
+      if (role === "admin") {
+        router.push("/dashboard");
+      } else {
+        router.push("/dashboard/projects");
+      }
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
     }
