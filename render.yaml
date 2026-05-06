@@ -37,19 +37,13 @@ services:
       - key: RENDER_EXTERNAL_URL
         value: https://bug-tracker-api-d117.onrender.com
 
-  # ── Frontend UI ──
-  - type: web
+  # ── Frontend UI (Static Site) ──
+  - type: static
     name: bug-tracker-ui
-    runtime: node
-    plan: free
     rootDir: frontend
-    region: oregon
     buildCommand: npm install && npm run build
-    startCommand: npm start
-    healthCheckPath: /
+    staticPublishPath: out
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: NODE_VERSION
         value: 20.11.0
       - key: NEXT_TELEMETRY_DISABLED
