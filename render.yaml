@@ -30,8 +30,6 @@ services:
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: "7d"
-      - key: REDIS_URL
-        value: ""
       - key: FRONTEND_URL
         value: https://bug-tracker-ui.onrender.com
       - key: RENDER_EXTERNAL_URL
