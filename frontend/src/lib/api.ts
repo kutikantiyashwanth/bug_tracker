@@ -71,6 +71,12 @@ export const invalidateCache = (prefix: string) => {
   }
 };
 
+// Clear entire cache — call on login/logout so stale data never shows
+export const clearAllCache = () => {
+  cache.clear();
+  pending.clear();
+};
+
 // ── Auth API ──────────────────────────────────────────────────────────────
 export const authApi = {
   register: (data: { name: string; email: string; password: string; role: string; skills?: string[] }) =>

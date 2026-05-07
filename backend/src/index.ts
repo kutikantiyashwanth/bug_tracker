@@ -403,6 +403,12 @@ app.post("/api/v1/projects/join", authMiddleware, async (req: any, res) => {
     });
 
     mc.del(`projects:${req.user.userId}`);
+    // Also bust cache for the project owner and all existing members
+    // so they see the new member when they refresh
+    mc.del(`projects:${project.ownerId}`);
+    for (const member of project.members) {
+      mc.del(`projects:${member.userId}`);
+    }
     res.json({
       success: true,
       message: "Joined project successfully",

@@ -4,7 +4,7 @@ import {
   User, Project, Task, Bug, ActivityLog, Notification,
   TaskStatus, Priority, Severity, BugStatus, Role, TimeEntry, ActiveTimer,
 } from "./types";
-import { authApi, projectsApi, tasksApi, bugsApi, activitiesApi, notificationsApi, invalidateCache } from "./api";
+import { authApi, projectsApi, tasksApi, bugsApi, activitiesApi, notificationsApi, invalidateCache, clearAllCache } from "./api";
 import { getSocket, disconnectSocket } from "./socket";
 
 // ── Normalize DB uppercase enums → frontend lowercase ──
@@ -126,6 +126,8 @@ export const useStore = create<AppState>()(
       
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
+        // Clear all frontend cache so we always get fresh data for the new user
+        clearAllCache();
         try {
           const response = await authApi.login({ email, password });
           // Handle both response shapes: { data: { user, token } } and { data: { data: { user, token } } }
@@ -180,9 +182,8 @@ export const useStore = create<AppState>()(
 
       logout: () => {
         localStorage.removeItem('token');
-        // Also clear the persisted store so isAuthenticated doesn't survive a refresh
         localStorage.removeItem('student-bug-tracker-api-store');
-        // Disconnect socket
+        clearAllCache();
         disconnectSocket();
         set({ 
           currentUser: null, 
