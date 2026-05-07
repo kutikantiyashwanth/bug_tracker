@@ -392,8 +392,8 @@ export default function BugsPage() {
       </Tabs>
 
       {/* Create Bug Dialog */}
-      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="sm:max-w-[550px]">
+      <Dialog open={showCreateDialog} onOpenChange={(open) => { if (!open) { setShowCreateDialog(false); setCreateError(""); } }}>
+        <DialogContent className="sm:max-w-[550px] max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -401,7 +401,7 @@ export default function BugsPage() {
             </DialogTitle>
             <DialogDescription>Provide details about the issue you found.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
+          <div className="space-y-4 py-2 overflow-y-auto flex-1 pr-1">
             <div className="space-y-2">
               <Label>Title *</Label>
               <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="Brief description of the bug..." />
