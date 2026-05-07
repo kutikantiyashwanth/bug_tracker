@@ -23,9 +23,7 @@ services:
       - key: PORT
         value: "10000"
       - key: DATABASE_URL
-        fromDatabase:
-          name: bug-tracker-db
-          property: connectionString
+        value: "postgresql://postgres:Yashwanth%405152@db.earwybppkswgemvjyjau.supabase.co:5432/postgres"
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
