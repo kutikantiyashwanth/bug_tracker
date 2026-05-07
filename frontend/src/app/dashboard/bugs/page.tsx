@@ -138,23 +138,33 @@ export default function BugsPage() {
     setAiSuggestion(null);
   };
 
-  const handleCreateBug = () => {
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState("");
+
+  const handleCreateBug = async () => {
     if (!formTitle.trim() || !currentUser || !activeProjectId) return;
-    // Convert screenshot to base64 data URL if present
-    const screenshotUrl = screenshotPreview || undefined;
-    createBug({
-      projectId: activeProjectId,
-      title: formTitle.trim(),
-      description: formDesc.trim(),
-      stepsToReproduce: formSteps.trim(),
-      severity: formSeverity,
-      status: "open",
-      assigneeId: formAssignee || undefined,
-      reportedBy: currentUser.id,
-      screenshotUrl,
-    });
-    setShowCreateDialog(false);
-    resetForm();
+    setCreating(true);
+    setCreateError("");
+    try {
+      const screenshotUrl = screenshotPreview || undefined;
+      await createBug({
+        projectId: activeProjectId,
+        title: formTitle.trim(),
+        description: formDesc.trim(),
+        stepsToReproduce: formSteps.trim(),
+        severity: formSeverity,
+        status: "open",
+        assigneeId: formAssignee || undefined,
+        reportedBy: currentUser.id,
+        screenshotUrl,
+      });
+      setShowCreateDialog(false);
+      resetForm();
+    } catch (err: any) {
+      setCreateError(err?.response?.data?.error || err?.message || "Failed to create bug. Please try again.");
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,7 +254,7 @@ export default function BugsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 page-title">Bug Reports</h1>
           <p className="text-sm text-gray-500 mt-1">Track and manage reported issues</p>
         </div>
-        <Button variant="glow" size="sm" onClick={() => { resetForm(); setShowCreateDialog(true); }} className="w-full sm:w-auto">
+        <Button variant="glow" size="sm" onClick={() => { resetForm(); setCreateError(""); setShowCreateDialog(true); }} className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-1" /> Report Bug
         </Button>
       </div>
@@ -511,9 +521,16 @@ export default function BugsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleCreateBug} disabled={!formTitle.trim()}>
-              <AlertTriangle className="h-4 w-4 mr-1" /> Submit Bug Report
+            <Button variant="outline" onClick={() => { setShowCreateDialog(false); setCreateError(""); }}>Cancel</Button>
+            {createError && (
+              <p className="text-xs text-red-500 self-center">{createError}</p>
+            )}
+            <Button variant="destructive" onClick={handleCreateBug} disabled={!formTitle.trim() || creating}>
+              {creating
+                ? <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin mr-1" />
+                : <AlertTriangle className="h-4 w-4 mr-1" />
+              }
+              {creating ? "Submitting..." : "Submit Bug Report"}
             </Button>
           </DialogFooter>
         </DialogContent>
