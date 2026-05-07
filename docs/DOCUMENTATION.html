@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Bug Tracker — Project Documentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; background: #fff; font-size: 14px; line-height: 1.7; }
+
+  /* ── Cover Page ── */
+  .cover { min-height: 100vh; background: linear-gradient(135deg, #6d28d9 0%, #2563eb 50%, #0891b2 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 40px; page-break-after: always; }
+  .cover-logo { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 40px; }
+  .cover h1 { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -1px; margin-bottom: 12px; }
+  .cover .subtitle { font-size: 20px; color: rgba(255,255,255,0.8); margin-bottom: 40px; }
+  .cover-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+  .badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .cover-urls { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 24px 40px; }
+  .cover-urls p { color: rgba(255,255,255,0.7); font-size: 12px; margin-bottom: 8px; }
+  .cover-urls a { color: #fff; font-weight: 700; font-size: 15px; text-decoration: none; }
+  .cover-meta { margin-top: 48px; color: rgba(255,255,255,0.5); font-size: 12px; }
+
+  /* ── Layout ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 40px; }
+  .section { margin-bottom: 56px; page-break-inside: avoid; }
+  h2 { font-size: 28px; font-weight: 900; color: #6d28d9; border-bottom: 3px solid #6d28d9; padding-bottom: 10px; margin-bottom: 24px; }
+  h3 { font-size: 18px; font-weight: 800; color: #1e293b; margin: 24px 0 12px; }
+  h4 { font-size: 15px; font-weight: 700; color: #475569; margin: 16px 0 8px; }
+  p { margin-bottom: 12px; color: #334155; }
+
+  /* ── TOC ── */
+  .toc { background: #f8f7ff; border: 2px solid #e9d5ff; border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+  .toc h2 { border: none; margin-bottom: 20px; }
+  .toc ol { padding-left: 24px; }
+  .toc li { margin-bottom: 8px; font-size: 15px; }
+  .toc a { color: #6d28d9; text-decoration: none; font-weight: 600; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Architecture Diagram ── */
+  .arch-diagram { background: #0f172a; border-radius: 20px; padding: 40px; margin: 24px 0; color: #e2e8f0; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.8; }
+  .arch-box { border: 2px solid; border-radius: 12px; padding: 16px 24px; margin: 8px auto; text-align: center; max-width: 500px; }
+  .arch-box.frontend { border-color: #818cf8; background: rgba(129,140,248,0.1); color: #818cf8; }
+  .arch-box.backend  { border-color: #34d399; background: rgba(52,211,153,0.1); color: #34d399; }
+  .arch-box.database { border-color: #f59e0b; background: rgba(245,158,11,0.1); color: #f59e0b; }
+  .arch-arrow { text-align: center; color: #64748b; font-size: 20px; margin: 4px 0; }
+  .arch-label { text-align: center; color: #64748b; font-size: 11px; margin-bottom: 4px; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 13px; }
+  th { background: #6d28d9; color: #fff; padding: 10px 14px; text-align: left; font-weight: 700; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8f7ff; }
+  tr:hover td { background: #f1f0ff; }
+
+  /* ── Code blocks ── */
+  pre { background: #1e293b; color: #e2e8f0; padding: 20px 24px; border-radius: 12px; overflow-x: auto; font-size: 12px; margin: 12px 0 20px; line-height: 1.6; }
+  code { background: #f1f5f9; color: #6d28d9; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: 'Courier New', monospace; }
+
+  /* ── Cards ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+  .card { border-radius: 14px; padding: 20px; border: 2px solid; }
+  .card.violet { border-color: #c4b5fd; background: #faf5ff; }
+  .card.blue   { border-color: #bfdbfe; background: #eff6ff; }
+  .card.amber  { border-color: #fde68a; background: #fffbeb; }
+  .card.green  { border-color: #bbf7d0; background: #f0fdf4; }
+  .card.rose   { border-color: #fecdd3; background: #fff1f2; }
+  .card.cyan   { border-color: #a5f3fc; background: #ecfeff; }
+  .card h4 { margin: 0 0 8px; font-size: 14px; }
+  .card p  { margin: 0; font-size: 12px; color: #64748b; }
+  .card .icon { font-size: 28px; margin-bottom: 10px; }
+
+  /* ── Role table ── */
+  .role-yes { color: #16a34a; font-weight: 700; }
+  .role-no  { color: #dc2626; font-weight: 700; }
+
+  /* ── Flow diagram ── */
+  .flow { display: flex; align-items: center; gap: 0; margin: 20px 0; flex-wrap: wrap; }
+  .flow-step { background: linear-gradient(135deg, #6d28d9, #2563eb); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; min-width: 100px; }
+  .flow-arrow { color: #6d28d9; font-size: 20px; padding: 0 8px; font-weight: 900; }
+
+  /* ── Callout boxes ── */
+  .callout { border-left: 4px solid; border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 16px 0; }
+  .callout.info    { border-color: #3b82f6; background: #eff6ff; }
+  .callout.success { border-color: #16a34a; background: #f0fdf4; }
+  .callout.warning { border-color: #f59e0b; background: #fffbeb; }
+  .callout strong  { display: block; margin-bottom: 4px; }
+
+  /* ── Q&A ── */
+  .qa { margin-bottom: 20px; }
+  .qa .q { background: #6d28d9; color: #fff; padding: 12px 18px; border-radius: 10px 10px 0 0; font-weight: 700; font-size: 14px; }
+  .qa .a { background: #f8f7ff; border: 2px solid #e9d5ff; border-top: none; padding: 14px 18px; border-radius: 0 0 10px 10px; font-size: 13px; color: #334155; }
+
+  /* ── Print ── */
+  @media print {
+    .cover { min-height: auto; padding: 80px 40px; }
+    .page { padding: 32px 40px; }
+    h2 { page-break-before: always; }
+    h2:first-child { page-break-before: avoid; }
+    pre { white-space: pre-wrap; }
+    .no-break { page-break-inside: avoid; }
+  }
+
+  /* ── Divider ── */
+  hr { border: none; border-top: 2px solid #e9d5ff; margin: 40px 0; }
+
+  /* ── Status pill ── */
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill.green  { background: #dcfce7; color: #16a34a; }
+  .pill.yellow { background: #fef9c3; color: #ca8a04; }
+  .pill.red    { background: #fee2e2; color: #dc2626; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">🐛</div>
+  <h1>Student Bug Tracker</h1>
+  <p class="subtitle">Complete Project Documentation — Technical &amp; User Guide</p>
+  <div class="cover-badges">
+    <span class="badge">Next.js 16</span>
+    <span class="badge">Node.js + Express</span>
+    <span class="badge">PostgreSQL</span>
+    <span class="badge">Socket.io</span>
+    <span class="badge">Prisma ORM</span>
+    <span class="badge">Render Deployment</span>
+  </div>
+  <div class="cover-urls">
+    <p>LIVE WEBSITE</p>
+    <a href="https://bug-tracker-ui-evqv.onrender.com">https://bug-tracker-ui-evqv.onrender.com</a>
+    <br><br>
+    <p>BACKEND API</p>
+    <a href="https://bug-tracker-api-d117.onrender.com/api/v1/health">https://bug-tracker-api-d117.onrender.com</a>
+  </div>
+  <p class="cover-meta">Version 1.0 &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; Yashwanth Kutikanti</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════ -->
+<div class="page">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ol>
+    <li><a href="#overview">Project Overview</a></li>
+    <li><a href="#architecture">System Architecture</a></li>
+    <li><a href="#techstack">Tech Stack</a></li>
+    <li><a href="#features">Features in Detail</a></li>
+    <li><a href="#database">Database Design</a></li>
+    <li><a href="#api">API Endpoints</a></li>
+    <li><a href="#rbac">Role-Based Access Control</a></li>
+    <li><a href="#flows">User Flows</a></li>
+    <li><a href="#deployment">Deployment Guide</a></li>
+    <li><a href="#localsetup">Local Development Setup</a></li>
+    <li><a href="#envvars">Environment Variables</a></li>
+    <li><a href="#qa">Q&amp;A — Common Questions</a></li>
+  </ol>
+</div>
+
+<!-- ══ 1. OVERVIEW ══ -->
+<div class="section" id="overview">
+  <h2>1. Project Overview</h2>
+  <p>
+    <strong>Student Bug Tracker</strong> is a full-stack web application built for student teams, hackathons, and open-source projects.
+    It combines project management, bug tracking, real-time collaboration, and analytics into one platform.
+  </p>
+
+  <div class="card-grid">
+    <div class="card violet">
+      <div class="icon">🐛</div>
+      <h4>Bug Tracking</h4>
+      <p>Report, assign, and resolve bugs with severity levels and status workflows</p>
+    </div>
+    <div class="card blue">
+      <div class="icon">📋</div>
+      <h4>Kanban Board</h4>
+      <p>Drag-and-drop task management across 5 columns</p>
+    </div>
+    <div class="card green">
+      <div class="icon">⚡</div>
+      <h4>Real-time</h4>
+      <p>Live updates via Socket.io — no page refresh needed</p>
+    </div>
+    <div class="card amber">
+      <div class="icon">📊</div>
+      <h4>Analytics</h4>
+      <p>Charts, completion rates, productivity trends</p>
+    </div>
+    <div class="card rose">
+      <div class="icon">🔔</div>
+      <h4>Notifications</h4>
+      <p>In-app and email alerts for assignments and deadlines</p>
+    </div>
+    <div class="card cyan">
+      <div class="icon">🛡️</div>
+      <h4>Role-Based Access</h4>
+      <p>Admin, Developer, and Tester roles with different permissions</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>✅ Live and Working</strong>
+    The application is fully deployed on Render. Frontend, backend, and database are all connected and operational.
+  </div>
+</div>
+
+<!-- ══ 2. ARCHITECTURE ══ -->
+<div class="section" id="architecture">
+  <h2>2. System Architecture</h2>
+  <p>The application follows a classic three-tier architecture: Frontend → Backend API → Database.</p>
+
+  <div class="arch-diagram">
+    <div style="text-align:center; color:#94a3b8; font-size:11px; margin-bottom:20px; letter-spacing:2px;">SYSTEM ARCHITECTURE DIAGRAM</div>
+
+    <div class="arch-box frontend">
+      <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">TIER 1 — PRESENTATION</div>
+      <div style="font-size:16px; font-weight:900;">🌐 Next.js Frontend (Static Site)</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.8;">React + Zustand + Socket.io-client + Tailwind CSS</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.6;">https://bug-tracker-ui-evqv.onrender.com</div>
+    </div>
+
+    <div class="arch-arrow">↕ HTTPS REST API + WebSocket (Socket.io)</div>
+
+    <div class="arch-box backend">
+      <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">TIER 2 — APPLICATION</div>
+      <div style="font-size:16px; font-weight:900;">⚙️ Express.js Backend API</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.8;">Node.js + TypeScript + Prisma ORM + JWT Auth</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.6;">https://bug-tracker-api-d117.onrender.com</div>
+    </div>
+
+    <div class="arch-arrow">↕ Prisma ORM (SQL Queries)</div>
+
+    <div class="arch-box database">
+      <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">TIER 3 — DATA</div>
+      <div style="font-size:16px; font-weight:900;">🗄️ PostgreSQL Database</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.8;">10 Tables · 18 Performance Indexes · Render Managed</div>
+      <div style="font-size:11px; margin-top:4px; opacity:0.6;">bug-tracker-db (Render PostgreSQL Free Tier)</div>
+    </div>
+
+    <div style="margin-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:11px;">
+      <div style="border:1px solid #334155; border-radius:8px; padding:12px;">
+        <div style="color:#818cf8; font-weight:700; margin-bottom:6px;">📦 In-Memory Cache</div>
+        <div style="color:#94a3b8;">TTL-based cache inside the backend process. Reduces DB hits for hot endpoints (projects, tasks, bugs, notifications). No Redis required.</div>
+      </div>
+      <div style="border:1px solid #334155; border-radius:8px; padding:12px;">
+        <div style="color:#34d399; font-weight:700; margin-bottom:6px;">🔌 Socket.io Rooms</div>
+        <div style="color:#94a3b8;">Each user joins a personal room (user:id) and a project room (project:id). Mutations broadcast to all connected members instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Request Flow (Step by Step)</h3>
+  <div class="flow">
+    <div class="flow-step">User opens browser</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Frontend loads (static HTML/JS)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">JWT read from localStorage</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">API call to backend</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Backend validates JWT</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Prisma queries PostgreSQL</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Response sent to frontend</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Zustand updates UI</div>
+  </div>
+</div>
+
+<!-- ══ 3. TECH STACK ══ -->
+<div class="section" id="techstack">
+  <h2>3. Tech Stack</h2>
+
+  <h3>🖥️ Frontend</h3>
+  <table>
+    <tr><th>Tool</th><th>Version</th><th>What it does</th></tr>
+    <tr><td><strong>Next.js</strong></td><td>16.2.4</td><td>React framework — handles routing, static export, and build optimization</td></tr>
+    <tr><td><strong>React</strong></td><td>18.3.1</td><td>UI component library — builds the interactive interface</td></tr>
+    <tr><td><strong>TypeScript</strong></td><td>5.9.3</td><td>Adds type safety to JavaScript — catches bugs at compile time</td></tr>
+    <tr><td><strong>Tailwind CSS</strong></td><td>3.4.3</td><td>Utility-first CSS — styles every component without writing custom CSS files</td></tr>
+    <tr><td><strong>Zustand</strong></td><td>4.5.2</td><td>Global state management — stores user, projects, tasks, bugs in memory</td></tr>
+    <tr><td><strong>Axios</strong></td><td>1.15.0</td><td>HTTP client — makes API calls to the backend with JWT attached</td></tr>
+    <tr><td><strong>Socket.io-client</strong></td><td>4.7.5</td><td>Real-time WebSocket client — receives live updates from backend</td></tr>
+    <tr><td><strong>Recharts</strong></td><td>2.12.7</td><td>Chart library — renders analytics graphs (area, bar, pie charts)</td></tr>
+    <tr><td><strong>Radix UI</strong></td><td>various</td><td>Accessible UI primitives — dialogs, dropdowns, tabs, tooltips</td></tr>
+    <tr><td><strong>Lucide React</strong></td><td>0.378.0</td><td>Icon library — all icons in the UI</td></tr>
+  </table>
+
+  <h3>⚙️ Backend</h3>
+  <table>
+    <tr><th>Tool</th><th>Version</th><th>What it does</th></tr>
+    <tr><td><strong>Node.js</strong></td><td>20.x</td><td>JavaScript runtime — executes the server code</td></tr>
+    <tr><td><strong>Express</strong></td><td>4.18.3</td><td>HTTP server framework — handles all API routes</td></tr>
+    <tr><td><strong>TypeScript</strong></td><td>5.4.2</td><td>Type safety for backend code</td></tr>
+    <tr><td><strong>Prisma</strong></td><td>5.10.2</td><td>ORM — translates TypeScript code into SQL queries, manages migrations</td></tr>
+    <tr><td><strong>Socket.io</strong></td><td>4.7.4</td><td>WebSocket server — pushes real-time events to connected clients</td></tr>
+    <tr><td><strong>bcryptjs</strong></td><td>2.4.3</td><td>Password hashing — stores passwords securely (never plain text)</td></tr>
+    <tr><td><strong>jsonwebtoken</strong></td><td>9.0.2</td><td>JWT creation and verification — authenticates every API request</td></tr>
+    <tr><td><strong>Nodemailer</strong></td><td>8.0.5</td><td>Email sender — sends notifications via SMTP (optional)</td></tr>
+    <tr><td><strong>Helmet</strong></td><td>7.1.0</td><td>Security headers — protects against common web attacks</td></tr>
+    <tr><td><strong>express-rate-limit</strong></td><td>7.2.0</td><td>Rate limiting — prevents API abuse (200 req/15 min)</td></tr>
+    <tr><td><strong>Winston</strong></td><td>3.12.0</td><td>Logging — records errors and events to log files</td></tr>
+  </table>
+
+  <h3>🗄️ Database &amp; Infrastructure</h3>
+  <table>
+    <tr><th>Tool</th><th>Purpose</th></tr>
+    <tr><td><strong>PostgreSQL 16</strong></td><td>Primary relational database — stores all application data permanently</td></tr>
+    <tr><td><strong>Render</strong></td><td>Cloud hosting platform — runs backend, frontend, and database</td></tr>
+    <tr><td><strong>Redis</strong></td><td>Optional cache — not configured, app uses in-memory cache instead</td></tr>
+  </table>
+</div>
+
+<!-- ══ 4. FEATURES ══ -->
+<div class="section" id="features">
+  <h2>4. Features in Detail</h2>
+
+  <h3>🔐 Authentication</h3>
+  <p>The app uses <strong>JWT (JSON Web Token)</strong> authentication. When you log in, the server creates a signed token that expires in 7 days. This token is stored in your browser's localStorage and sent with every API request.</p>
+  <div class="flow">
+    <div class="flow-step">Enter email + password</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Backend verifies password (bcrypt)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">JWT token created</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Token stored in localStorage</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">All future requests use token</div>
+  </div>
+  <div class="callout info">
+    <strong>ℹ️ Why JWT?</strong>
+    JWT is stateless — the server doesn't need to store sessions in a database. The token itself contains the user ID and role, which the server verifies using a secret key.
+  </div>
+
+  <h3>🐛 Bug Tracking</h3>
+  <p>The core feature. Anyone on the team can report a bug with:</p>
+  <table>
+    <tr><th>Field</th><th>Description</th><th>Required</th></tr>
+    <tr><td>Title</td><td>Short description of the bug</td><td>Yes</td></tr>
+    <tr><td>Description</td><td>Detailed explanation</td><td>No</td></tr>
+    <tr><td>Steps to Reproduce</td><td>Numbered steps to trigger the bug</td><td>No</td></tr>
+    <tr><td>Severity</td><td>Minor / Major / Critical</td><td>Yes</td></tr>
+    <tr><td>Assignee</td><td>Developer assigned to fix it</td><td>No</td></tr>
+    <tr><td>Screenshot</td><td>Image upload (max 5MB)</td><td>No</td></tr>
+  </table>
+
+  <h4>Bug Status Workflow</h4>
+  <div class="flow">
+    <div class="flow-step" style="background:linear-gradient(135deg,#dc2626,#ef4444);">OPEN</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:linear-gradient(135deg,#d97706,#f59e0b);">IN PROGRESS</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:linear-gradient(135deg,#059669,#10b981);">RESOLVED</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:linear-gradient(135deg,#475569,#64748b);">CLOSED</div>
+  </div>
+
+  <h4>AI Severity Analysis</h4>
+  <p>Click <strong>"AI Analyze Severity"</strong> when reporting a bug. The backend scans the title and description for keywords and suggests a severity level:</p>
+  <table>
+    <tr><th>Keywords Detected</th><th>Suggested Severity</th></tr>
+    <tr><td>crash, system down, data loss, security, payment fail, 500 error</td><td>🔴 Critical</td></tr>
+    <tr><td>error, fail, wrong, broken, not loading, null, exception</td><td>🟠 Major</td></tr>
+    <tr><td>typo, cosmetic, minor, slow, alignment</td><td>🔵 Minor</td></tr>
+  </table>
+
+  <h3>📋 Kanban Board</h3>
+  <p>A visual task management board with 5 columns. Tasks can be dragged between columns.</p>
+  <table>
+    <tr><th>Column</th><th>Meaning</th><th>Color</th></tr>
+    <tr><td>Backlog</td><td>Tasks not yet started or prioritized</td><td>Gray</td></tr>
+    <tr><td>To Do</td><td>Ready to be worked on</td><td>Blue</td></tr>
+    <tr><td>In Progress</td><td>Currently being worked on</td><td>Violet</td></tr>
+    <tr><td>Testing</td><td>Ready for QA review</td><td>Amber</td></tr>
+    <tr><td>Done</td><td>Completed and verified</td><td>Green</td></tr>
+  </table>
+  <div class="callout info">
+    <strong>ℹ️ Real-time Sync</strong>
+    When you drag a task to a new column, all other team members connected to the same project see the change instantly via Socket.io — no page refresh needed.
+  </div>
+
+  <h3>📊 Analytics Dashboard</h3>
+  <p>The Overview page shows live statistics for the active project:</p>
+  <ul style="padding-left:20px; margin-bottom:16px;">
+    <li style="margin-bottom:6px;"><strong>Task Completion Rate</strong> — % of tasks in Done status</li>
+    <li style="margin-bottom:6px;"><strong>Bug Fix Rate</strong> — % of bugs resolved or closed</li>
+    <li style="margin-bottom:6px;"><strong>7-Day Productivity Chart</strong> — tasks done and bugs fixed per day</li>
+    <li style="margin-bottom:6px;"><strong>Bug Severity Pie Chart</strong> — breakdown of Critical/Major/Minor</li>
+    <li style="margin-bottom:6px;"><strong>Upcoming Deadlines</strong> — tasks due in the next 7 days</li>
+    <li style="margin-bottom:6px;"><strong>Success Metrics</strong> — weekly tasks done, bugs fixed, overdue count</li>
+  </ul>
+
+  <h3>⚡ Real-time Collaboration</h3>
+  <p>Socket.io creates a persistent WebSocket connection between the browser and server. Events flow in both directions:</p>
+  <table>
+    <tr><th>Event</th><th>Direction</th><th>What happens</th></tr>
+    <tr><td>join-user</td><td>Client → Server</td><td>User joins their personal notification room</td></tr>
+    <tr><td>join-project</td><td>Client → Server</td><td>User joins the active project room</td></tr>
+    <tr><td>task-moved</td><td>Client → Server → All</td><td>Task status change broadcast to project room</td></tr>
+    <tr><td>bug-reported</td><td>Client → Server → All</td><td>New bug broadcast to project room</td></tr>
+    <tr><td>notification</td><td>Server → Client</td><td>Push notification to specific user</td></tr>
+    <tr><td>task-updated</td><td>Server → Client</td><td>Task update received, UI updates instantly</td></tr>
+  </table>
+
+  <h3>🔔 Notifications</h3>
+  <p>Notifications are created in the database and pushed via Socket.io. Types:</p>
+  <table>
+    <tr><th>Type</th><th>When triggered</th><th>Who receives it</th></tr>
+    <tr><td>TASK_ASSIGNED</td><td>Task assigned to someone</td><td>The assignee</td></tr>
+    <tr><td>BUG_ASSIGNED</td><td>Bug assigned to someone</td><td>The assignee</td></tr>
+    <tr><td>BUG_RESOLVED</td><td>Bug marked as resolved</td><td>Reporter + Project owner</td></tr>
+    <tr><td>DEADLINE_REMINDER</td><td>Task due in next 48 hours</td><td>Task assignee</td></tr>
+    <tr><td>PROJECT_INVITE</td><td>User joins a project</td><td>Project members</td></tr>
+  </table>
+  <div class="callout warning">
+    <strong>⚠️ Email Notifications</strong>
+    Email notifications require SMTP configuration (SMTP_HOST, SMTP_USER, SMTP_PASS). Without it, in-app notifications still work perfectly.
+  </div>
+</div>
+
+<!-- ══ 5. DATABASE ══ -->
+<div class="section" id="database">
+  <h2>5. Database Design</h2>
+  <p>PostgreSQL is used as the primary database. Prisma ORM manages the schema, migrations, and queries.</p>
+
+  <h3>Entity Relationship Overview</h3>
+  <div class="arch-diagram">
+    <div style="text-align:center; color:#94a3b8; font-size:11px; margin-bottom:20px; letter-spacing:2px;">DATABASE RELATIONSHIPS</div>
+    <pre style="background:transparent; padding:0; color:#e2e8f0; font-size:12px;">
+  ┌──────────┐     owns      ┌──────────┐    has many   ┌──────────┐
+  │  User    │──────────────▶│ Project  │──────────────▶│  Task    │
+  └──────────┘               └──────────┘               └──────────┘
+       │                          │                           │
+       │ member of                │ has many                  │ has many
+       ▼                          ▼                           ▼
+  ┌──────────────┐          ┌──────────┐               ┌──────────┐
+  │ProjectMember │          │   Bug    │               │ Comment  │
+  └──────────────┘          └──────────┘               └──────────┘
+                                  │
+                                  │ has many
+                                  ▼
+                            ┌──────────┐
+                            │ Comment  │
+                            └──────────┘
+
+  Project also has: ActivityLog, Notification, Sprint, GitHubLink
+    </pre>
+  </div>
+
+  <h3>Tables</h3>
+  <table>
+    <tr><th>Table</th><th>Records (current)</th><th>Description</th></tr>
+    <tr><td><code>users</code></td><td>17</td><td>User accounts — name, email, hashed password, role, skills</td></tr>
+    <tr><td><code>projects</code></td><td>3</td><td>Projects — name, description, invite code, owner</td></tr>
+    <tr><td><code>project_members</code></td><td>—</td><td>Who belongs to which project and their role</td></tr>
+    <tr><td><code>tasks</code></td><td>6</td><td>Kanban tasks — title, status, priority, assignee, due date</td></tr>
+    <tr><td><code>bugs</code></td><td>5</td><td>Bug reports — title, severity, status, reporter, assignee</td></tr>
+    <tr><td><code>comments</code></td><td>5</td><td>Comments on bugs and tasks</td></tr>
+    <tr><td><code>activity_logs</code></td><td>—</td><td>Audit trail — who did what and when</td></tr>
+    <tr><td><code>notifications</code></td><td>8</td><td>Per-user in-app notifications</td></tr>
+    <tr><td><code>sprints</code></td><td>—</td><td>Sprint planning with task ID arrays</td></tr>
+    <tr><td><code>github_links</code></td><td>—</td><td>GitHub issue/PR links per project item</td></tr>
+  </table>
+
+  <h3>Performance Indexes (18 total)</h3>
+  <p>Without indexes, every query scans the entire table. Indexes make lookups instant:</p>
+  <table>
+    <tr><th>Table</th><th>Index</th><th>Query it speeds up</th></tr>
+    <tr><td>bugs</td><td>(projectId)</td><td>Get all bugs for a project</td></tr>
+    <tr><td>bugs</td><td>(projectId, status)</td><td>Filter bugs by status</td></tr>
+    <tr><td>bugs</td><td>(projectId, severity)</td><td>Filter bugs by severity</td></tr>
+    <tr><td>tasks</td><td>(projectId)</td><td>Get all tasks for a project</td></tr>
+    <tr><td>tasks</td><td>(projectId, status)</td><td>Kanban column queries</td></tr>
+    <tr><td>tasks</td><td>(assigneeId)</td><td>Tasks assigned to a user</td></tr>
+    <tr><td>notifications</td><td>(userId, read)</td><td>Unread notification count</td></tr>
+    <tr><td>activity_logs</td><td>(projectId, createdAt DESC)</td><td>Recent activity feed</td></tr>
+    <tr><td>comments</td><td>(bugId, createdAt)</td><td>Comments on a bug</td></tr>
+  </table>
+</div>
+
+<!-- ══ 6. API ENDPOINTS ══ -->
+<div class="section" id="api">
+  <h2>6. API Endpoints</h2>
+  <p>Base URL: <code>https://bug-tracker-api-d117.onrender.com/api/v1</code></p>
+  <p>All endpoints except <code>/auth/register</code>, <code>/auth/login</code>, and <code>/health</code> require a JWT token in the header:</p>
+  <pre>Authorization: Bearer &lt;your-jwt-token&gt;</pre>
+
+  <h3>Authentication</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Body</th><th>Returns</th></tr>
+    <tr><td>POST</td><td>/auth/register</td><td>name, email, password, role, skills</td><td>user + token</td></tr>
+    <tr><td>POST</td><td>/auth/login</td><td>email, password</td><td>user + token</td></tr>
+    <tr><td>GET</td><td>/auth/me</td><td>—</td><td>current user</td></tr>
+    <tr><td>PATCH</td><td>/auth/profile</td><td>name, skills</td><td>updated user</td></tr>
+    <tr><td>PATCH</td><td>/auth/password</td><td>currentPassword, newPassword</td><td>success</td></tr>
+  </table>
+
+  <h3>Projects</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/projects</td><td>List all projects the user belongs to</td></tr>
+    <tr><td>POST</td><td>/projects</td><td>Create a new project (Admin only)</td></tr>
+    <tr><td>POST</td><td>/projects/join</td><td>Join a project using invite code</td></tr>
+  </table>
+
+  <h3>Tasks</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/projects/:id/tasks</td><td>Get all tasks for a project</td></tr>
+    <tr><td>POST</td><td>/projects/:id/tasks</td><td>Create a new task</td></tr>
+    <tr><td>PATCH</td><td>/tasks/:id</td><td>Update task (status, priority, assignee, etc.)</td></tr>
+    <tr><td>DELETE</td><td>/tasks/:id</td><td>Delete a task</td></tr>
+  </table>
+
+  <h3>Bugs</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/projects/:id/bugs</td><td>Get all bugs (supports ?status= and ?severity= filters)</td></tr>
+    <tr><td>POST</td><td>/projects/:id/bugs</td><td>Report a new bug</td></tr>
+    <tr><td>PATCH</td><td>/bugs/:id</td><td>Update bug status, severity, assignee</td></tr>
+  </table>
+
+  <h3>Comments</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/bugs/:id/comments</td><td>Get all comments on a bug</td></tr>
+    <tr><td>POST</td><td>/bugs/:id/comments</td><td>Add a comment to a bug</td></tr>
+  </table>
+
+  <h3>Notifications</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/notifications</td><td>Get user's notifications (last 50)</td></tr>
+    <tr><td>PATCH</td><td>/notifications/:id/read</td><td>Mark one notification as read</td></tr>
+    <tr><td>PATCH</td><td>/notifications/read-all</td><td>Mark all notifications as read</td></tr>
+  </table>
+
+  <h3>Analytics &amp; Activity</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/projects/:id/analytics</td><td>Task stats, bug stats, weekly chart data</td></tr>
+    <tr><td>GET</td><td>/projects/:id/activities</td><td>Activity log (last 50 entries)</td></tr>
+  </table>
+
+  <h3>Sprints</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/projects/:id/sprints</td><td>List all sprints</td></tr>
+    <tr><td>POST</td><td>/projects/:id/sprints</td><td>Create a sprint</td></tr>
+    <tr><td>PATCH</td><td>/sprints/:id</td><td>Update sprint (status, taskIds, dates)</td></tr>
+    <tr><td>DELETE</td><td>/sprints/:id</td><td>Delete a sprint</td></tr>
+  </table>
+
+  <h3>AI Analysis</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/ai/analyze-bug</td><td>Analyze bug title/description, return severity suggestion</td></tr>
+  </table>
+
+  <h3>Health Check</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Returns</th></tr>
+    <tr><td>GET</td><td>/health</td><td><code>{"status":"ok","database":"connected"}</code></td></tr>
+  </table>
+</div>
+
+<!-- ══ 7. RBAC ══ -->
+<div class="section" id="rbac">
+  <h2>7. Role-Based Access Control</h2>
+  <p>There are 3 roles. Each role has different permissions across the application.</p>
+
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>🛡️ Admin</th>
+      <th>💻 Developer</th>
+      <th>🧪 Tester</th>
+    </tr>
+    <tr><td>Create project</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Join project via invite</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td></tr>
+    <tr><td>See invite code</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Kanban board access</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Create tasks</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Delete tasks</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Report bugs</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td></tr>
+    <tr><td>Change bug status</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Delete bugs</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Mark bug resolved</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ (if assigned)</td><td class="role-no">❌ No</td></tr>
+    <tr><td>View analytics</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td></tr>
+    <tr><td>Sprint planning</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td></tr>
+    <tr><td>Time tracking</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-no">❌ No</td></tr>
+    <tr><td>View notifications</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td></tr>
+    <tr><td>View activity log</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td><td class="role-yes">✅ Yes</td></tr>
+  </table>
+</div>
+
+<!-- ══ 8. USER FLOWS ══ -->
+<div class="section" id="flows">
+  <h2>8. User Flows</h2>
+
+  <h3>Flow 1: Admin Creates a Project and Invites Team</h3>
+  <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px;">1. Admin registers</div>
+      <span style="color:#64748b;">→ Selects "Admin" role during registration</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px;">2. Goes to Projects</div>
+      <span style="color:#64748b;">→ Clicks "New Project", enters name and description</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px;">3. Copies invite code</div>
+      <span style="color:#64748b;">→ UUID like: 539c5256-5439-4834-b53a-c90f00d53920</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px;">4. Shares with team</div>
+      <span style="color:#64748b;">→ Sends invite code via WhatsApp, email, etc.</span>
+    </div>
+  </div>
+
+  <h3>Flow 2: Developer Joins and Works on Tasks</h3>
+  <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#2563eb,#0891b2);">1. Developer registers</div>
+      <span style="color:#64748b;">→ Selects "Developer" role</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#2563eb,#0891b2);">2. Goes to Projects</div>
+      <span style="color:#64748b;">→ Clicks "Join Project", pastes invite code</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#2563eb,#0891b2);">3. Opens Kanban</div>
+      <span style="color:#64748b;">→ Sees all tasks, finds tasks assigned to them</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#2563eb,#0891b2);">4. Drags task</div>
+      <span style="color:#64748b;">→ Moves to "In Progress", team sees it instantly</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#2563eb,#0891b2);">5. Fixes bug</div>
+      <span style="color:#64748b;">→ Opens bug, adds comment, clicks "Mark as Resolved"</span>
+    </div>
+  </div>
+
+  <h3>Flow 3: Tester Reports a Bug</h3>
+  <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">1. Tester registers</div>
+      <span style="color:#64748b;">→ Selects "Tester" role</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">2. Joins project</div>
+      <span style="color:#64748b;">→ Uses invite code from Admin</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">3. Goes to Bug Reports</div>
+      <span style="color:#64748b;">→ Clicks "Report Bug"</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">4. Fills in details</div>
+      <span style="color:#64748b;">→ Title, description, steps, screenshot</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">5. AI analyzes</div>
+      <span style="color:#64748b;">→ Clicks "AI Analyze Severity" for auto-detection</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flow-step" style="min-width:180px; background:linear-gradient(135deg,#d97706,#f59e0b);">6. Submits</div>
+      <span style="color:#64748b;">→ Bug appears in list, assigned developer gets notified</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 9. DEPLOYMENT ══ -->
+<div class="section" id="deployment">
+  <h2>9. Deployment Guide</h2>
+  <p>The app is deployed on <strong>Render</strong> — a cloud platform that hosts web services, static sites, and databases.</p>
+
+  <h3>Services on Render</h3>
+  <table>
+    <tr><th>Service Name</th><th>Type</th><th>URL</th></tr>
+    <tr><td>bug-tracker-api</td><td>Web Service (Node.js)</td><td>https://bug-tracker-api-d117.onrender.com</td></tr>
+    <tr><td>bug-tracker-ui</td><td>Static Site</td><td>https://bug-tracker-ui-evqv.onrender.com</td></tr>
+    <tr><td>bug-tracker-db</td><td>PostgreSQL (Free)</td><td>Internal to Render</td></tr>
+  </table>
+
+  <h3>Backend Build &amp; Start</h3>
+  <pre>Build:  npm install &amp;&amp; npx prisma generate &amp;&amp; npx prisma migrate deploy
+Start:  npm start  (runs: npx ts-node --transpile-only src/server.ts)</pre>
+
+  <h3>Frontend Build</h3>
+  <pre>Build:   npm install &amp;&amp; npm run build
+Publish: out/   (Next.js static export)</pre>
+
+  <h3>Keep-Alive (Free Tier)</h3>
+  <p>Render free tier sleeps after 15 minutes of inactivity. The backend pings itself every 14 minutes to stay awake:</p>
+  <pre>// In server.ts
+setInterval(() => {
+  https.get(`${RENDER_EXTERNAL_URL}/api/v1/health`, ...);
+}, 14 * 60 * 1000);</pre>
+
+  <h3>Auto-Deploy</h3>
+  <p>Every <code>git push</code> to the <code>master</code> branch on GitHub triggers an automatic redeploy on Render.</p>
+</div>
+
+<!-- ══ 10. LOCAL SETUP ══ -->
+<div class="section" id="localsetup">
+  <h2>10. Local Development Setup</h2>
+
+  <h3>Prerequisites</h3>
+  <ul style="padding-left:20px; margin-bottom:16px;">
+    <li>Node.js 20+</li>
+    <li>PostgreSQL 16 (installed at C:\Program Files\PostgreSQL\16)</li>
+    <li>Git</li>
+  </ul>
+
+  <h3>Step 1 — Clone the Repository</h3>
+  <pre>git clone https://github.com/kutikantiyashwanth/bug_tracker.git
+cd bug_tracker/student-bug-tracker</pre>
+
+  <h3>Step 2 — Backend Setup</h3>
+  <pre>cd backend
+npm install</pre>
+  <p>Create <code>backend/.env</code>:</p>
+  <pre>DATABASE_URL="postgresql://postgres:Yashwanth@localhost:5432/student_bug_tracker"
+JWT_SECRET="your-secret-key-here"
+JWT_EXPIRES_IN="7d"
+PORT=5000
+NODE_ENV="development"
+FRONTEND_URL="http://localhost:3000"
+REDIS_URL=""</pre>
+  <p>Run migrations and start:</p>
+  <pre>npx prisma migrate deploy
+npx prisma generate
+npm run dev</pre>
+
+  <h3>Step 3 — Frontend Setup</h3>
+  <pre>cd ../frontend
+npm install</pre>
+  <p>Create <code>frontend/.env.local</code>:</p>
+  <pre>NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+NEXT_PUBLIC_SOCKET_URL=http://localhost:5000</pre>
+  <pre>npm run dev</pre>
+  <p>Open <strong>http://localhost:3000</strong></p>
+
+  <h3>Connect to Local Database (psql)</h3>
+  <pre>"C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -d student_bug_tracker</pre>
+  <p>Password: <code>Yashwanth</code></p>
+</div>
+
+<!-- ══ 11. ENV VARS ══ -->
+<div class="section" id="envvars">
+  <h2>11. Environment Variables</h2>
+
+  <h3>Backend (.env)</h3>
+  <table>
+    <tr><th>Variable</th><th>Required</th><th>Example</th><th>Description</th></tr>
+    <tr><td>DATABASE_URL</td><td><span class="pill green">Required</span></td><td>postgresql://...</td><td>PostgreSQL connection string</td></tr>
+    <tr><td>JWT_SECRET</td><td><span class="pill green">Required</span></td><td>my-secret-key</td><td>Secret for signing JWT tokens</td></tr>
+    <tr><td>JWT_EXPIRES_IN</td><td><span class="pill green">Required</span></td><td>7d</td><td>Token expiry duration</td></tr>
+    <tr><td>PORT</td><td><span class="pill green">Required</span></td><td>5000 / 10000</td><td>Server port (10000 on Render)</td></tr>
+    <tr><td>NODE_ENV</td><td><span class="pill green">Required</span></td><td>production</td><td>Environment mode</td></tr>
+    <tr><td>FRONTEND_URL</td><td><span class="pill green">Required</span></td><td>https://...</td><td>Frontend URL for CORS</td></tr>
+    <tr><td>RENDER_EXTERNAL_URL</td><td><span class="pill yellow">Optional</span></td><td>https://...</td><td>Backend URL for keep-alive ping</td></tr>
+    <tr><td>REDIS_URL</td><td><span class="pill yellow">Optional</span></td><td>redis://...</td><td>Redis cache (app works without it)</td></tr>
+    <tr><td>SMTP_HOST</td><td><span class="pill yellow">Optional</span></td><td>smtp.gmail.com</td><td>Email server host</td></tr>
+    <tr><td>SMTP_PORT</td><td><span class="pill yellow">Optional</span></td><td>587</td><td>Email server port</td></tr>
+    <tr><td>SMTP_USER</td><td><span class="pill yellow">Optional</span></td><td>you@gmail.com</td><td>Email address</td></tr>
+    <tr><td>SMTP_PASS</td><td><span class="pill yellow">Optional</span></td><td>app-password</td><td>Gmail App Password</td></tr>
+  </table>
+
+  <h3>Frontend (.env.local)</h3>
+  <table>
+    <tr><th>Variable</th><th>Required</th><th>Value</th></tr>
+    <tr><td>NEXT_PUBLIC_API_URL</td><td><span class="pill green">Required</span></td><td>https://bug-tracker-api-d117.onrender.com/api/v1</td></tr>
+    <tr><td>NEXT_PUBLIC_SOCKET_URL</td><td><span class="pill green">Required</span></td><td>https://bug-tracker-api-d117.onrender.com</td></tr>
+  </table>
+
+  <div class="callout warning">
+    <strong>⚠️ Important for Static Sites</strong>
+    NEXT_PUBLIC_ variables are baked into the JavaScript bundle at build time. If you change them on Render, you must trigger a redeploy for the changes to take effect.
+  </div>
+</div>
+
+<!-- ══ 12. Q&A ══ -->
+<div class="section" id="qa">
+  <h2>12. Q&amp;A — Common Questions</h2>
+
+  <div class="qa">
+    <div class="q">Q: What is this project?</div>
+    <div class="a">A full-stack web application for student teams to track bugs, manage tasks on a Kanban board, collaborate in real-time, and analyze project progress. It has three user roles (Admin, Developer, Tester) with different permissions.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What tech stack does it use?</div>
+    <div class="a">
+      <strong>Frontend:</strong> Next.js 16 (React), TypeScript, Tailwind CSS, Zustand, Socket.io-client, Recharts<br>
+      <strong>Backend:</strong> Node.js, Express, TypeScript, Prisma ORM, Socket.io, JWT, bcrypt<br>
+      <strong>Database:</strong> PostgreSQL 16<br>
+      <strong>Hosting:</strong> Render (free tier)
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: How does authentication work?</div>
+    <div class="a">JWT (JSON Web Token) authentication. When you log in, the server verifies your password using bcrypt, then creates a signed JWT token that expires in 7 days. This token is stored in localStorage and sent with every API request in the Authorization header. The server verifies the token on every protected endpoint.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: How does real-time collaboration work?</div>
+    <div class="a">Socket.io creates a persistent WebSocket connection between the browser and server. When a user moves a task on the Kanban board, the frontend emits a "task-moved" event to the server. The server broadcasts this to all users in the same project room. Their browsers receive the event and update the UI instantly — no page refresh needed.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What is Prisma?</div>
+    <div class="a">Prisma is an ORM (Object-Relational Mapper). Instead of writing raw SQL, you write TypeScript code like <code>prisma.bug.findMany({ where: { projectId } })</code> and Prisma translates it to SQL. It also manages database migrations — when you change the schema, Prisma generates and applies the SQL changes automatically.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What is Zustand?</div>
+    <div class="a">Zustand is a state management library for React. It stores global application state (current user, projects, tasks, bugs) in memory. When the state changes, all React components that use it automatically re-render. It also persists some state to localStorage so it survives page refreshes.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: Why is the first login slow?</div>
+    <div class="a">The backend runs on Render's free tier, which spins down after 15 minutes of inactivity. The first request wakes it up, which takes 30-60 seconds. After that, it runs at full speed. A keep-alive ping runs every 14 minutes to prevent this during active use.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: How does the invite code system work?</div>
+    <div class="a">When an Admin creates a project, PostgreSQL automatically generates a UUID (e.g., 539c5256-5439-4834-b53a-c90f00d53920) as the invite code. The Admin copies this and shares it with team members. When a Developer or Tester enters this code in the "Join Project" dialog, the backend finds the project by invite code and adds them as a member.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What does the AI severity analysis do?</div>
+    <div class="a">It's a keyword-based analysis (not a real AI model). The backend scans the bug title and description for keywords. Words like "crash", "data loss", "security" → Critical. Words like "error", "fail", "broken" → Major. Everything else → Minor. It also suggests tags like "authentication", "api", "mobile" based on keywords.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: Where is data stored?</div>
+    <div class="a">All data (users, projects, tasks, bugs, comments, notifications) is stored in PostgreSQL on Render. The in-memory cache is temporary and clears on server restart. Time tracking entries are stored in browser localStorage (not the database).</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What are the database indexes for?</div>
+    <div class="a">Without indexes, every database query scans the entire table row by row — slow when there are thousands of records. Indexes are like a book's index — they let the database jump directly to the relevant rows. We added 18 indexes on the most common query patterns (e.g., "get all bugs for project X with status OPEN").</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What is the in-memory cache?</div>
+    <div class="a">A simple TTL (time-to-live) cache inside the backend process. When multiple users request the same data within 30 seconds, the second request is served from memory instead of hitting the database. This reduces database load under multi-user scenarios. It's automatically invalidated when data changes (create/update/delete).</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: Does it work without Redis?</div>
+    <div class="a">Yes. Redis is optional. The app uses an in-memory cache as a fallback. Redis would provide a shared cache across multiple server instances, but since we run a single instance on Render free tier, in-memory cache is sufficient.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: Does it work without email (SMTP)?</div>
+    <div class="a">Yes. Email is optional. In-app notifications (the bell icon) work without SMTP. Email notifications (sent to your inbox) require SMTP configuration with a Gmail App Password.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: How is the frontend deployed as a static site?</div>
+    <div class="a">Next.js has an <code>output: 'export'</code> option that generates plain HTML, CSS, and JavaScript files (no server needed). These files are uploaded to Render's static site hosting. The browser downloads them and runs the React app entirely client-side. API calls go to the separate backend service.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What is render.yaml?</div>
+    <div class="a">A blueprint file that defines all Render services in code. It specifies the backend web service, frontend static site, and PostgreSQL database — including build commands, environment variables, and configuration. When connected to GitHub, Render reads this file to set up the deployment automatically.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: How do I add a new team member?</div>
+    <div class="a">
+      1. Admin copies the invite code from the Projects page (visible only to admins)<br>
+      2. New member registers at /register with Developer or Tester role<br>
+      3. New member goes to Projects page → Join Project → pastes the invite code<br>
+      4. They are now a member and can see all project data
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q: What is the project structure?</div>
+    <div class="a">
+      <code>backend/src/index.ts</code> — All API routes and Socket.io handlers (main file)<br>
+      <code>backend/src/server.ts</code> — Entry point with keep-alive and graceful shutdown<br>
+      <code>backend/prisma/schema.prisma</code> — Database schema definition<br>
+      <code>frontend/src/app/dashboard/</code> — All dashboard pages<br>
+      <code>frontend/src/lib/store-api.ts</code> — Zustand store with all API calls<br>
+      <code>frontend/src/lib/api.ts</code> — Axios instance with JWT interceptor<br>
+      <code>frontend/src/lib/socket.ts</code> — Socket.io client connection
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<hr>
+<div style="text-align:center; padding:32px; color:#94a3b8; font-size:12px;">
+  <p style="font-size:16px; font-weight:900; color:#6d28d9; margin-bottom:8px;">🐛 Student Bug Tracker</p>
+  <p>Built with Next.js · Express · PostgreSQL · Socket.io · Deployed on Render</p>
+  <p style="margin-top:8px;">
+    Frontend: <a href="https://bug-tracker-ui-evqv.onrender.com" style="color:#6d28d9;">https://bug-tracker-ui-evqv.onrender.com</a>
+    &nbsp;·&nbsp;
+    Backend: <a href="https://bug-tracker-api-d117.onrender.com/api/v1/health" style="color:#6d28d9;">https://bug-tracker-api-d117.onrender.com</a>
+  </p>
+  <p style="margin-top:8px;">Demo: admin@test.com / password123</p>
+  <p style="margin-top:16px; color:#cbd5e1;">Version 1.0 · May 2026 · Yashwanth Kutikanti</p>
+</div>
+
+</div><!-- end .page -->
+</body>
+</html>

@@ -3,7 +3,8 @@
 A full-stack project management and bug tracking platform built for student teams, hackathons, and open-source projects. Features role-based access control, real-time collaboration, Kanban board, AI-powered bug analysis, and full deployment on Render.
 
 **Live Demo:** https://bug-tracker-ui-evqv.onrender.com  
-**Backend API:** https://bug-tracker-api-d117.onrender.com/api/v1/health
+**Backend API:** https://bug-tracker-api-d117.onrender.com/api/v1/health  
+**Database:** Supabase PostgreSQL (db.earwybppkswgemvjyjau.supabase.co)
 
 ---
 
