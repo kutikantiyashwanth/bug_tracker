@@ -74,26 +74,32 @@ const baseTemplate = (content: string) => `
 async function sendEmail(to: string, subject: string, html: string) {
   console.log(`[Email] Attempting to send to ${to}`);
 
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const resendKey = process.env.RESEND_API_KEY;
 
-  if (!user || !pass) {
-    console.log(`[Email] Skipping — SMTP not configured`);
+  if (!resendKey) {
+    console.log(`[Email] Skipping — RESEND_API_KEY not set`);
     return;
   }
 
   const nodemailer = require('nodemailer');
-
-  // Use Gmail's SMTP relay on port 465 (SSL) — most reliable on cloud servers
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // Let nodemailer handle Gmail config automatically
-    auth: { user, pass },
+    host: 'smtp.resend.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'resend',
+      pass: resendKey,
+    },
     tls: { rejectUnauthorized: false },
   });
 
   try {
-    const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
-    await transporter.sendMail({ from, to, subject, html });
+    await transporter.sendMail({
+      from: 'BugTracker <onboarding@resend.dev>',
+      to,
+      subject,
+      html,
+    });
     console.log(`[Email] ✅ Sent to ${to}: ${subject}`);
   } catch (err: any) {
     console.error(`[Email] ❌ Failed: ${err.message}`);
