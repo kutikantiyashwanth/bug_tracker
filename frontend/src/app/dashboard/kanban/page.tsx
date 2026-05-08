@@ -106,7 +106,7 @@ export default function KanbanPage() {
       priority: formPriority,
       assigneeId: formAssignee || undefined,
       createdBy: currentUser.id,
-      dueDate: formDueDate || undefined,
+      dueDate: formDueDate ? new Date(formDueDate).toISOString() : undefined,
       tags: formTags ? formTags.split(",").map((t) => t.trim()).filter(Boolean) : [],
     });
     setShowCreateDialog(false);
@@ -130,7 +130,7 @@ export default function KanbanPage() {
       description: formDesc.trim(),
       priority: formPriority,
       assigneeId: formAssignee || undefined,
-      dueDate: formDueDate || undefined,
+      dueDate: formDueDate ? new Date(formDueDate).toISOString() : undefined,
       tags: formTags ? formTags.split(",").map((t) => t.trim()).filter(Boolean) : [],
     });
     setEditTask(null);

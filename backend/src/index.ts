@@ -488,18 +488,23 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
 
     // Notify assignee if different from creator
     if (assigneeId && assigneeId !== req.user.userId) {
+      const dueDateStr = dueDate
+        ? new Date(dueDate).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })
+        : null;
+
       await prisma.notification.create({
         data: {
           userId: assigneeId,
           type: "TASK_ASSIGNED",
           title: "New Task Assigned",
-          message: `You have been assigned to "${task.title}"`,
+          message: `You have been assigned to "${task.title}"${dueDateStr ? ` — Due: ${dueDateStr}` : ""}`,
           link: `/dashboard/kanban`,
         },
       });
+      mc.del(`notifs:${assigneeId}`);
       io.to(`user:${assigneeId}`).emit("notification", { type: "TASK_ASSIGNED", title: "New Task Assigned" });
 
-      // Send email
+      // Send email with due date included
       const assignee = await prisma.user.findUnique({ where: { id: assigneeId } });
       const project  = await prisma.project.findUnique({ where: { id: projectId } });
       if (assignee?.email) {
@@ -508,7 +513,9 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
           taskTitle: task.title,
           priority: dbPriority.toLowerCase(),
           projectName: project?.name || "Your Project",
-          description: description,
+          description: dueDateStr
+            ? `${description || ""}\n\n⏰ Deadline: ${dueDateStr}`.trim()
+            : description,
         });
       }
     }
@@ -538,6 +545,35 @@ app.patch("/api/v1/tasks/:taskId", authMiddleware, async (req: any, res) => {
         createdBy: { select: { id: true, name: true, email: true } },
       },
     });
+
+    // If due date was updated and task has an assignee → notify them
+    if (updates.dueDate && task.assigneeId && task.assigneeId !== req.user.userId) {
+      const dueDateStr = new Date(updates.dueDate).toLocaleString("en-US", {
+        weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
+      });
+      await prisma.notification.create({
+        data: {
+          userId: task.assigneeId,
+          type: "DEADLINE_REMINDER",
+          title: `📅 Deadline Set: "${task.title}"`,
+          message: `Your deadline has been set to ${dueDateStr}`,
+          link: `/dashboard/kanban`,
+        },
+      });
+      mc.del(`notifs:${task.assigneeId}`);
+      io.to(`user:${task.assigneeId}`).emit("notification", { type: "DEADLINE_REMINDER", title: "Deadline Updated" });
+
+      // Send email
+      if (task.assignee?.email) {
+        sendTaskAssignedEmail(task.assignee.email, {
+          assigneeName: task.assignee.name,
+          taskTitle: task.title,
+          priority: (task.priority || "MEDIUM").toLowerCase(),
+          projectName: "Your Project",
+          description: `⏰ Your deadline has been set to: ${dueDateStr}`,
+        });
+      }
+    }
 
     mc.del(`tasks:${task.projectId}`);
     res.json({ success: true, message: "Task updated successfully", data: task });
