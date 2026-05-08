@@ -74,36 +74,41 @@ const baseTemplate = (content: string) => `
 async function sendEmail(to: string, subject: string, html: string) {
   console.log(`[Email] Attempting to send to ${to}`);
 
-  const resendKey = process.env.RESEND_API_KEY;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '587');
 
-  if (!resendKey) {
-    console.log(`[Email] Skipping — RESEND_API_KEY not set`);
+  if (!user || !pass) {
+    console.log(`[Email] Skipping — SMTP not configured`);
     return;
   }
 
   const nodemailer = require('nodemailer');
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.resend.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'resend',
-      pass: resendKey,
-    },
-    tls: { rejectUnauthorized: false },
-  });
 
-  try {
-    await transporter.sendMail({
-      from: 'BugTracker <onboarding@resend.dev>',
-      to,
-      subject,
-      html,
-    });
-    console.log(`[Email] ✅ Sent to ${to}: ${subject}`);
-  } catch (err: any) {
-    console.error(`[Email] ❌ Failed: ${err.message}`);
+  // Try configured port first, then fallbacks
+  const ports = [port, 465, 587, 2525].filter((v, i, a) => a.indexOf(v) === i);
+
+  for (const p of ports) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host,
+        port: p,
+        secure: p === 465,
+        auth: { user, pass },
+        tls: { rejectUnauthorized: false },
+        connectionTimeout: 8000,
+        socketTimeout: 10000,
+      });
+      const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
+      await transporter.sendMail({ from, to, subject, html });
+      console.log(`[Email] ✅ Sent to ${to} via port ${p}`);
+      return;
+    } catch (err: any) {
+      console.log(`[Email] Port ${p} failed: ${err.message.substring(0, 80)}`);
+    }
   }
+  console.error(`[Email] ❌ All ports failed for ${to}`);
 }
 
 // ─── Email templates ───
