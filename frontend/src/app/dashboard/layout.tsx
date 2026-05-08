@@ -155,7 +155,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const SidebarContent = () =>       {/* ── Logo ── */}
+  const SidebarContent = () => (
+    <div className="flex flex-col h-full">
+      {/* ── Logo ── */}
       <div className="flex items-center gap-3 px-6 h-20 shrink-0">
         <div className="relative group cursor-pointer">
           <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
@@ -318,196 +320,191 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-    <div className="flex min-h-screen bg-[#f8fafc]">
+      <div className="flex min-h-screen bg-[#f8fafc]">
+        {/* Desktop Sidebar */}
+        <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
+          <SidebarContent />
+        </aside>
 
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
-        <SidebarContent />
-      </aside>
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-md lg:hidden"
+            onClick={() => setSidebarOpen(false)} />
+        )}
 
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-md lg:hidden"
-          onClick={() => setSidebarOpen(false)} />
-      )}
-
-      {/* Mobile Sidebar */}
-      <aside className={cn(
-        "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <button className="absolute right-4 top-4 p-2 rounded-xl text-white/20 hover:text-white hover:bg-white/5 transition-all"
-          onClick={() => setSidebarOpen(false)}>
-          <X className="h-5 w-5" />
-        </button>
-        <SidebarContent />
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
-
-        {/* Top bar / Header */}
-        <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
-          <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
-            onClick={() => setSidebarOpen(true)}>
-            <Menu className="h-5 w-5" />
+        {/* Mobile Sidebar */}
+        <aside className={cn(
+          "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/20 hover:text-white hover:bg-white/5 transition-all"
+            onClick={() => setSidebarOpen(false)}>
+            <X className="h-5 w-5" />
           </button>
+          <SidebarContent />
+        </aside>
 
-          <div className="flex-1 flex items-center">
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
-                <span>Workspace</span>
-                <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
-              </div>
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{currentLabel}</h1>
-            </div>
-          </div>
+        {/* Main Content Area */}
+        <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
+          {/* Top bar / Header */}
+          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
+            <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
+              onClick={() => setSidebarOpen(true)}>
+              <Menu className="h-5 w-5" />
+            </button>
 
-          <div className="flex items-center gap-4">
-            {/* Search Bar */}
-            <div className="hidden md:block relative">
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
-                <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
-                <span className="text-sm font-medium">Search anything...</span>
-                <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Link href="/dashboard/notifications">
-                <button className="relative p-3 rounded-2xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
-                  <Bell className="h-5 w-5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
-                  )}
-                </button>
-              </Link>
-
-              <div className="h-8 w-[1px] bg-slate-200 mx-1" />
-
-              <Link href="/dashboard/settings" className="flex items-center gap-3 group">
-                <div className="text-right hidden xl:block">
-                  <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
-                  <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Profile</p>
+            <div className="flex-1 flex items-center">
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
+                  <span>Workspace</span>
+                  <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
                 </div>
-                <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-slate-200">
-                  <AvatarFallback className="text-xs font-black bg-slate-100 text-slate-600">
-                    {getInitials(currentUser?.name || "U")}
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{currentLabel}</h1>
+              </div>
             </div>
-          </div>
-        </header>
 
-        {/* Scrollable Page Content */}
-        <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up">
-          {children}
-        </div>
-      </main>
-    </div>
-    </div>
-      </main>
-    </div>
-
-    {/* ── Deadline Alert Toast ── */}
-    <DeadlineAlert />
-
-    {/* ── Search Modal ── */}
-    {searchOpen && (
-      <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4"
-        onClick={() => setSearchOpen(false)}>
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
-        <div className="relative w-full max-w-lg animate-scale-in"
-          onClick={(e) => e.stopPropagation()}>
-          <div className="rounded-2xl overflow-hidden shadow-xl"
-            style={{ background: "#ffffff", border: "1px solid #e8ecf4", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
-            {/* Input */}
-            <div className="flex items-center gap-3 px-4 py-3.5" style={{ borderBottom: "1px solid rgba(109,40,217,0.15)" }}>
-              <Search className="h-[18px] w-[18px] text-purple-600 shrink-0" />
-              <input
-                ref={searchRef}
-                type="text"
-                placeholder="Search tasks, bugs, projects..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-transparent"
-              />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-700">
-                  <X className="h-4 w-4" />
+            <div className="flex items-center gap-4">
+              {/* Search Bar */}
+              <div className="hidden md:block relative">
+                <button
+                  onClick={() => setSearchOpen(true)}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
+                  <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                  <span className="text-sm font-medium">Search anything...</span>
+                  <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
                 </button>
-              )}
-              <kbd className="text-[10px] rounded px-1.5 py-0.5 font-mono shrink-0"
-                style={{ background: "rgba(109,40,217,0.1)", border: "1px solid rgba(109,40,217,0.2)", color: "rgba(196,181,253,0.7)" }}>ESC</kbd>
-            </div>
+              </div>
 
-            {/* Results */}
-            {searchQuery.trim().length >= 2 && (
-              <div className="py-2 max-h-80 overflow-y-auto">
-                {searchResults.length === 0 ? (
-                  <div className="px-4 py-8 text-center">
-                    <p className="text-sm text-gray-400">No results for "<span className="font-medium text-gray-700">{searchQuery}</span>"</p>
+              <div className="flex items-center gap-2">
+                <Link href="/dashboard/notifications">
+                  <button className="relative p-3 rounded-2xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                    <Bell className="h-5 w-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
+                    )}
+                  </button>
+                </Link>
+
+                <div className="h-8 w-[1px] bg-slate-200 mx-1" />
+
+                <Link href="/dashboard/settings" className="flex items-center gap-3 group">
+                  <div className="text-right hidden xl:block">
+                    <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
+                    <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Profile</p>
                   </div>
-                ) : (
-                  <>
-                    {searchResults.map((r, i) => (
-                      <Link key={i} href={r.href}
+                  <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-slate-200">
+                    <AvatarFallback className="text-xs font-black bg-slate-100 text-slate-600">
+                      {getInitials(currentUser?.name || "U")}
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+              </div>
+            </div>
+          </header>
+
+          {/* Scrollable Page Content */}
+          <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up">
+            {children}
+          </div>
+        </main>
+      </div>
+
+      {/* ── Deadline Alert Toast ── */}
+      <DeadlineAlert />
+
+      {/* ── Search Modal ── */}
+      {searchOpen && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4"
+          onClick={() => setSearchOpen(false)}>
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg animate-scale-in"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="rounded-2xl overflow-hidden shadow-xl"
+              style={{ background: "#ffffff", border: "1px solid #e8ecf4", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
+              {/* Input */}
+              <div className="flex items-center gap-3 px-4 py-3.5" style={{ borderBottom: "1px solid rgba(109,40,217,0.15)" }}>
+                <Search className="h-[18px] w-[18px] text-purple-600 shrink-0" />
+                <input
+                  ref={searchRef}
+                  type="text"
+                  placeholder="Search tasks, bugs, projects..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-transparent"
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-700">
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+                <kbd className="text-[10px] rounded px-1.5 py-0.5 font-mono shrink-0"
+                  style={{ background: "rgba(109,40,217,0.1)", border: "1px solid rgba(109,40,217,0.2)", color: "rgba(196,181,253,0.7)" }}>ESC</kbd>
+              </div>
+
+              {/* Results */}
+              {searchQuery.trim().length >= 2 && (
+                <div className="py-2 max-h-80 overflow-y-auto">
+                  {searchResults.length === 0 ? (
+                    <div className="px-4 py-8 text-center">
+                      <p className="text-sm text-gray-400">No results for "<span className="font-medium text-gray-700">{searchQuery}</span>"</p>
+                    </div>
+                  ) : (
+                    <>
+                      {searchResults.map((r, i) => (
+                        <Link key={i} href={r.href}
+                          onClick={() => setSearchOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 transition-colors group"
+                          style={{}}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.1)")}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
+                          <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                            r.type === "Task" ? "icon-violet" : r.type === "Bug" ? "icon-rose" : "icon-blue"
+                          )}>
+                            <r.icon className={cn("h-4 w-4", r.color)} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-800 truncate">{r.label}</p>
+                            <p className="text-xs text-gray-400 capitalize">{r.type} · {r.sub}</p>
+                          </div>
+                          <span className="text-[10px] text-slate-600 group-hover:text-purple-600 transition-colors">↵ Open</span>
+                        </Link>
+                      ))}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Hints */}
+              {searchQuery.trim().length < 2 && (
+                <div className="px-4 py-4">
+                  <p className="text-xs text-gray-400 mb-3 font-medium">Quick navigation</p>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[
+                      { label: "Overview",    href: "/dashboard",              icon: LayoutDashboard, color: "icon-violet" },
+                      { label: "Kanban",      href: "/dashboard/kanban",       icon: Kanban,          color: "icon-blue" },
+                      { label: "Bug Reports", href: "/dashboard/bugs",         icon: Bug,             color: "icon-rose" },
+                      { label: "Activity",    href: "/dashboard/activity",     icon: Activity,        color: "icon-emerald" },
+                      { label: "Notifications", href: "/dashboard/notifications", icon: Bell,         color: "icon-amber" },
+                      { label: "Settings",    href: "/dashboard/settings",     icon: Settings,        color: "icon-indigo" },
+                    ].map((item) => (
+                      <Link key={item.href} href={item.href}
                         onClick={() => setSearchOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 transition-colors group"
-                        style={{}}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.1)")}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all"
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.04)")}
                         onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
-                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-                          r.type === "Task" ? "icon-violet" : r.type === "Bug" ? "icon-rose" : "icon-blue"
-                        )}>
-                          <r.icon className={cn("h-4 w-4", r.color)} />
+                        <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center shrink-0", item.color)}>
+                          <item.icon className="h-3.5 w-3.5" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-800 truncate">{r.label}</p>
-                          <p className="text-xs text-gray-400 capitalize">{r.type} · {r.sub}</p>
-                        </div>
-                        <span className="text-[10px] text-slate-600 group-hover:text-purple-600 transition-colors">↵ Open</span>
+                        <span className="text-xs font-medium text-gray-500">{item.label}</span>
                       </Link>
                     ))}
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* Hints */}
-            {searchQuery.trim().length < 2 && (
-              <div className="px-4 py-4">
-                <p className="text-xs text-gray-400 mb-3 font-medium">Quick navigation</p>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {[
-                    { label: "Overview",    href: "/dashboard",              icon: LayoutDashboard, color: "icon-violet" },
-                    { label: "Kanban",      href: "/dashboard/kanban",       icon: Kanban,          color: "icon-blue" },
-                    { label: "Bug Reports", href: "/dashboard/bugs",         icon: Bug,             color: "icon-rose" },
-                    { label: "Activity",    href: "/dashboard/activity",     icon: Activity,        color: "icon-emerald" },
-                    { label: "Notifications", href: "/dashboard/notifications", icon: Bell,         color: "icon-amber" },
-                    { label: "Settings",    href: "/dashboard/settings",     icon: Settings,        color: "icon-indigo" },
-                  ].map((item) => (
-                    <Link key={item.href} href={item.href}
-                      onClick={() => setSearchOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all"
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.04)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
-                      <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center shrink-0", item.color)}>
-                        <item.icon className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-xs font-medium text-gray-500">{item.label}</span>
-                    </Link>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </>
   );
 }

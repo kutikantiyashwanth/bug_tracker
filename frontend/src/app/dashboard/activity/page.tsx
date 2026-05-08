@@ -65,102 +65,129 @@ export default function ActivityPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10 animate-slide-up max-w-5xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Activity Log</h1>
-        <p className="text-sm text-gray-500 mt-1">Track all actions and changes in your project</p>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-1 bg-indigo-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Project Operations</span>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Activity <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
+        <p className="text-slate-500 mt-2 font-medium max-w-xl">
+          Real-time surveillance of all project operations, modifications, and system events across the workspace.
+        </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {statCards.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-3"
-            style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
-            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", stat.bg)}>
-              <stat.icon className={cn("h-5 w-5", stat.text)} />
+          <div key={stat.label} className="premium-card p-6 flex flex-col items-center text-center group hover:scale-105 transition-all">
+            <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 shadow-sm", 
+              stat.label === "Total Actions" ? "bg-slate-900 text-white" :
+              stat.label === "Tasks" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+              stat.label === "Bugs" ? "bg-rose-50 text-rose-600 border-rose-100" :
+              "bg-emerald-50 text-emerald-600 border-emerald-100"
+            )}>
+              <stat.icon className="h-6 w-6" />
             </div>
-            <div>
-              <p className="text-xl font-black text-gray-900">{stat.value}</p>
-              <p className="text-xs font-medium text-gray-500">{stat.label}</p>
+            <div className="space-y-1">
+              <p className="text-3xl font-black text-slate-900">{stat.value}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Timeline */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6"
-        style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 rounded-xl bg-violet-100 flex items-center justify-center">
-            <Activity className="h-4 w-4 text-violet-700" />
+      <div className="premium-card p-10">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+              <Activity className="h-6 w-6 text-slate-400" />
+            </div>
+            <div>
+              <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Operational Timeline</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Chronological System Events</p>
+            </div>
           </div>
-          <h2 className="text-base font-bold text-gray-900">Timeline</h2>
+          <div className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-100">
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Live Monitoring Active</span>
+          </div>
         </div>
 
-        <ScrollArea className="h-[600px]">
+        <ScrollArea className="h-[700px] pr-6">
           {Object.keys(groupedActivities).length === 0 ? (
-            <div className="text-center py-16">
-              <Activity className="h-12 w-12 text-gray-200 mx-auto mb-4" />
-              <p className="text-gray-400 font-medium">No activity yet</p>
-              <p className="text-xs text-gray-300 mt-1">Actions will appear here as your team works</p>
+            <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+              <div className="w-20 h-20 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
+                <Activity className="h-10 w-10 text-slate-200" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-black text-slate-900 uppercase tracking-widest">No Operational History</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase">Actions will materialize as protocols are executed</p>
+              </div>
             </div>
           ) : (
             Object.entries(groupedActivities).map(([date, dateActivities]) => (
-              <div key={date} className="mb-8 last:mb-0">
+              <div key={date} className="mb-12 last:mb-0">
                 {/* Date header */}
-                <div className="sticky top-0 bg-white z-10 pb-2 mb-3">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 py-4 mb-6 border-b border-slate-50">
+                  <span className="text-xs font-black text-indigo-600 uppercase tracking-[0.2em]">
                     {date}
                   </span>
                 </div>
 
-                <div className="space-y-1 relative">
+                <div className="space-y-4 relative">
                   {/* Timeline line */}
-                  <div className="absolute left-5 top-6 bottom-2 w-0.5 bg-gray-100 rounded-full" />
+                  <div className="absolute left-6 top-8 bottom-0 w-px bg-slate-100" />
 
                   {dateActivities.map((activity, i) => {
                     const user = getUserById(activity.userId);
                     const Icon = actionIcons[activity.action] || Activity;
-                    const cfg = actionConfig[activity.action] || { bg: "bg-gray-100", text: "text-gray-600", border: "border-gray-200" };
                     const entityKey = activity.entityType?.toLowerCase() || "";
-                    const badgeCls = entityBadge[entityKey] || "bg-gray-100 text-gray-600 border border-gray-200";
-
+                    
                     return (
-                      <div key={activity.id}
-                        className="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors stagger-item relative"
-                        style={{ animationDelay: `${i * 30}ms` }}>
-
-                        {/* Action icon */}
-                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0 z-10 border", cfg.bg, cfg.text, cfg.border)}>
-                          <Icon className="h-4 w-4" />
+                      <div key={activity.id} className="flex gap-6 group">
+                        {/* Action icon bubble */}
+                        <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 z-10 border transition-all shadow-sm group-hover:scale-110", 
+                          activity.action === "resolved" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+                          activity.action === "reported" ? "bg-rose-50 text-rose-600 border-rose-100" :
+                          activity.action === "joined" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+                          "bg-slate-50 text-slate-600 border-slate-100"
+                        )}>
+                          <Icon className="h-5 w-5" />
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0 pt-1">
-                          <p className="text-sm text-gray-800 leading-relaxed">
-                            <span className="font-bold text-gray-900">{user?.name || "Unknown"}</span>{" "}
-                            <span className="text-gray-600">{activity.details}</span>
-                          </p>
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-[11px] text-gray-400 font-medium">
-                              {formatRelativeTime(activity.createdAt)}
-                            </span>
-                            {entityKey && (
-                              <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-semibold capitalize", badgeCls)}>
-                                {entityKey}
-                              </span>
-                            )}
+                        <div className="flex-1 pb-8 group-last:pb-0">
+                          <div className="p-6 rounded-[2rem] bg-slate-50/50 border border-transparent group-hover:border-slate-100 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
+                            <div className="space-y-2">
+                              <p className="text-sm font-medium text-slate-600 leading-relaxed">
+                                <span className="font-black text-slate-900 uppercase tracking-tight mr-1">{user?.name || "System Actor"}</span>{" "}
+                                {activity.details}
+                              </p>
+                              <div className="flex items-center gap-3">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                  {formatRelativeTime(activity.createdAt)}
+                                </span>
+                                {entityKey && (
+                                  <Badge className={cn("text-[9px] font-black uppercase tracking-widest",
+                                    entityKey === "task" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+                                    entityKey === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" :
+                                    "bg-slate-100 text-slate-600 border-slate-200"
+                                  )}>
+                                    {entityKey}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+
+                            <Avatar className="h-10 w-10 border-2 border-white shadow-sm shrink-0">
+                              <AvatarFallback className="text-[10px] font-black bg-slate-900 text-white">
+                                {user ? getInitials(user.name) : "?"}
+                              </AvatarFallback>
+                            </Avatar>
                           </div>
                         </div>
-
-                        {/* Avatar */}
-                        <Avatar className="h-7 w-7 shrink-0 mt-0.5">
-                          <AvatarFallback className="text-[9px] font-bold"
-                            style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)", color: "white" }}>
-                            {user ? getInitials(user.name) : "?"}
-                          </AvatarFallback>
-                        </Avatar>
                       </div>
                     );
                   })}

@@ -123,193 +123,193 @@ export default function GitHubPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-4xl">
-      {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 github-header">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2 page-title">
-            <Github className="h-6 w-6 text-gray-700" />
-            GitHub Integration
+    <div className="space-y-10 animate-slide-up max-w-4xl">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-1 bg-slate-900 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">External Sync</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight flex items-center gap-4">
+            GitHub <span className="text-slate-500 underline decoration-slate-200 underline-offset-8">Intelligence</span>
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Link bugs and tasks to GitHub issues and pull requests</p>
+          <p className="text-slate-500 mt-2 font-medium max-w-xl">
+            Synchronize your local development environment with global VCS repositories. Map defects and requirements to remote issues and pull requests.
+          </p>
         </div>
         {repoUrl && (
           <a href={repoUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all w-full sm:w-auto"
-            style={{ background: "rgba(109,40,217,0.06)", border: "1px solid rgba(109,40,217,0.2)", color: "#7c3aed" }}>
-            <ExternalLink className="h-3.5 w-3.5" /> View Repo
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white border border-slate-200 text-xs font-black uppercase tracking-widest hover:border-slate-900 hover:bg-slate-50 transition-all shadow-sm">
+            <ExternalLink className="h-4 w-4" /> REPOSITORY
           </a>
         )}
       </div>
 
-      {/* ── Connect Repo ── */}
-      <Card className="card-base">
-        <CardContent className="p-4 sm:p-5">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 icon-purple rounded-xl flex items-center justify-center shrink-0">
-              <Github className="h-5 w-5" />
+      {/* Connect Repo */}
+      <div className="premium-card p-8 bg-slate-950 text-white relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 transition-transform">
+          <Github className="h-32 w-32" />
+        </div>
+        <div className="relative z-10 space-y-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10">
+              <Github className="h-6 w-6" />
             </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-bold text-gray-900">Connect Repository</h2>
-              <p className="text-xs text-gray-500 truncate">
-                {repoUrl ? `Connected: ${repoUrl}` : "Enter your GitHub repository URL"}
-              </p>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Connection Endpoint</p>
+              <h2 className="text-lg font-black tracking-tight">{repoUrl ? "REPOSITORY SYNCHRONIZED" : "INITIALIZE CONNECTION"}</h2>
             </div>
-            {repoUrl && (
-              <span className="pill-emerald shrink-0 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                Connected
-              </span>
-            )}
           </div>
-          <div className="flex gap-2">
+          
+          <div className="flex gap-3">
             <Input value={repoInput} onChange={(e) => setRepoInput(e.target.value)}
-              placeholder="https://github.com/owner/repo" className="flex-1 min-w-0" />
-            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="shrink-0"
-              style={{ background: "linear-gradient(135deg, #6d28d9, #2563eb)", color: "white" }}>
-              {repoSaved ? "Saved!" : <><Save className="h-4 w-4 mr-1 hidden sm:inline" /> Save</>}
+              placeholder="https://github.com/owner/repository" 
+              className="h-14 bg-white/5 border-white/10 focus:border-indigo-500/50 text-white !rounded-2xl font-mono text-xs" />
+            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="h-14 px-8 !rounded-2xl !bg-white !text-slate-950 font-black text-xs uppercase tracking-widest hover:!bg-slate-200">
+              {repoSaved ? "SAVED" : <><Save className="h-4 w-4 mr-2" /> COMMIT URL</>}
             </Button>
           </div>
-          {!repoUrl && (
-            <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3 shrink-0" />
-              Issue/PR URLs will be auto-generated once a repo is connected.
-            </p>
-          )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* ── Stats ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 stat-grid">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
-          { label: "Total Items",   value: allItems.length,                          color: "text-gray-700",    bg: "bg-gray-100" },
-          { label: "Linked Issues", value: linkedIssues.length,                      color: "text-violet-700",  bg: "bg-violet-100" },
-          { label: "Linked PRs",    value: linkedPRs.length,                         color: "text-blue-700",    bg: "bg-blue-100" },
-          { label: "Unlinked",      value: allItems.filter((i) => !i.link).length,   color: "text-gray-500",    bg: "bg-gray-100" },
+          { label: "TOTAL OBJECTS",   value: allItems.length,                          icon: Github,    bg: "bg-slate-50 text-slate-400" },
+          { label: "ACTIVE ISSUES", value: linkedIssues.length,                      icon: AlertCircle,    bg: "bg-indigo-50 text-indigo-600" },
+          { label: "PULL REQUESTS",    value: linkedPRs.length,                         icon: GitPullRequest,    bg: "bg-emerald-50 text-emerald-600" },
+          { label: "PENDING SYNC",      value: allItems.filter((i) => !i.link).length,   icon: Link2Off,    bg: "bg-rose-50 text-rose-600" },
         ].map((s) => (
-          <Card key={s.label} className="card-base">
-            <CardContent className="p-3 sm:p-4 flex items-center gap-3">
-              <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0", s.bg)}>
-                <span className={cn("text-base font-bold", s.color)}>{s.value}</span>
-              </div>
-              <span className="text-xs sm:text-sm text-gray-500 truncate">{s.label}</span>
-            </CardContent>
-          </Card>
+          <div key={s.label} className="premium-card p-6 flex flex-col items-center text-center group">
+            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110", s.bg)}>
+              <s.icon className="h-5 w-5" />
+            </div>
+            <p className="text-2xl font-black text-slate-900">{s.value}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
+          </div>
         ))}
       </div>
 
-      {/* ── Tabs + Item List ── */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="w-full sm:w-auto">
-          <TabsTrigger value="all" className="flex-1 sm:flex-none">All ({allItems.length})</TabsTrigger>
-          <TabsTrigger value="issues" className="flex-1 sm:flex-none">Issues ({linkedIssues.length})</TabsTrigger>
-          <TabsTrigger value="prs" className="flex-1 sm:flex-none">PRs ({linkedPRs.length})</TabsTrigger>
-        </TabsList>
+      {/* Tabs + Item List */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <TabsList className="bg-transparent gap-8 h-auto p-0">
+            {[
+              { id: "all", label: "ALL ENTITIES", count: allItems.length },
+              { id: "issues", label: "TRACKED ISSUES", count: linkedIssues.length },
+              { id: "prs", label: "PULL REQUESTS", count: linkedPRs.length },
+            ].map((tab) => (
+              <TabsTrigger key={tab.id} value={tab.id} 
+                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-slate-900 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-slate-900 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-slate-50 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-slate-900 group-data-[state=active]:text-white transition-all">{tab.count}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
 
-        <TabsContent value={activeTab} className="mt-4 space-y-2">
+        <TabsContent value={activeTab} className="space-y-4 outline-none">
           {tabItems.length === 0 ? (
-            <Card className="card-base">
-              <CardContent className="p-10 sm:p-12 text-center">
-                <div className="w-14 h-14 icon-purple rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Link2Off className="h-7 w-7" />
-                </div>
-                <p className="text-gray-700 font-semibold">
-                  {activeTab === "all" ? "No bugs or tasks yet" : `No ${activeTab === "issues" ? "linked issues" : "linked PRs"} yet`}
-                </p>
-                <p className="text-sm text-gray-400 mt-1">
-                  {activeTab === "all" ? "Create bugs or tasks in your project first." : "Click \"Link to GitHub\" on any item to get started."}
-                </p>
-              </CardContent>
-            </Card>
+            <div className="premium-card p-24 text-center border-dashed">
+              <div className="w-20 h-20 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-6">
+                <Link2Off className="h-10 w-10 text-slate-200" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Isolated Environment</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2 max-w-xs mx-auto">
+                No external VCS mappings detected. Initialize synchronization on any project entity.
+              </p>
+            </div>
           ) : (
-            tabItems.map((item, i) => (
-              <Card key={item.id} className="card-base stagger-item" style={{ animationDelay: `${i * 40}ms` }}>
-                <CardContent className="p-3 sm:p-4">
-                  <div className="flex items-start gap-3">
-                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
-                      item.kind === "bug" ? "icon-rose" : "icon-violet")}>
-                      {item.kind === "bug" ? <Bug className="h-4 w-4" /> : <CheckSquare className="h-4 w-4" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 truncate">{item.title}</p>
-                          <div className="flex items-center gap-2 mt-1 flex-wrap">
-                            <span className="pill-gray text-[10px] capitalize">{item.kind}</span>
-                            <span className="text-[10px] text-gray-400 capitalize">{item.status}</span>
-                          </div>
+            tabItems.map((item) => (
+              <div key={item.id} className="premium-card !p-0 group transition-all hover:shadow-xl hover:shadow-indigo-500/5">
+                <div className="p-6 sm:p-8 flex items-center gap-6">
+                  <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border shadow-sm transition-all group-hover:scale-110",
+                    item.kind === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" : "bg-indigo-50 text-indigo-600 border-indigo-100")}>
+                    {item.kind === "bug" ? <Bug className="h-6 w-6" /> : <CheckSquare className="h-6 w-6" />}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <p className="text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-indigo-600 transition-colors">{item.title}</p>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className={cn("text-[9px] font-black px-2 py-0.5 rounded-md border uppercase tracking-widest",
+                            item.kind === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" : "bg-indigo-50 text-indigo-600 border-indigo-100")}>
+                            {item.kind}
+                          </span>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{item.status.replace('-', ' ')}</span>
                         </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
                         {item.link ? (
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex items-center gap-2">
                             <a href={item.link.url} target="_blank" rel="noopener noreferrer"
-                              className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all hover:opacity-80",
-                                item.link.type === "issue" ? "pill-purple" : "pill-blue")}>
-                              {item.link.type === "issue" ? <Link2 className="h-3 w-3" /> : <GitPullRequest className="h-3 w-3" />}
-                              {item.link.type === "issue" ? "Issue" : "PR"} #{item.link.number}
-                              <ExternalLink className="h-2.5 w-2.5 ml-0.5" />
+                              className={cn("flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                item.link.type === "issue" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20" : "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20")}>
+                              {item.link.type === "issue" ? <Link2 className="h-3.5 w-3.5" /> : <GitPullRequest className="h-3.5 w-3.5" />}
+                              #{item.link.number}
+                              <ExternalLink className="h-3 w-3 ml-1" />
                             </a>
                             <button onClick={() => handleOpenLinkForm(item.id, item.link!.type)}
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-violet-600 hover:bg-violet-50 transition-all" title="Edit">
-                              <Link2 className="h-3.5 w-3.5" />
+                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all">
+                              <Save className="h-4 w-4" />
                             </button>
                             <button onClick={() => handleRemoveLink(item.id)}
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="Remove">
-                              <X className="h-3.5 w-3.5" />
+                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all">
+                              <X className="h-4 w-4" />
                             </button>
                           </div>
                         ) : (
                           <button onClick={() => handleOpenLinkForm(item.id, item.kind === "bug" ? "issue" : "pr")}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 w-full sm:w-auto justify-center sm:justify-start"
-                            style={{ background: "rgba(109,40,217,0.06)", border: "1px solid rgba(109,40,217,0.2)", color: "#7c3aed" }}>
-                            <Plus className="h-3 w-3" /> Link to GitHub
+                            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-indigo-600 hover:text-indigo-600 transition-all shadow-sm">
+                            <Plus className="h-4 w-4" /> ESTABLISH SYNC
                           </button>
                         )}
                       </div>
+                    </div>
 
-                      {/* Inline link form */}
-                      {linkForm?.itemId === item.id && (
-                        <div className="mt-3 p-3 rounded-xl space-y-3 animate-fade-in"
-                          style={{ background: "rgba(109,40,217,0.04)", border: "1px solid rgba(109,40,217,0.15)" }}>
-                          <div className="flex gap-2">
-                            {(["issue", "pr"] as const).map((t) => (
-                              <button key={t}
-                                onClick={() => setLinkForm((f) => f ? { ...f, type: t } : f)}
-                                className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex-1 justify-center",
-                                  linkForm.type === t ? "text-white" : "text-gray-500 bg-white border border-gray-200 hover:border-violet-300")}
-                                style={linkForm.type === t ? { background: "linear-gradient(135deg, #6d28d9, #2563eb)" } : {}}>
-                                {t === "issue" ? <Link2 className="h-3 w-3" /> : <GitPullRequest className="h-3 w-3" />}
-                                {t === "issue" ? "Issue" : "Pull Request"}
-                              </button>
-                            ))}
+                    {/* Inline Form */}
+                    {linkForm?.itemId === item.id && (
+                      <div className="mt-8 p-8 rounded-[2rem] bg-slate-50 border border-slate-100 animate-slide-up space-y-6">
+                        <div className="flex gap-4">
+                          {(["issue", "pr"] as const).map((t) => (
+                            <button key={t}
+                              onClick={() => setLinkForm((f) => f ? { ...f, type: t } : f)}
+                              className={cn("flex items-center gap-3 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex-1 justify-center",
+                                linkForm.type === t ? "bg-slate-900 text-white shadow-xl" : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-300")}
+                            >
+                              {t === "issue" ? <Link2 className="h-4 w-4" /> : <GitPullRequest className="h-4 w-4" />}
+                              {t === "issue" ? "ISSUE OBJECT" : "PULL REQUEST"}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Reference Number</Label>
+                            <Input value={linkForm.number}
+                              onChange={(e) => setLinkForm((f) => f ? { ...f, number: e.target.value } : f)}
+                              placeholder="e.g. 1024" className="h-12 !rounded-xl bg-white border-slate-200 font-bold" />
                           </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div className="space-y-1">
-                              <Label className="text-xs">Number *</Label>
-                              <Input value={linkForm.number}
-                                onChange={(e) => setLinkForm((f) => f ? { ...f, number: e.target.value } : f)}
-                                placeholder="e.g. 42" className="h-8 text-xs" />
-                            </div>
-                            <div className="space-y-1">
-                              <Label className="text-xs">URL (optional)</Label>
-                              <Input value={linkForm.url}
-                                onChange={(e) => setLinkForm((f) => f ? { ...f, url: e.target.value } : f)}
-                                placeholder={repoUrl ? "Auto-generated" : "https://github.com/..."} className="h-8 text-xs" />
-                            </div>
-                          </div>
-                          <div className="flex gap-2 justify-end">
-                            <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setLinkForm(null)}>Cancel</Button>
-                            <Button size="sm" className="h-7 text-xs"
-                              style={{ background: "linear-gradient(135deg, #6d28d9, #2563eb)", color: "white" }}
-                              onClick={handleSaveLink} disabled={!linkForm.number.trim() && !linkForm.url.trim()}>
-                              <Save className="h-3 w-3 mr-1" /> Save
-                            </Button>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Override URL (Optional)</Label>
+                            <Input value={linkForm.url}
+                              onChange={(e) => setLinkForm((f) => f ? { ...f, url: e.target.value } : f)}
+                              placeholder="Leave blank for auto-generation" className="h-12 !rounded-xl bg-white border-slate-200 font-mono text-xs" />
                           </div>
                         </div>
-                      )}
-                    </div>
+                        <div className="flex gap-3 justify-end pt-2">
+                          <button onClick={() => setLinkForm(null)} className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600">Discard</button>
+                          <Button onClick={handleSaveLink} className="px-8 h-12 !rounded-xl !bg-indigo-600 font-black text-[10px] uppercase tracking-widest shadow-lg shadow-indigo-500/20">
+                            CONFIRM SYNC
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))
           )}
         </TabsContent>

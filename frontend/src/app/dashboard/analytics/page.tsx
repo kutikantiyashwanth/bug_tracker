@@ -69,169 +69,190 @@ export default function AnalyticsPage() {
   );
 
   return (
-    <div className="space-y-6 max-w-7xl">
-
+    <div className="space-y-10 animate-slide-up max-w-7xl">
       {/* Header */}
-      <div className="flex items-start justify-between stagger-item">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-          <p className="text-sm mt-1 text-gray-500">
-            {activeProject ? <>Project: <span className="text-gray-700 font-medium">{activeProject.name}</span></> : "Select a project"}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-1 bg-indigo-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Mission Intelligence</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Performance <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Analytics</span></h1>
+          <p className="text-slate-500 font-medium max-w-xl">
+            {activeProject ? (
+              <>Synthesizing data for <span className="text-indigo-600 font-black">{activeProject.name}</span>. Deep-dive into velocity metrics and defect density.</>
+            ) : (
+              "Please select a project from the workspace to initialize intelligence protocols."
+            )}
           </p>
         </div>
-        <button onClick={fetchAnalytics} disabled={loading}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl transition-all"
-          style={{ background: "rgba(109,40,217,0.08)", border: "1px solid rgba(109,40,217,0.2)", color: "#6d28d9" }}>
-          <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
-          {loading ? "Loading..." : "Refresh"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={fetchAnalytics} disabled={loading}
+            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all">
+            <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors", loading && "animate-spin")} />
+            <span className="text-xs font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-600">Sync Intelligence</span>
+          </button>
+        </div>
       </div>
 
       {!data && !loading && (
-        <div className="card-base rounded-2xl p-12 text-center">
-          <BarChart3 className="h-12 w-12 mx-auto mb-3" style={{ color: "rgba(109,40,217,0.4)" }} />
-          <p className="text-gray-500">Select a project to view analytics</p>
+        <div className="premium-card py-20 flex flex-col items-center justify-center text-center space-y-4">
+          <div className="w-20 h-20 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+            <BarChart3 className="h-10 w-10 text-slate-300" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-xl font-bold text-slate-900">No Intelligence Data Available</h3>
+            <p className="text-slate-500 text-sm max-w-xs">Select an active project to synchronize real-time velocity and defect metrics.</p>
+          </div>
         </div>
       )}
 
       {loading && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="skeleton h-28 rounded-2xl" />
+            <div key={i} className="h-40 rounded-[2.5rem] bg-slate-100/50 animate-pulse border border-slate-100" />
           ))}
         </div>
       )}
 
       {data && (
-        <>
+        <div className="space-y-10">
           {/* ── KPI Cards ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: CheckCircle2, label: "Task Completion",
+                icon: CheckCircle2, label: "Mission Velocity",
                 value: `${data.taskStats.completionRate}%`,
-                sub: `${data.taskStats.completed}/${data.taskStats.total} tasks done`,
-                iconCls: "icon-emerald w-10 h-10", accent: "stat-emerald",
-                trend: data.taskStats.completionRate >= 50 ? "On track" : "Behind",
+                sub: `${data.taskStats.completed}/${data.taskStats.total} TASKS FINALIZED`,
+                iconCls: "bg-emerald-50 text-emerald-600 border-emerald-100", 
+                accent: "border-emerald-500/10 hover:border-emerald-500/30",
+                trend: data.taskStats.completionRate >= 50 ? "PEAK PERFORMANCE" : "ACCELERATION NEEDED",
                 up: data.taskStats.completionRate >= 50,
               },
               {
-                icon: Bug, label: "Bug Fix Rate",
+                icon: Bug, label: "Defect Density",
                 value: `${data.bugStats.fixRate}%`,
-                sub: `${data.bugStats.resolved + data.bugStats.closed}/${data.bugStats.total} fixed`,
-                iconCls: "icon-rose w-10 h-10", accent: "stat-rose",
-                trend: data.bugStats.critical > 0 ? `${data.bugStats.critical} critical` : "No critical",
+                sub: `${data.bugStats.resolved + data.bugStats.closed}/${data.bugStats.total} THREATS NEUTRALIZED`,
+                iconCls: "bg-rose-50 text-rose-600 border-rose-100", 
+                accent: "border-rose-500/10 hover:border-rose-500/30",
+                trend: data.bugStats.critical > 0 ? `${data.bugStats.critical} CRITICAL DEFECTS` : "CLEAN STATUS",
                 up: data.bugStats.critical === 0,
               },
               {
-                icon: Zap, label: "This Week",
+                icon: Zap, label: "Weekly Momentum",
                 value: data.successMetrics.tasksCompletedThisWeek,
-                sub: `${data.successMetrics.bugsResolvedThisWeek} bugs resolved`,
-                iconCls: "icon-violet w-10 h-10", accent: "stat-violet",
+                sub: `${data.successMetrics.bugsResolvedThisWeek} BUGS RESOLVED`,
+                iconCls: "bg-indigo-50 text-indigo-600 border-indigo-100", 
+                accent: "border-indigo-500/10 hover:border-indigo-500/30",
               },
               {
-                icon: Activity, label: "Total Activity",
+                icon: Activity, label: "System Cycles",
                 value: data.successMetrics.totalActivities,
-                sub: "actions logged",
-                iconCls: "icon-cyan w-10 h-10", accent: "stat-cyan",
+                sub: "TOTAL OPERATIONS LOGGED",
+                iconCls: "bg-slate-900 text-white border-slate-800", 
+                accent: "border-slate-900/10 hover:border-slate-900/30",
               },
             ].map((card, i) => (
-              <div key={i}
-                className={cn("stagger-item card-base card-lift p-5 rounded-2xl", card.accent)}
-                style={{ animationDelay: `${i * 60}ms` }}>
-                <div className="flex items-start justify-between mb-3">
-                  <div className={card.iconCls}><card.icon className="h-5 w-5" /></div>
+              <div key={i} className={cn("premium-card p-8 group transition-all", card.accent)}>
+                <div className="flex items-start justify-between mb-6">
+                  <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center border shadow-sm", card.iconCls)}>
+                    <card.icon className="h-6 w-6" />
+                  </div>
                   {card.trend && (
-                    <span className={cn("flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full",
-                      card.up ? "pill-emerald" : "pill-rose"
+                    <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg",
+                      card.up ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"
                     )}>
-                      {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                       {card.trend}
                     </span>
                   )}
                 </div>
-                <p className="text-2xl font-black text-gray-900">{card.value}</p>
-                <p className="text-xs font-semibold mt-0.5 text-gray-500">{card.label}</p>
-                <p className="text-[10px] mt-1 text-gray-400">{card.sub}</p>
+                <div className="space-y-1">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
+                  <p className="text-4xl font-black text-slate-900 tracking-tight group-hover:scale-105 transition-transform origin-left">{card.value}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2">{card.sub}</p>
+                </div>
               </div>
             ))}
           </div>
 
           {/* ── Productivity Chart ── */}
-          <div className="stagger-item card-base rounded-2xl p-6" style={{ animationDelay: "200ms" }}>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl icon-violet flex items-center justify-center">
-                  <BarChart3 className="h-4 w-4" />
+          <div className="premium-card p-10 space-y-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+                  <BarChart3 className="h-6 w-6 text-indigo-500" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-gray-800">Weekly Productivity</h3>
-                  <p className="text-[10px] text-gray-500">Tasks &amp; bugs over the last 7 days</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Velocity Diagnostics</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Operational flow over last 7 sessions</p>
                 </div>
               </div>
               {/* Legend */}
-              <div className="flex items-center gap-4 text-[10px]">
+              <div className="flex flex-wrap items-center gap-6">
                 {[
-                  { color: "#7c3aed", label: "Tasks Created" },
-                  { color: "#10b981", label: "Tasks Done" },
-                  { color: "#f43f5e", label: "Bugs Reported" },
-                  { color: "#f59e0b", label: "Bugs Fixed" },
+                  { color: "#6366f1", label: "TASKS CREATED" },
+                  { color: "#10b981", label: "TASKS FINALIZED" },
+                  { color: "#f43f5e", label: "BUGS DETECTED" },
+                  { color: "#f59e0b", label: "BUGS NEUTRALIZED" },
                 ].map((l) => (
-                  <div key={l.label} className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-sm" style={{ background: l.color }} />
-                    <span className="text-gray-500">{l.label}</span>
+                  <div key={l.label} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-md shadow-sm" style={{ background: l.color }} />
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{l.label}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Bar chart */}
-            <div className="flex items-end gap-3 h-32">
+            <div className="flex items-end gap-4 h-64 px-4">
               {data.weeklyData.map((day, i) => (
-                <div key={i} className="flex-1 flex flex-col gap-1">
+                <div key={i} className="flex-1 flex flex-col gap-4 group">
                   {/* Bars group */}
-                  <div className="flex items-end gap-0.5 h-24">
-                    <Bar value={day.tasksCreated}  color="#7c3aed" max={chartMax} />
+                  <div className="flex items-end gap-1.5 h-full px-1">
+                    <Bar value={day.tasksCreated}  color="#6366f1" max={chartMax} />
                     <Bar value={day.tasksResolved} color="#10b981" max={chartMax} />
                     <Bar value={day.bugsReported}  color="#f43f5e" max={chartMax} />
                     <Bar value={day.bugsResolved}  color="#f59e0b" max={chartMax} />
                   </div>
                   {/* Day label */}
-                  <p className="text-center text-[10px] font-semibold text-gray-500">{day.label}</p>
+                  <div className="p-2 rounded-xl bg-slate-50 group-hover:bg-indigo-50 border border-slate-100 group-hover:border-indigo-100 transition-all">
+                    <p className="text-center text-[10px] font-black text-slate-600 group-hover:text-indigo-600 uppercase tracking-widest">{day.label}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── Task vs Bug breakdown + Deadlines ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Task breakdown */}
-            <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "240ms" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-xl icon-violet flex items-center justify-center">
-                  <CheckCircle2 className="h-4 w-4" />
+            <div className="premium-card p-8 space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                 </div>
-                <h3 className="text-sm font-black text-gray-800">Tasks Breakdown</h3>
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Task Lifecycle</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Velocity Distribution</p>
+                </div>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-6">
                 {[
-                  { label: "Done",        count: data.taskStats.completed,  color: "#10b981" },
-                  { label: "In Progress", count: data.taskStats.inProgress, color: "#7c3aed" },
-                  { label: "Testing",     count: data.taskStats.testing,    color: "#f59e0b" },
-                  { label: "To Do",       count: data.taskStats.todo,       color: "#3b82f6" },
-                  { label: "Backlog",     count: data.taskStats.backlog,    color: "#64748b" },
+                  { label: "FINALIZED",        count: data.taskStats.completed,  color: "#10b981" },
+                  { label: "ACTIVE", count: data.taskStats.inProgress, color: "#6366f1" },
+                  { label: "VALIDATION",     count: data.taskStats.testing,    color: "#f59e0b" },
+                  { label: "PENDING",       count: data.taskStats.todo,       color: "#3b82f6" },
+                  { label: "BACKLOG",     count: data.taskStats.backlog,    color: "#94a3b8" },
                 ].map((item) => (
-                  <div key={item.label}>
-                    <div className="flex justify-between text-xs mb-1">
+                  <div key={item.label} className="space-y-2">
+                    <div className="flex justify-between items-end">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
-                        <span className="text-gray-600">{item.label}</span>
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color }} />
+                        <span className="text-[10px] font-black tracking-widest text-slate-500">{item.label}</span>
                       </div>
-                      <span className="font-bold text-gray-800">{item.count}</span>
+                      <span className="text-sm font-black text-slate-900">{item.count}</span>
                     </div>
-                    <div className="h-1.5 rounded-full overflow-hidden bg-gray-100">
-                      <div className="h-full rounded-full transition-all duration-700"
+                    <div className="h-2 rounded-full bg-slate-50 border border-slate-100 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-1000 ease-out"
                         style={{ width: `${data.taskStats.total > 0 ? (item.count / data.taskStats.total) * 100 : 0}%`, background: item.color }} />
                     </div>
                   </div>
@@ -240,80 +261,93 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Bug breakdown */}
-            <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "280ms" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-xl icon-rose flex items-center justify-center">
-                  <Bug className="h-4 w-4" />
+            <div className="premium-card p-8 space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
+                  <Bug className="h-6 w-6 text-rose-600" />
                 </div>
-                <h3 className="text-sm font-black text-gray-800">Bugs Breakdown</h3>
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Threat Matrix</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Defect Severity Analysis</p>
+                </div>
               </div>
 
-              {/* Severity */}
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-2 text-violet-600">By Severity</p>
-              <div className="space-y-2 mb-4">
+              <div className="space-y-4">
                 {[
-                  { label: "Critical", count: data.bugStats.critical, color: "#f43f5e" },
-                  { label: "Major",    count: data.bugStats.major,    color: "#f97316" },
-                  { label: "Minor",    count: data.bugStats.minor,    color: "#3b82f6" },
+                  { label: "CRITICAL THREATS", count: data.bugStats.critical, color: "#f43f5e" },
+                  { label: "MAJOR DEFECTS",    count: data.bugStats.major,    color: "#f97316" },
+                  { label: "MINOR ISSUES",    count: data.bugStats.minor,    color: "#3b82f6" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
-                    <span className="text-xs flex-1 text-gray-600">{item.label}</span>
-                    <span className="text-xs font-bold text-gray-800">{item.count}</span>
-                    <div className="w-16 h-1.5 rounded-full overflow-hidden bg-gray-100">
-                      <div className="h-full rounded-full" style={{ width: `${data.bugStats.total > 0 ? (item.count / data.bugStats.total) * 100 : 0}%`, background: item.color }} />
+                  <div key={item.label} className="p-4 rounded-[1.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
+                      <span className="text-[10px] font-black tracking-widest text-slate-500 uppercase">{item.label}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-lg font-black text-slate-900">{item.count}</span>
+                      <div className="w-20 h-2 rounded-full bg-slate-200/50 overflow-hidden">
+                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${data.bugStats.total > 0 ? (item.count / data.bugStats.total) * 100 : 0}%`, background: item.color }} />
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Status */}
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-2 text-violet-600">By Status</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
                 {[
-                  { label: "Open",     count: data.bugStats.open,       cls: "pill-rose" },
-                  { label: "Progress", count: data.bugStats.inProgress, cls: "pill-amber" },
-                  { label: "Resolved", count: data.bugStats.resolved,   cls: "pill-emerald" },
-                  { label: "Closed",   count: data.bugStats.closed,     cls: "pill-gray" },
+                  { label: "OPEN",     count: data.bugStats.open,       cls: "bg-rose-50 text-rose-600 border-rose-100" },
+                  { label: "PROGRESS", count: data.bugStats.inProgress, cls: "bg-amber-50 text-amber-600 border-amber-100" },
+                  { label: "RESOLVED", count: data.bugStats.resolved,   cls: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+                  { label: "CLOSED",   count: data.bugStats.closed,     cls: "bg-slate-100 text-slate-600 border-slate-200" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100">
-                    <span className="text-[10px] text-gray-600">{item.label}</span>
-                    <span className={cn("text-[10px] font-black px-1.5 py-0.5 rounded-full", item.cls)}>{item.count}</span>
+                  <div key={item.label} className={cn("flex flex-col p-4 rounded-2xl border transition-all", item.cls)}>
+                    <span className="text-[9px] font-black tracking-widest uppercase opacity-60">{item.label}</span>
+                    <span className="text-xl font-black mt-1">{item.count}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Upcoming deadlines */}
-            <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "320ms" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-xl icon-amber flex items-center justify-center">
-                  <Calendar className="h-4 w-4" />
+            <div className="premium-card p-8 space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+                  <Calendar className="h-6 w-6 text-amber-600" />
                 </div>
-                <h3 className="text-sm font-black text-gray-800">Upcoming Deadlines</h3>
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Timeline Alerts</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Critical Proximity Deadlines</p>
+                </div>
               </div>
               {data.upcomingDeadlines.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8">
-                  <CheckCircle2 className="h-8 w-8 mb-2" style={{ color: "rgba(16,185,129,0.5)" }} />
-                  <p className="text-xs text-gray-500">No deadlines in next 7 days</p>
+                <div className="flex flex-col items-center justify-center py-20 bg-emerald-50/20 rounded-[2.5rem] border border-emerald-100/30">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                  </div>
+                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">No Critical Deadlines</p>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {data.upcomingDeadlines.map((task) => (
-                    <div key={task.id} className="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 border border-gray-100">
-                      <div className="w-1 h-8 rounded-full shrink-0"
-                        style={{ background: task.daysLeft <= 1 ? "#f43f5e" : task.daysLeft <= 3 ? "#f59e0b" : "#10b981" }} />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-gray-800 truncate">{task.title}</p>
-                        <p className="text-[10px] text-gray-500">
-                          {task.daysLeft <= 1 ? "Due tomorrow" : `${task.daysLeft}d left`}
-                        </p>
+                    <div key={task.id} className="group p-5 rounded-[2rem] bg-white border border-slate-200 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all relative overflow-hidden">
+                      <div className={cn("absolute left-0 top-0 bottom-0 w-1.5", 
+                        task.daysLeft <= 1 ? "bg-rose-500" : task.daysLeft <= 3 ? "bg-amber-500" : "bg-emerald-500"
+                      )} />
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <p className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{task.title}</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase">
+                            {task.daysLeft <= 1 ? <span className="text-rose-500">DUE IMMINENTLY</span> : <span className="text-indigo-500">{task.daysLeft} DAYS UNTIL EXPIRY</span>}
+                          </p>
+                        </div>
+                        <Badge className={cn("font-black text-[9px] uppercase tracking-widest px-2",
+                          task.priority === "CRITICAL" ? "bg-rose-50 text-rose-600 border-rose-100" : 
+                          task.priority === "HIGH" ? "bg-amber-50 text-amber-600 border-amber-100" : 
+                          "bg-indigo-50 text-indigo-600 border-indigo-100"
+                        )}>
+                          {task.priority}
+                        </Badge>
                       </div>
-                      <span className={cn("text-[9px] font-bold px-1.5 py-0.5 rounded-full",
-                        task.daysLeft <= 1 ? "pill-rose" : task.daysLeft <= 3 ? "pill-amber" : "pill-emerald"
-                      )}>
-                        {task.priority.toLowerCase()}
-                      </span>
                     </div>
                   ))}
                 </div>
@@ -322,67 +356,68 @@ export default function AnalyticsPage() {
           </div>
 
           {/* ── Success Metrics ── */}
-          <div className="stagger-item card-base rounded-2xl p-6" style={{ animationDelay: "360ms" }}>
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-8 rounded-xl icon-cyan flex items-center justify-center">
-                <Target className="h-4 w-4" />
+          <div className="premium-card p-10 space-y-10">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
+                <Target className="h-6 w-6 text-indigo-600" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-gray-800">Success Metrics</h3>
-                <p className="text-[10px] text-gray-500">Key performance indicators for your project</p>
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Intelligence Success Matrix</h3>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Key Performance Indicators vs Benchmarks</p>
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
-                  label: "Task Completion Rate",
+                  label: "VELOCITY TARGET",
                   value: `${data.taskStats.completionRate}%`,
-                  target: "Target: 80%",
+                  target: "BENCHMARK: 80%",
                   met: data.taskStats.completionRate >= 80,
                   icon: CheckCircle2, color: "#10b981",
                 },
                 {
-                  label: "Bug Fix Rate",
+                  label: "NEUTRALIZATION RATE",
                   value: `${data.bugStats.fixRate}%`,
-                  target: "Target: 70%",
+                  target: "BENCHMARK: 70%",
                   met: data.bugStats.fixRate >= 70,
                   icon: Bug, color: "#f43f5e",
                 },
                 {
-                  label: "Bugs Resolved / Week",
+                  label: "WEEKLY THROUGHPUT",
                   value: data.successMetrics.bugsResolvedThisWeek,
-                  target: "This week",
+                  target: "STATUS: ACTIVE",
                   met: data.successMetrics.bugsResolvedThisWeek > 0,
-                  icon: TrendingUp, color: "#7c3aed",
+                  icon: TrendingUp, color: "#6366f1",
                 },
                 {
-                  label: "Tasks Active / Week",
+                  label: "OPERATIONAL CYCLES",
                   value: data.successMetrics.tasksCompletedThisWeek,
-                  target: "This week",
+                  target: "STATUS: SYNCHRONIZED",
                   met: data.successMetrics.tasksCompletedThisWeek > 0,
                   icon: Zap, color: "#f59e0b",
                 },
               ].map((metric, i) => (
-                <div key={i} className="p-4 rounded-2xl text-center bg-gray-50 border"
-                  style={{ borderColor: metric.met ? metric.color + "40" : "#e5e7eb" }}>
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-3"
-                    style={{ background: metric.color + "15", color: metric.color, border: `1px solid ${metric.color}30` }}>
-                    <metric.icon className="h-5 w-5" />
+                <div key={i} className={cn("p-8 rounded-[2.5rem] text-center border transition-all hover:scale-105", 
+                  metric.met ? "bg-slate-50/50 border-slate-100" : "bg-white border-slate-200"
+                )}>
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm"
+                    style={{ background: metric.color + "15", color: metric.color, border: `1px solid ${metric.color}20` }}>
+                    <metric.icon className="h-7 w-7" />
                   </div>
-                  <p className="text-2xl font-black text-gray-900">{metric.value}</p>
-                  <p className="text-xs font-semibold mt-1 text-gray-600">{metric.label}</p>
-                  <div className="flex items-center justify-center gap-1 mt-2">
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: metric.met ? "#10b981" : "#f43f5e" }} />
-                    <span className="text-[10px]" style={{ color: metric.met ? "#059669" : "#e11d48" }}>
-                      {metric.met ? "✓ Met" : "Below target"}
+                  <p className="text-4xl font-black text-slate-900 tracking-tight">{metric.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] mt-3 text-slate-500">{metric.label}</p>
+                  <div className="flex items-center justify-center gap-2 mt-4">
+                    <div className={cn("w-2 h-2 rounded-full animate-pulse", metric.met ? "bg-emerald-500" : "bg-rose-500")} />
+                    <span className={cn("text-[10px] font-black uppercase tracking-widest", metric.met ? "text-emerald-600" : "text-rose-600")}>
+                      {metric.met ? "MET" : "UNDER"}
                     </span>
                   </div>
-                  <p className="text-[10px] mt-0.5 text-gray-400">{metric.target}</p>
+                  <p className="text-[9px] font-black mt-2 text-slate-400 uppercase tracking-widest">{metric.target}</p>
                 </div>
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
