@@ -597,7 +597,7 @@ export default function BugsPage() {
                       )}>
                         {bug.severity}
                       </Badge>
-                      <span className="text-white/20 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
+                      <span className="text-white/40 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
                     </div>
                     <DialogTitle className="text-3xl font-black text-white tracking-tight leading-tight">{bug.title}</DialogTitle>
                     <div className="flex items-center gap-6 mt-6">
@@ -606,8 +606,8 @@ export default function BugsPage() {
                           <AvatarFallback className="bg-indigo-600 text-white text-[10px] font-black">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Reporter</p>
-                          <p className="text-xs font-bold text-white/80">{reporter?.name || "Anonymous"}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/50">Reporter</p>
+                          <p className="text-xs font-bold text-white/90">{reporter?.name || "Anonymous"}</p>
                         </div>
                       </div>
                       <div className="h-8 w-px bg-white/10" />
@@ -616,13 +616,13 @@ export default function BugsPage() {
                           {statusIcon(bug.status)}
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Status</p>
-                          <p className="text-xs font-bold text-white/80 capitalize">{bug.status.replace('-', ' ')}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/50">Status</p>
+                          <p className="text-xs font-bold text-white/90 capitalize">{bug.status.replace('-', ' ')}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/20 hover:text-white transition-colors">
+                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/40 hover:text-white transition-colors">
                     <Trash2 className="h-6 w-6 rotate-45" />
                   </button>
                 </div>
