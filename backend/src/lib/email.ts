@@ -1,26 +1,27 @@
 import nodemailer from "nodemailer";
 
-// ─── Create transporter ───
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: false, // TLS
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
 const FROM = process.env.EMAIL_FROM || "BugTracker <noreply@bugtracker.dev>";
 const APP_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // ─── Check if email is configured ───
 export const isEmailConfigured = () =>
   !!(process.env.SMTP_USER && process.env.SMTP_PASS &&
-     process.env.SMTP_USER !== "your-gmail@gmail.com");
+     process.env.SMTP_USER !== "your-gmail@gmail.com" &&
+     process.env.SMTP_PASS !== "your-app-password-here");
+
+// ─── Create transporter lazily on each send ───
+function getTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: parseInt(process.env.SMTP_PORT || "587"),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    tls: { rejectUnauthorized: false },
+  });
+}
 
 // ─── Base HTML template ───
 const baseTemplate = (content: string) => `
@@ -72,14 +73,16 @@ const baseTemplate = (content: string) => `
 // ─── Send email helper ───
 async function sendEmail(to: string, subject: string, html: string) {
   if (!isEmailConfigured()) {
-    console.log(`[Email] Not configured — would send to ${to}: ${subject}`);
+    console.log(`[Email] Not configured — SMTP_USER=${process.env.SMTP_USER} SMTP_PASS=${process.env.SMTP_PASS ? 'set' : 'not set'}`);
+    console.log(`[Email] Would send to ${to}: ${subject}`);
     return;
   }
   try {
-    await transporter.sendMail({ from: FROM, to, subject, html });
-    console.log(`[Email] Sent to ${to}: ${subject}`);
-  } catch (err) {
-    console.error(`[Email] Failed to send to ${to}:`, err);
+    const transporter = getTransporter();
+    await transporter.sendMail({ from: process.env.EMAIL_FROM || FROM, to, subject, html });
+    console.log(`[Email] ✅ Sent to ${to}: ${subject}`);
+  } catch (err: any) {
+    console.error(`[Email] ❌ Failed to send to ${to}: ${err.message}`);
   }
 }
 
