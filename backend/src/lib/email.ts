@@ -89,6 +89,7 @@ async function sendEmail(to: string, subject: string, html: string) {
   // Try configured port first, then fallbacks
   const ports = [port, 465, 587, 2525].filter((v, i, a) => a.indexOf(v) === i);
 
+  let lastErr = "";
   for (const p of ports) {
     try {
       const transporter = nodemailer.createTransport({
@@ -103,12 +104,16 @@ async function sendEmail(to: string, subject: string, html: string) {
       const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
       await transporter.sendMail({ from, to, subject, html });
       console.log(`[Email] ✅ Sent to ${to} via port ${p}`);
+      setLastEmailError("none");
       return;
     } catch (err: any) {
+      lastErr = err.message;
       console.log(`[Email] Port ${p} failed: ${err.message.substring(0, 80)}`);
     }
   }
+  const { setLastEmailError } = require("../index");
   console.error(`[Email] ❌ All ports failed for ${to}`);
+  setLastEmailError(`All ports failed for ${to}. Last attempt error: ${lastErr || 'Unknown'}`);
 }
 
 // ─── Email templates ───

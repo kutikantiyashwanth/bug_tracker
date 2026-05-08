@@ -121,6 +121,9 @@ const authMiddleware = async (req: any, res: any, next: any) => {
   }
 };
 
+let lastEmailError = "";
+export const setLastEmailError = (err: string) => { lastEmailError = err; };
+
 // ─── Health Check ───
 app.get("/api/v1/health", (_req, res) => {
   res.json({
@@ -132,6 +135,7 @@ app.get("/api/v1/health", (_req, res) => {
     smtpUser: process.env.SMTP_USER || "not set",
     smtpPassSet: !!(process.env.SMTP_PASS),
     smtpPassLength: process.env.SMTP_PASS?.length || 0,
+    lastEmailError: lastEmailError || "none",
   });
 });
 
