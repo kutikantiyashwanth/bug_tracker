@@ -1436,16 +1436,25 @@ app.post("/api/v1/test-email", authMiddleware, async (req: any, res) => {
   try {
     const { to } = req.body;
     if (!to) return res.status(400).json({ error: "Recipient email 'to' is required" });
-    
+
+    addLog(`[TestEmail] Sending test email to: ${to}`);
     const { sendEmail } = require("./lib/email");
-    await sendEmail(to, "Test Email from Bug Tracker", "<h1>Test</h1><p>SMTP is working!</p>");
-    
-    res.json({ success: true, message: `Test email sent to ${to}` });
+    await sendEmail(to, "🐛 Test Email — Bug Tracker", `
+      <div style="font-family:sans-serif;padding:24px;background:#f9fafb;border-radius:12px;max-width:500px">
+        <h2 style="color:#6c5ce7">✅ Email is Working!</h2>
+        <p>This is a test email from your <strong>Student Bug Tracker</strong> backend.</p>
+        <p>If you received this, email notifications are correctly configured.</p>
+        <p style="color:#9ca3af;font-size:12px">Sent via Resend API · ${new Date().toISOString()}</p>
+      </div>
+    `);
+    addLog(`[TestEmail] ✅ Test email sent to ${to}`);
+    res.json({ success: true, message: `Test email sent to ${to}. Check debug logs at /api/v1/debug-logs` });
   } catch (error: any) {
-    console.error("Test email failed:", error.message);
+    addLog(`[TestEmail] ❌ Failed: ${error.message}`);
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 // ─── Start Server ───
 const PORT = parseInt(process.env.PORT || "5000", 10);

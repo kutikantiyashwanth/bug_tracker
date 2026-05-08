@@ -70,7 +70,7 @@ const baseTemplate = (content: string) => `
 </html>
 `;
 
-async function sendEmail(to: string, subject: string, html: string) {
+export async function sendEmail(to: string, subject: string, html: string) {
   const { setLastEmailError, addLog } = require("../index");
   addLog(`[Email] Attempting to send to ${to}`);
 
