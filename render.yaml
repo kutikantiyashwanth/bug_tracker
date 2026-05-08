@@ -41,7 +41,9 @@ services:
       - key: SMTP_PASS
         value: cdmdsulhtwvpjqpr
       - key: EMAIL_FROM
-        value: "BugTracker <kutikantiyashwanth@gmail.com>"
+        value: "onboarding@resend.dev"
+      - key: RESEND_API_KEY
+        value: "re_your_key_here"
 
   # ── Frontend UI (Static Site) ──
   - type: static
