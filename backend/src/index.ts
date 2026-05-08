@@ -128,6 +128,8 @@ app.get("/api/v1/health", (_req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     database: "connected",
+    smtp: !!(process.env.SMTP_USER && process.env.SMTP_PASS && process.env.SMTP_PASS !== "your-app-password-here"),
+    smtpUser: process.env.SMTP_USER || "not set",
   });
 });
 
