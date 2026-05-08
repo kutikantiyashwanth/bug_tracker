@@ -143,6 +143,7 @@ app.get("/api/v1/health", (_req, res) => {
     smtpUser: process.env.SMTP_USER || "not set",
     smtpPassSet: !!(process.env.SMTP_PASS),
     smtpPassLength: process.env.SMTP_PASS?.length || 0,
+    resendConfigured: !!(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_your_key_here"),
     lastEmailError: lastEmailError || "none",
   });
 });
