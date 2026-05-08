@@ -725,6 +725,9 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
     if (updates.status)   updates.status   = updates.status.toUpperCase().replace("-", "_");
     if (updates.severity) updates.severity = updates.severity.toUpperCase();
 
+    // Fetch bug BEFORE update to detect assignee change
+    const existingBug = await prisma.bug.findUnique({ where: { id: bugId } });
+
     const bug = await prisma.bug.update({
       where: { id: bugId },
       data: updates,
@@ -733,6 +736,46 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
         reporter: { select: { id: true, name: true, email: true } },
       },
     });
+
+    // ── Notify new assignee when assigneeId changes ──
+    const newAssigneeId = updates.assigneeId;
+    const oldAssigneeId = existingBug?.assigneeId;
+    if (
+      newAssigneeId &&
+      newAssigneeId !== oldAssigneeId &&
+      newAssigneeId !== req.user.userId
+    ) {
+      await prisma.notification.create({
+        data: {
+          userId: newAssigneeId,
+          type: "BUG_ASSIGNED",
+          title: "Bug Assigned to You",
+          message: `You have been assigned to fix "${bug.title}" (${(bug.severity || "major").toLowerCase()} severity)`,
+          link: `/dashboard/bugs`,
+        },
+      });
+      mc.del(`notifs:${newAssigneeId}`);
+      io.to(`user:${newAssigneeId}`).emit("notification", { type: "BUG_ASSIGNED", title: "Bug Assigned to You" });
+
+      // Send email to the new assignee
+      const assignee = await prisma.user.findUnique({ where: { id: newAssigneeId } });
+      const adminUser = await prisma.user.findUnique({ where: { id: req.user.userId } });
+      const project   = await prisma.project.findUnique({ where: { id: bug.projectId } });
+      if (assignee?.email) {
+        console.log(`[Email] Sending bug assigned email to ${assignee.email}`);
+        sendBugAssignedEmail(assignee.email, {
+          assigneeName: assignee.name,
+          bugTitle: bug.title,
+          severity: (bug.severity || "major").toLowerCase(),
+          reporterName: adminUser?.name || "Admin",
+          projectName: project?.name || "Your Project",
+          description: bug.description || undefined,
+        }).then(() => console.log(`[Email] Bug assigned email sent to ${assignee.email}`))
+          .catch((err: any) => console.error(`[Email] Failed to send bug assigned email:`, err.message));
+      } else {
+        console.log(`[Email] No email found for assignee ${newAssigneeId}`);
+      }
+    }
 
     // If marked resolved → notify reporter AND project owner
     if (updates.status === "RESOLVED" && bug.reporterId !== req.user.userId) {
