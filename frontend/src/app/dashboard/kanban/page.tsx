@@ -118,7 +118,7 @@ export default function KanbanPage() {
     setFormDesc(task.description);
     setFormPriority(task.priority);
     setFormAssignee(task.assigneeId || "");
-    setFormDueDate(task.dueDate ? task.dueDate.split("T")[0] : "");
+    setFormDueDate(task.dueDate ? task.dueDate.slice(0, 16) : "");
     setFormTags(task.tags?.join(", ") || "");
     setShowEditMenu(null);
   };
@@ -233,7 +233,7 @@ export default function KanbanPage() {
                 : "bg-gray-100 text-gray-500"
             )}>
               {isOverdue ? <AlertCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-              {formatDate(task.dueDate)}
+              {new Date(task.dueDate).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
             </div>
           )}
         </div>
@@ -349,8 +349,8 @@ export default function KanbanPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Due Date</Label>
-                <Input type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
+                <Label>Due Date &amp; Time</Label>
+                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Tags</Label>
@@ -408,8 +408,8 @@ export default function KanbanPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Due Date</Label>
-                <Input type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
+                <Label>Due Date &amp; Time</Label>
+                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Tags</Label>

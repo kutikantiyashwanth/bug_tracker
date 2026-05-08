@@ -1194,7 +1194,7 @@ const checkDeadlines = async () => {
         sendDeadlineReminderEmail(task.assignee.email, {
           recipientName: task.assignee.name,
           taskTitle: task.title,
-          dueDate: new Date(task.dueDate!).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+          dueDate: new Date(task.dueDate!).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" }),
           daysLeft,
           projectName: task.project?.name || "Your Project",
         });
