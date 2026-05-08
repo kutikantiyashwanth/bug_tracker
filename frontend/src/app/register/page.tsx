@@ -14,9 +14,9 @@ import {
 import type { Role } from "@/lib/types";
 
 const ROLE_OPTIONS = [
-  { value: "admin",     label: "Admin",     icon: Shield,    bg: "bg-violet-100", text: "text-violet-600", active: "border-violet-400 bg-violet-50" },
-  { value: "developer", label: "Developer", icon: Code2,     bg: "bg-blue-100",   text: "text-blue-600",   active: "border-blue-400 bg-blue-50" },
-  { value: "tester",    label: "Tester",    icon: TestTube2, bg: "bg-amber-100",  text: "text-amber-600",  active: "border-amber-400 bg-amber-50" },
+  { value: "admin",     label: "Project Lead",     icon: Shield,    bg: "bg-indigo-100", text: "text-indigo-600", active: "border-indigo-400 bg-indigo-50" },
+  { value: "developer", label: "Team Member",     icon: Code2,     bg: "bg-emerald-100",   text: "text-emerald-600",   active: "border-emerald-400 bg-emerald-50" },
+  { value: "tester",    label: "QA Analyst",    icon: TestTube2, bg: "bg-amber-100",  text: "text-amber-600",  active: "border-amber-400 bg-amber-50" },
 ];
 
 const SKILL_SUGGESTIONS = ["React", "Node.js", "TypeScript", "Python", "Testing", "UI/UX", "DevOps", "SQL", "Git", "Java", "Flutter", "AWS"];

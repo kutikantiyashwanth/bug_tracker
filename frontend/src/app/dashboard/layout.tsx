@@ -25,9 +25,9 @@ const iconMap: Record<string, any> = {
 };
 
 const roleMeta: Record<string, { label: string; icon: any; gradient: string; text: string }> = {
-  admin:     { label: "Admin",     icon: Shield,    gradient: "from-violet-500 to-purple-600", text: "text-violet-600" },
-  developer: { label: "Developer", icon: Code2,     gradient: "from-blue-500 to-cyan-500",    text: "text-blue-600" },
-  tester:    { label: "Tester",    icon: TestTube2, gradient: "from-amber-500 to-orange-500", text: "text-amber-600" },
+  admin:     { label: "Project Lead", icon: Shield,    gradient: "from-indigo-500 to-indigo-600", text: "text-indigo-600" },
+  developer: { label: "Team Member",  icon: Code2,     gradient: "from-emerald-500 to-teal-600",   text: "text-emerald-600" },
+  tester:    { label: "QA Analyst",   icon: TestTube2, gradient: "from-amber-500 to-orange-600",  text: "text-amber-600" },
 };
 
 const allNavGroups = [
