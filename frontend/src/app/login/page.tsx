@@ -77,10 +77,28 @@ export default function LoginPage() {
       if (selectedRole === "admin") {
         router.push("/dashboard");
       } else {
-        await new Promise((r) => setTimeout(r, 800));
+        // Wait for fetchProjects to complete (called inside login)
+        // Poll for up to 3 seconds
+        let attempts = 0;
+        while (attempts < 6) {
+          await new Promise((r) => setTimeout(r, 500));
+          const state = useStore.getState();
+          if (state.projects !== undefined) {
+            if (state.projects.length > 0) {
+              router.push("/dashboard");
+              return;
+            }
+            break;
+          }
+          attempts++;
+        }
+        // Check one final time
         const state = useStore.getState();
-        if (state.projects?.length > 0) router.push("/dashboard");
-        else setStep("invite");
+        if (state.projects?.length > 0) {
+          router.push("/dashboard");
+        } else {
+          setStep("invite");
+        }
       }
     } catch (err: any) {
       const msg = err.message || "";
