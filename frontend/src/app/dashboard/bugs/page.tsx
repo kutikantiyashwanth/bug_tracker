@@ -700,21 +700,40 @@ export default function BugsPage() {
 
                   {/* Admin: change status */}
                   {permissions.changeBugStatus && (
-                    <Select
-                      value={bug.status}
-                      onValueChange={(v) => {
-                        handleStatusChange(bug.id, v as BugStatus);
-                        setShowDetailDialog({ ...bug, status: v as BugStatus });
-                      }}
-                    >
-                      <SelectTrigger className="w-[150px] h-9 text-sm"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="open">Open</SelectItem>
-                        <SelectItem value="in-progress">In Progress</SelectItem>
-                        <SelectItem value="resolved">Resolved</SelectItem>
-                        <SelectItem value="closed">Closed</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex gap-2">
+                      <Select
+                        value={bug.status}
+                        onValueChange={(v) => {
+                          handleStatusChange(bug.id, v as BugStatus);
+                          setShowDetailDialog({ ...bug, status: v as BugStatus });
+                        }}
+                      >
+                        <SelectTrigger className="w-[130px] h-9 text-sm"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="open">Open</SelectItem>
+                          <SelectItem value="in-progress">In Progress</SelectItem>
+                          <SelectItem value="resolved">Resolved</SelectItem>
+                          <SelectItem value="closed">Closed</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      <Select
+                        value={bug.assigneeId || "unassigned"}
+                        onValueChange={(v) => {
+                          const newId = v === "unassigned" ? null : v;
+                          updateBug(bug.id, { assigneeId: newId as any });
+                          setShowDetailDialog({ ...bug, assigneeId: newId as any });
+                        }}
+                      >
+                        <SelectTrigger className="w-[140px] h-9 text-sm"><SelectValue placeholder="Assign To..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="unassigned">Unassigned</SelectItem>
+                          {projectMembers.map((m) => m && (
+                            <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   )}
 
                   {/* Admin: delete */}
