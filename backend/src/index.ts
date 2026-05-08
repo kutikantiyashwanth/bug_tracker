@@ -510,6 +510,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
       const assignee = await prisma.user.findUnique({ where: { id: assigneeId } });
       const project  = await prisma.project.findUnique({ where: { id: projectId } });
       if (assignee?.email) {
+        console.log(`[Email] Sending task assigned email to ${assignee.email}`);
         sendTaskAssignedEmail(assignee.email, {
           assigneeName: assignee.name,
           taskTitle: task.title,
@@ -518,7 +519,8 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
           description: dueDateStr
             ? `${description || ""}\n\n⏰ Deadline: ${dueDateStr}`.trim()
             : description,
-        });
+        }).then(() => console.log(`[Email] Task assigned email sent to ${assignee.email}`))
+          .catch((err: any) => console.error(`[Email] Failed to send task assigned email:`, err.message));
       }
     }
 
@@ -689,6 +691,7 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
       const reporter = await prisma.user.findUnique({ where: { id: req.user.userId } });
       const project  = await prisma.project.findUnique({ where: { id: projectId } });
       if (assignee?.email) {
+        console.log(`[Email] Sending bug assigned email to ${assignee.email}`);
         sendBugAssignedEmail(assignee.email, {
           assigneeName: assignee.name,
           bugTitle: bug.title,
@@ -696,7 +699,10 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
           reporterName: reporter?.name || "Someone",
           projectName: project?.name || "Your Project",
           description: description,
-        });
+        }).then(() => console.log(`[Email] Bug assigned email sent to ${assignee.email}`))
+          .catch((err: any) => console.error(`[Email] Failed to send bug assigned email:`, err.message));
+      } else {
+        console.log(`[Email] No email for assignee ${assigneeId}`);
       }
     }
 
@@ -750,12 +756,14 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
         // Send email
         const recipient = await prisma.user.findUnique({ where: { id: uid } });
         if (recipient?.email) {
+          console.log(`[Email] Sending bug resolved email to ${recipient.email}`);
           sendBugResolvedEmail(recipient.email, {
             recipientName: recipient.name,
             bugTitle: bug.title,
             resolverName: resolver?.name || "Developer",
             projectName: project?.name || "Your Project",
-          });
+          }).then(() => console.log(`[Email] Bug resolved email sent to ${recipient.email}`))
+            .catch((err: any) => console.error(`[Email] Failed to send bug resolved email:`, err.message));
         }
       }
 
@@ -1064,13 +1072,15 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
       // Send email
       const recipient = await prisma.user.findUnique({ where: { id: userId } });
       if (recipient?.email) {
+        console.log(`[Email] Sending comment email to ${recipient.email}`);
         sendCommentEmail(recipient.email, {
           recipientName: recipient.name,
           commenterName: commenter?.name || "Someone",
           bugTitle: bug.title,
           comment: content.trim().substring(0, 200),
           projectName: project?.name || "Your Project",
-        });
+        }).then(() => console.log(`[Email] Comment email sent to ${recipient.email}`))
+          .catch((err: any) => console.error(`[Email] Failed to send comment email:`, err.message));
       }
     }
 
