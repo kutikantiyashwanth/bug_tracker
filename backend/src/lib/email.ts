@@ -70,30 +70,60 @@ const baseTemplate = (content: string) => `
 </html>
 `;
 
-// ─── Send email helper ───
 async function sendEmail(to: string, subject: string, html: string) {
-  console.log(`[Email] Attempting to send to ${to}`);
+  const { setLastEmailError, addLog } = require("../index");
+  addLog(`[Email] Attempting to send to ${to}`);
 
+  // ─── Method 1: Resend API (HTTP based, most reliable) ───
+  const resendKey = process.env.RESEND_API_KEY;
+  if (resendKey && resendKey !== "re_your_key") {
+    try {
+      addLog(`[Email] Using Resend API...`);
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${resendKey}`
+        },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+          to: [to],
+          subject: subject,
+          html: html
+        })
+      });
+      
+      const resData: any = await response.json();
+      if (response.ok) {
+        addLog(`[Email] ✅ Successfully sent via Resend API (ID: ${resData.id})`);
+        setLastEmailError("none");
+        return;
+      } else {
+        addLog(`[Email] ⚠️ Resend API failed: ${resData.message || JSON.stringify(resData)}`);
+      }
+    } catch (err: any) {
+      addLog(`[Email] ⚠️ Resend API error: ${err.message}`);
+    }
+  }
+
+  // ─── Method 2: SMTP (Standard) ───
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const port = parseInt(process.env.SMTP_PORT || '587');
 
   if (!user || !pass) {
-    console.log(`[Email] Skipping — SMTP not configured`);
+    addLog(`[Email] ❌ Skipping — SMTP not configured and no Resend API key found`);
     return;
   }
 
   const nodemailer = require('nodemailer');
-
-  const { setLastEmailError, addLog } = require("../index");
   let lastErr = "";
   // Port 465 (SMTPS), 587 (STARTTLS), 2525 (Alternative), 25 (Standard - often blocked)
   const ports = [465, 587, 2525, 25];
 
   for (const p of ports) {
     try {
-      addLog(`[Email] Trying port ${p}...`);
+      addLog(`[Email] Trying SMTP port ${p}...`);
       const transporter = nodemailer.createTransport({
         host,
         port: p,
@@ -117,7 +147,7 @@ async function sendEmail(to: string, subject: string, html: string) {
     }
   }
   
-  const finalError = `SMTP Blocked: All ports (465, 587, 2525, 25) failed. Render often blocks SMTP. Final error: ${lastErr}`;
+  const finalError = `Email Blocked: Both Resend and SMTP failed. Google/Render security blocking detected. Final error: ${lastErr}`;
   addLog(`[Email] ❌ ${finalError}`);
   setLastEmailError(finalError);
 }
