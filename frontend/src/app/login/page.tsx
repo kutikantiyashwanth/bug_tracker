@@ -276,6 +276,7 @@ export default function LoginPage() {
                 <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or quick access</span></div>
               </div>
 
+              {/* Only show demo login for admin */}
               <button onClick={handleDemoLogin} disabled={isLoading}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border-2 border-gray-100 bg-white hover:bg-gray-50 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-all hover:shadow-sm disabled:opacity-50">
                 {isLoading
@@ -355,10 +356,22 @@ export default function LoginPage() {
                   style={{ background: "linear-gradient(135deg, #6d28d9 0%, #2563eb 100%)", boxShadow: "0 8px 24px rgba(108,92,231,0.35)" }}>
                   {isLoading
                     ? <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                    : <>{selectedRole === "admin" ? "Sign in to Dashboard" : "Sign in & Enter Invite Code"} <ArrowRight className="h-4 w-4" /></>
+                    : <>{selectedRole === "admin" ? "Sign in to Dashboard" : "Sign in"} <ArrowRight className="h-4 w-4" /></>
                   }
                 </button>
               </form>
+
+              {/* Developer/Tester info box */}
+              {selectedRole !== "admin" && (
+                <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+                  <p className="text-xs text-blue-700 font-semibold mb-1">
+                    {selectedRole === "developer" ? "👨‍💻 Developer Account" : "🧪 Tester Account"}
+                  </p>
+                  <p className="text-xs text-blue-600">
+                    After signing in, you'll need an <strong>invite code</strong> from your Admin to join a project.
+                  </p>
+                </div>
+              )}
 
               <p className="text-center text-sm text-gray-400">
                 No account?{" "}
