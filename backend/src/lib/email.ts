@@ -76,7 +76,7 @@ async function sendEmail(to: string, subject: string, html: string) {
 
   // ─── Method 1: Resend API (HTTP based, most reliable) ───
   const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey && resendKey !== "re_your_key") {
+  if (resendKey && resendKey.startsWith("re_") && !resendKey.includes("your_key")) {
     try {
       addLog(`[Email] Using Resend API...`);
       const response = await fetch("https://api.resend.com/emails", {
