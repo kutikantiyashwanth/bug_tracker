@@ -32,6 +32,16 @@ services:
         value: https://bug-tracker-ui.onrender.com
       - key: RENDER_EXTERNAL_URL
         value: https://bug-tracker-api-d117.onrender.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        value: kutikantiyashwanth@gmail.com
+      - key: SMTP_PASS
+        value: cdmdsulhtwvpjqpr
+      - key: EMAIL_FROM
+        value: "BugTracker <kutikantiyashwanth@gmail.com>"
 
   # ── Frontend UI (Static Site) ──
   - type: static
