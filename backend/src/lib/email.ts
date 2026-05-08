@@ -72,14 +72,27 @@ const baseTemplate = (content: string) => `
 
 // ─── Send email helper ───
 async function sendEmail(to: string, subject: string, html: string) {
-  if (!isEmailConfigured()) {
-    console.log(`[Email] Not configured — SMTP_USER=${process.env.SMTP_USER} SMTP_PASS=${process.env.SMTP_PASS ? 'set' : 'not set'}`);
-    console.log(`[Email] Would send to ${to}: ${subject}`);
+  console.log(`[Email] Attempting to send to ${to}: ${subject}`);
+  console.log(`[Email] Config: SMTP_USER=${process.env.SMTP_USER || 'NOT SET'}, SMTP_PASS=${process.env.SMTP_PASS ? 'SET('+process.env.SMTP_PASS.length+'chars)' : 'NOT SET'}`);
+
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (!user || !pass) {
+    console.log(`[Email] Skipping — SMTP not configured`);
     return;
   }
+
   try {
-    const transporter = getTransporter();
-    await transporter.sendMail({ from: process.env.EMAIL_FROM || FROM, to, subject, html });
+    const transporter = require('nodemailer').createTransport({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false,
+      auth: { user, pass },
+      tls: { rejectUnauthorized: false },
+    });
+    const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
+    await transporter.sendMail({ from, to, subject, html });
     console.log(`[Email] ✅ Sent to ${to}: ${subject}`);
   } catch (err: any) {
     console.error(`[Email] ❌ Failed to send to ${to}: ${err.message}`);
