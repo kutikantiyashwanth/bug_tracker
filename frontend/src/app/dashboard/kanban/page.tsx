@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   Plus, GripVertical, Calendar, User, Tag, MoreHorizontal,
-  Trash2, Edit3, Clock, AlertCircle
+  Trash2, Edit3, Clock, AlertCircle, CheckCircle2, X,
 } from "lucide-react";
 import type { Task, TaskStatus, Priority } from "@/lib/types";
 

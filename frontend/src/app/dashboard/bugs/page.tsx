@@ -20,7 +20,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Plus, AlertTriangle, Search, Bug, CheckCircle2,
-  Clock, ArrowUpCircle, Trash2, Send, MessageSquare, Sparkles, Cpu,
+  Clock, ArrowUpCircle, Trash2, Send, MessageSquare, Sparkles, Cpu, RefreshCw,
 } from "lucide-react";
 import type { Bug as BugType, Severity, BugStatus } from "@/lib/types";
 

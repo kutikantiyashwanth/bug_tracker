@@ -8,52 +8,45 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Bell, CheckCheck, AlertTriangle, Clock,
   UserPlus, ArrowRight, Bug, CheckCircle2, Inbox,
-  Filter, RefreshCw, Kanban, Mail,
+  RefreshCw, Kanban, Mail,
 } from "lucide-react";
 import Link from "next/link";
 
-// ── Notification type config ──
 const typeConfig: Record<string, {
-  icon: any; label: string; bg: string; text: string; border: string; description: string;
+  icon: any; label: string; bg: string; text: string; border: string;
 }> = {
   task_assigned: {
     icon: Kanban, label: "Task Assigned",
     bg: "bg-violet-100", text: "text-violet-700", border: "border-violet-200",
-    description: "A task has been assigned to you",
   },
   deadline_reminder: {
     icon: Clock, label: "Deadline Reminder",
     bg: "bg-amber-100", text: "text-amber-700", border: "border-amber-200",
-    description: "A task deadline is approaching",
   },
   bug_assigned: {
     icon: Bug, label: "Bug Assigned",
     bg: "bg-red-100", text: "text-red-700", border: "border-red-200",
-    description: "A bug has been assigned to you",
   },
   project_invite: {
     icon: UserPlus, label: "Project Invite",
     bg: "bg-cyan-100", text: "text-cyan-700", border: "border-cyan-200",
-    description: "You've been invited to a project",
   },
   task_moved: {
     icon: ArrowRight, label: "Task Updated",
     bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200",
-    description: "A task status has changed",
   },
   bug_resolved: {
     icon: CheckCircle2, label: "Bug Resolved",
     bg: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200",
-    description: "A bug has been resolved",
   },
 };
 
 const FILTERS = [
-  { key: "all",              label: "All",             icon: Bell },
-  { key: "task_assigned",    label: "Tasks",           icon: Kanban },
-  { key: "bug_assigned",     label: "Bugs",            icon: Bug },
-  { key: "deadline_reminder",label: "Deadlines",       icon: Clock },
-  { key: "project_invite",   label: "Invites",         icon: UserPlus },
+  { key: "all",               label: "All",       icon: Bell },
+  { key: "task_assigned",     label: "Tasks",     icon: Kanban },
+  { key: "bug_assigned",      label: "Bugs",      icon: Bug },
+  { key: "deadline_reminder", label: "Deadlines", icon: Clock },
+  { key: "project_invite",    label: "Invites",   icon: UserPlus },
 ];
 
 export default function NotificationsPage() {
@@ -67,7 +60,6 @@ export default function NotificationsPage() {
     setLoading(false);
   };
 
-  // Auto-refresh every 30s
   useEffect(() => {
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 30000);
@@ -80,36 +72,45 @@ export default function NotificationsPage() {
     .filter((n) => filter === "all" || n.type === filter)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-  const unreadFiltered = filtered.filter((n) => !n.read).length;
-
-  // Group by date
+  // Group by date label
   const grouped: Record<string, typeof filtered> = {};
   filtered.forEach((n) => {
     const date = new Date(n.createdAt);
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
-    const key = diffDays === 0 ? "Today" : diffDays === 1 ? "Yesterday" : date.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+    const key =
+      diffDays === 0 ? "Today" :
+      diffDays === 1 ? "Yesterday" :
+      date.toLocaleDateString("en-US", { month: "long", day: "numeric" });
     if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(n);  return (
+    grouped[key].push(n);
+  });
+
+  return (
     <div className="space-y-10 animate-slide-up max-w-4xl">
-      {/* Header */}
+
+      {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Communication Hub</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+            System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span>
+          </h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             {unreadCount > 0
-              ? <><span className="text-indigo-600 font-black">{unreadCount} PENDING ALERTS</span> requiring immediate attention and operational resolution.</>
-              : "System status nominal. All protocols are synchronized and validated."
-            }
+              ? <><span className="text-indigo-600 font-black">{unreadCount} PENDING ALERTS</span> requiring immediate attention.</>
+              : "System status nominal. All protocols are synchronized."}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={handleRefresh} disabled={loading}
-            className="p-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all">
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            className="p-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all"
+          >
             <RefreshCw className={cn("h-4 w-4 text-slate-400", loading && "animate-spin")} />
           </button>
           {unreadCount > 0 && (
@@ -124,22 +125,23 @@ export default function NotificationsPage() {
       {/* ── Summary Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
-          { type: "task_assigned",     label: "TASK ALERTS",    icon: Kanban,    bg: "bg-indigo-50", text: "text-indigo-600", border: "border-indigo-100" },
-          { type: "deadline_reminder", label: "TIMELINES",      icon: Clock,     bg: "bg-amber-50",  text: "text-amber-600",  border: "border-amber-100" },
-          { type: "bug_assigned",      label: "DEFECTS",     icon: Bug,       bg: "bg-rose-50",    text: "text-rose-600",    border: "border-rose-100" },
-          { type: "project_invite",    label: "INVITATIONS",        icon: UserPlus,  bg: "bg-emerald-50",   text: "text-emerald-600",   border: "border-emerald-100" },
+          { type: "task_assigned",     label: "TASK ALERTS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-100" },
+          { type: "deadline_reminder", label: "TIMELINES",    icon: Clock,    bg: "bg-amber-50",   text: "text-amber-600",   border: "border-amber-100" },
+          { type: "bug_assigned",      label: "DEFECTS",      icon: Bug,      bg: "bg-rose-50",    text: "text-rose-600",    border: "border-rose-100" },
+          { type: "project_invite",    label: "INVITATIONS",  icon: UserPlus, bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100" },
         ].map((item) => {
-          const count = notifications.filter((n) => n.type === item.type).length;
+          const count  = notifications.filter((n) => n.type === item.type).length;
           const unread = notifications.filter((n) => n.type === item.type && !n.read).length;
           const isActive = filter === item.type;
-
           return (
-            <button key={item.type}
+            <button
+              key={item.type}
               onClick={() => setFilter(isActive ? "all" : item.type)}
               className={cn(
                 "premium-card p-6 text-left group transition-all",
                 isActive ? "ring-2 ring-indigo-500/20 bg-indigo-50/30 border-indigo-200" : "hover:border-slate-300"
-              )}>
+              )}
+            >
               <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 border shadow-sm transition-all group-hover:scale-110", item.bg, item.text, item.border)}>
                 <item.icon className="h-6 w-6" />
               </div>
@@ -164,16 +166,17 @@ export default function NotificationsPage() {
             ? notifications.filter((n) => !n.read).length
             : notifications.filter((n) => n.type === f.key && !n.read).length;
           const isActive = filter === f.key;
-
           return (
-            <button key={f.key}
+            <button
+              key={f.key}
               onClick={() => setFilter(f.key)}
               className={cn(
-                "flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
+                "flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                 isActive
                   ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10"
                   : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-200 hover:text-indigo-600"
-              )}>
+              )}
+            >
               <f.icon className="h-4 w-4" />
               {f.label}
               {count > 0 && (
@@ -197,7 +200,9 @@ export default function NotificationsPage() {
               <div className="space-y-1">
                 <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Clear Spectrum</h3>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest max-w-xs">
-                  {filter === "all" ? "No active intelligence alerts detected in the system." : `No active ${filter.replace('_', ' ')} alerts found.`}
+                  {filter === "all"
+                    ? "No active intelligence alerts detected in the system."
+                    : `No active ${filter.replace("_", " ")} alerts found.`}
                 </p>
               </div>
             </div>
@@ -205,20 +210,16 @@ export default function NotificationsPage() {
             <div className="divide-y divide-slate-50">
               {Object.entries(grouped).map(([date, items]) => (
                 <div key={date}>
-                  {/* Date separator */}
                   <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 px-8 py-4 border-b border-slate-50">
                     <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">{date}</span>
                   </div>
-
                   <div className="divide-y divide-slate-50">
                     {items.map((notification) => {
                       const cfg = typeConfig[notification.type] || {
                         icon: Bell, label: "NOTIFICATION",
                         bg: "bg-slate-100", text: "text-slate-600", border: "border-slate-200",
-                        description: "",
                       };
                       const Icon = cfg.icon;
-
                       return (
                         <div
                           key={notification.id}
@@ -228,7 +229,7 @@ export default function NotificationsPage() {
                             !notification.read ? "bg-indigo-50/30 hover:bg-indigo-50/50" : "hover:bg-slate-50/50"
                           )}
                         >
-                          {/* Unread indicator */}
+                          {/* Unread dot */}
                           <div className="flex flex-col items-center pt-1 shrink-0">
                             <div className={cn(
                               "w-2.5 h-2.5 rounded-full transition-all",
@@ -236,7 +237,7 @@ export default function NotificationsPage() {
                             )} />
                           </div>
 
-                          {/* Icon container */}
+                          {/* Icon */}
                           <div className={cn(
                             "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border shadow-sm transition-all group-hover:scale-110",
                             cfg.bg, cfg.text, cfg.border
@@ -273,7 +274,6 @@ export default function NotificationsPage() {
                                 </Link>
                               )}
                             </div>
-                            
                             {!notification.read && (
                               <div className="flex items-center gap-2 pt-2">
                                 <div className="w-1 h-1 rounded-full bg-indigo-600" />
@@ -292,21 +292,25 @@ export default function NotificationsPage() {
         </ScrollArea>
       </div>
 
-      {/* ── Footer Info ── */}
-      <div className="premium-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 text-white border-slate-800">
+      {/* ── Footer ── */}
+      <div className="rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 text-white border border-slate-800">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
             <Mail className="h-6 w-6 text-indigo-400" />
           </div>
           <div className="space-y-1">
             <p className="text-sm font-black uppercase tracking-widest">External Relay Active</p>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Redundant email alerts are dispatched for all high-priority events.</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Redundant email alerts dispatched for high-priority events.</p>
           </div>
         </div>
-        <Link href="/dashboard/settings" className="px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all">
+        <Link
+          href="/dashboard/settings"
+          className="px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all"
+        >
           CONFIGURE RELAY
         </Link>
       </div>
+
     </div>
   );
 }

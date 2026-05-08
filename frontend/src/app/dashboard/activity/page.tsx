@@ -4,6 +4,7 @@ import { useMemo, useEffect } from "react";
 import { useStore } from "@/lib/store-api";
 import { cn, formatRelativeTime, getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Activity, GitBranch, Bug, Users, ArrowRight, Plus,

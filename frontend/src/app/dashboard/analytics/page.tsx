@@ -9,6 +9,7 @@ import {
   BarChart3, Activity, AlertTriangle, Zap, RefreshCw,
   ArrowUpRight, ArrowDownRight, Calendar,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface AnalyticsData {
   taskStats: {

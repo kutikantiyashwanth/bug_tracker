@@ -149,7 +149,7 @@
   }
 
   .premium-card {
-    @apply glass rounded-2xl p-6 shadow-premium hover-lift border-white/20;
+    @apply glass rounded-2xl p-6 shadow-lg hover-lift border-white/20;
   }
 
   /* --- Scrollbar --- */

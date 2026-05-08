@@ -12,7 +12,7 @@ import {
 import {
   CheckCircle2, Bug, Users, Zap, ArrowUpRight, ArrowDownRight,
   BarChart3, Calendar, Activity, AlertTriangle, TrendingUp, Clock,
-  RefreshCw, Target, Award, Flame,
+  RefreshCw, Target, Award, Flame, Plus,
 } from "lucide-react";
 
 export default function DashboardPage() {
