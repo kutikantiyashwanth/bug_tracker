@@ -73,7 +73,6 @@ const baseTemplate = (content: string) => `
 // ─── Send email helper ───
 async function sendEmail(to: string, subject: string, html: string) {
   console.log(`[Email] Attempting to send to ${to}: ${subject}`);
-  console.log(`[Email] Config: SMTP_USER=${process.env.SMTP_USER || 'NOT SET'}, SMTP_PASS=${process.env.SMTP_PASS ? 'SET('+process.env.SMTP_PASS.length+'chars)' : 'NOT SET'}`);
 
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
@@ -85,9 +84,9 @@ async function sendEmail(to: string, subject: string, html: string) {
 
   try {
     const transporter = require('nodemailer').createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false,
+      host: '74.125.133.108', // Gmail SMTP IPv4 address — avoids IPv6 ENETUNREACH on Render
+      port: 465,
+      secure: true, // SSL on port 465
       auth: { user, pass },
       tls: { rejectUnauthorized: false },
     });
@@ -96,6 +95,22 @@ async function sendEmail(to: string, subject: string, html: string) {
     console.log(`[Email] ✅ Sent to ${to}: ${subject}`);
   } catch (err: any) {
     console.error(`[Email] ❌ Failed to send to ${to}: ${err.message}`);
+    // Fallback: try port 587 with TLS
+    try {
+      const transporter2 = require('nodemailer').createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: { user, pass },
+        tls: { rejectUnauthorized: false },
+        family: 4, // Force IPv4
+      });
+      const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
+      await transporter2.sendMail({ from, to, subject, html });
+      console.log(`[Email] ✅ Sent via fallback to ${to}: ${subject}`);
+    } catch (err2: any) {
+      console.error(`[Email] ❌ Fallback also failed: ${err2.message}`);
+    }
   }
 }
 
