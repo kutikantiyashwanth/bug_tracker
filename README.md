@@ -84,7 +84,7 @@ Student Bug Tracker is a collaborative platform where student teams can:
 
 ### Authentication
 - JWT-based authentication with 7-day token expiry
-- Role selection at registration (Admin / Developer / Tester)
+- Role selection at registration (Project Lead / Team Member / QA Analyst)
 - Secure password hashing with bcrypt (10 rounds)
 - Auto-seed demo accounts on server startup
 
@@ -201,7 +201,7 @@ Student Bug Tracker is a collaborative platform where student teams can:
 ### Enums
 
 ```
-Role:         ADMIN | DEVELOPER | TESTER
+Role:         PROJECT LEAD | TEAM MEMBER | QA ANALYST
 TaskStatus:   BACKLOG | TODO | IN_PROGRESS | TESTING | DONE
 Priority:     LOW | MEDIUM | HIGH | CRITICAL
 Severity:     MINOR | MAJOR | CRITICAL
@@ -303,7 +303,7 @@ All hot query paths are indexed:
 
 ## Role-Based Access Control
 
-| Feature | Admin | Developer | Tester |
+| Feature | Project Lead | Team Member | QA Analyst |
 |---|---|---|---|
 | Create project | ✅ | ❌ | ❌ |
 | Join project | ✅ | ✅ | ✅ |
@@ -505,6 +505,6 @@ The backend pings its own `/api/v1/health` endpoint every 14 minutes to prevent 
 
 | Email | Password | Role |
 |---|---|---|
-| admin@test.com | password123 | Admin |
-| dev@test.com | password123 | Developer |
-| tester@test.com | password123 | Tester |
+| admin@test.com | password123 | Project Lead |
+| dev@test.com | password123 | Team Member |
+| tester@test.com | password123 | QA Analyst |
