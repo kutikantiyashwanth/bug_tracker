@@ -92,198 +92,230 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="space-y-10 animate-slide-up max-w-4xl">
+      {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Settings</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Manage your account and preferences</p>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-1 bg-indigo-500 rounded-full" />
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Account Preferences</span>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
+        <p className="text-slate-500 mt-2 font-medium max-w-xl">
+          Customize your professional profile, manage security protocols, and configure your notification ecosystem.
+        </p>
       </div>
 
-      {/* ── Profile ── */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
-        <div className="flex items-center gap-2 mb-1">
-          <User className="h-4 w-4 text-purple-500" />
-          <h2 className="text-sm font-semibold text-gray-800">Profile</h2>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: Profile & Security */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* ── Profile ── */}
+          <div className="premium-card space-y-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
+                  <User className="h-5 w-5 text-indigo-500" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Personal Identity</h2>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Public Professional Profile</p>
+                </div>
+              </div>
+            </div>
 
-        {/* Avatar row */}
-        <div className="flex items-center gap-4">
-          <Avatar className="h-14 w-14">
-            <AvatarFallback className="text-lg bg-purple-100 text-purple-700 font-bold">
-              {getInitials(currentUser.name)}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="font-semibold text-gray-900">{currentUser.name}</p>
-            <p className="text-sm text-gray-500">{currentUser.email}</p>
-            <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100 capitalize">
-              {currentUser.role?.toLowerCase()}
-            </span>
+            {/* Avatar row */}
+            <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100">
+              <Avatar className="h-20 w-20 ring-4 ring-white shadow-xl shadow-indigo-500/10">
+                <AvatarFallback className="text-2xl font-black bg-indigo-600 text-white">
+                  {getInitials(currentUser.name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="space-y-1">
+                <p className="text-xl font-black text-slate-900 tracking-tight">{currentUser.name}</p>
+                <p className="text-sm font-medium text-slate-500">{currentUser.email}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
+                    {currentUser.role?.toUpperCase()}
+                  </Badge>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active System Status</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Legal Name</Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)}
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">System Identifier (Email)</Label>
+                <Input value={email} readOnly
+                  className="h-14 rounded-2xl bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed font-bold" />
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="space-y-4">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Technical Competencies</Label>
+              <div className="flex flex-wrap gap-2">
+                {skills.map((s) => (
+                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
+                    {s}
+                    <button onClick={() => removeSkill(s)} className="text-slate-300 hover:text-rose-500 transition-colors">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 mt-4">
+                <Input
+                  placeholder="e.g. React, Microservices, Penetration Testing"
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 flex-1 font-medium"
+                />
+                <Button onClick={addSkill} variant="outline"
+                  className="h-14 px-8 rounded-2xl border-slate-200 text-slate-600 font-bold hover:bg-slate-50">
+                  <Plus className="h-4 w-4 mr-2" /> ADD
+                </Button>
+              </div>
+            </div>
+
+            {profileError && (
+              <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-rose-600" /> 
+                <p className="text-xs font-bold text-rose-600">{profileError}</p>
+              </div>
+            )}
+
+            <Button onClick={handleSaveProfile} disabled={profileSaving} variant="premium" className="w-full h-14 !rounded-2xl shadow-indigo-500/20">
+              {profileSaving ? (
+                <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+              ) : profileSaved ? (
+                <><Check className="h-5 w-5 mr-2" /> PROFILE UPDATED</>
+              ) : (
+                <><Save className="h-5 w-5 mr-2" /> SYNCHRONIZE PROFILE</>
+              )}
+            </Button>
+          </div>
+
+          {/* ── Security ── */}
+          <div className="premium-card space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800">
+                <Shield className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Cryptographic Security</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Manage Authentication Credentials</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Current Secret</Label>
+                <div className="relative">
+                  <Input type={showPw ? "text" : "password"} value={currentPw}
+                    onChange={(e) => setCurrentPw(e.target.value)}
+                    placeholder="••••••••" 
+                    className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
+                  <button type="button" onClick={() => setShowPw(!showPw)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors">
+                    {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">New Protocol Secret</Label>
+                <Input type={showPw ? "text" : "password"} value={newPw}
+                  onChange={(e) => setNewPw(e.target.value)}
+                  placeholder="Minimum 8 characters" 
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirm Protocol Secret</Label>
+                <Input type={showPw ? "text" : "password"} value={confirmPw}
+                  onChange={(e) => setConfirmPw(e.target.value)}
+                  placeholder="Verify new secret" 
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+              </div>
+            </div>
+
+            {pwError && (
+              <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center">
+                <p className="text-xs font-bold text-rose-600">{pwError}</p>
+              </div>
+            )}
+
+            <Button onClick={handleChangePassword} disabled={pwSaving} 
+              className="w-full h-14 !rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10">
+              {pwSaving ? (
+                <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+              ) : pwSaved ? (
+                <><Check className="h-4 w-4 mr-2" /> CREDENTIALS UPDATED</>
+              ) : (
+                "Update Security Credentials"
+              )}
+            </Button>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-gray-600">Full Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)}
-              className="h-9 text-sm border-gray-200 focus:border-purple-400" />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-gray-600">Email</Label>
-            <Input value={email} readOnly
-              className="h-9 text-sm border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed" />
-            <p className="text-[10px] text-gray-400">Email cannot be changed</p>
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-gray-600">Role</Label>
-            <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-              <SelectTrigger className="h-9 text-sm border-gray-200">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="admin">Admin / Team Lead</SelectItem>
-                <SelectItem value="developer">Developer</SelectItem>
-                <SelectItem value="tester">Tester</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        {/* Right Column: Notifications & Danger Zone */}
+        <div className="space-y-8">
+          {/* ── Notifications ── */}
+          <div className="premium-card space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100">
+                <Bell className="h-5 w-5 text-amber-500" />
+              </div>
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Event Protocol</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Notification Configuration</p>
+              </div>
+            </div>
 
-        {/* Skills */}
-        <div className="space-y-2">
-          <Label className="text-xs font-medium text-gray-600">Skills</Label>
-          <div className="flex flex-wrap gap-2 min-h-8">
-            {skills.map((s) => (
-              <span key={s} className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-100 text-xs font-medium">
-                {s}
-                <button onClick={() => removeSkill(s)} className="hover:text-red-500 transition-colors">
-                  <X className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Add a skill (e.g. React, Testing...)"
-              value={newSkill}
-              onChange={(e) => setNewSkill(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
-              className="h-9 text-sm border-gray-200 flex-1"
-            />
-            <button onClick={addSkill}
-              className="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors text-sm font-medium flex items-center gap-1">
-              <Plus className="h-3.5 w-3.5" /> Add
-            </button>
-          </div>
-        </div>
-
-        {profileError && (
-          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {profileError}
-          </div>
-        )}
-
-        <button onClick={handleSaveProfile} disabled={profileSaving}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-teal-500 text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50">
-          {profileSaving ? (
-            <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-          ) : profileSaved ? (
-            <><Check className="h-4 w-4" /> Saved!</>
-          ) : (
-            <><Save className="h-4 w-4" /> Save Profile</>
-          )}
-        </button>
-      </div>
-
-      {/* ── Security ── */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <div className="flex items-center gap-2 mb-1">
-          <Shield className="h-4 w-4 text-purple-500" />
-          <h2 className="text-sm font-semibold text-gray-800">Security</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-gray-600">Current Password</Label>
-            <div className="relative">
-              <Input type={showPw ? "text" : "password"} value={currentPw}
-                onChange={(e) => setCurrentPw(e.target.value)}
-                placeholder="••••••••" className="h-9 text-sm border-gray-200 pr-9" />
-              <button type="button" onClick={() => setShowPw(!showPw)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                {showPw ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-              </button>
+            <div className="space-y-2">
+              {[
+                { key: "task_assigned",      label: "Task Velocity",    desc: "Assignment alerts" },
+                { key: "deadline_reminder",  label: "Timeline Drift",  desc: "Deadline proximity" },
+                { key: "bug_assigned",       label: "Defect Analysis",     desc: "Bug report allocation" },
+                { key: "project_invite",     label: "Workspace Access",     desc: "Collaborative invitations" },
+                { key: "email_notifications",label: "Remote Sync", desc: "External SMTP relay" },
+              ].map((pref) => (
+                <div key={pref.key} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-900">{pref.label}</p>
+                    <p className="text-[10px] font-bold text-slate-400">{pref.desc}</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox"
+                      checked={notifPrefs[pref.key as keyof typeof notifPrefs]}
+                      onChange={(e) => setNotifPrefs({ ...notifPrefs, [pref.key]: e.target.checked })}
+                      className="sr-only peer" />
+                    <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-gray-600">New Password</Label>
-            <Input type={showPw ? "text" : "password"} value={newPw}
-              onChange={(e) => setNewPw(e.target.value)}
-              placeholder="Min 6 characters" className="h-9 text-sm border-gray-200" />
-          </div>
-          <div className="space-y-1.5 sm:col-span-2">
-            <Label className="text-xs font-medium text-gray-600">Confirm New Password</Label>
-            <Input type={showPw ? "text" : "password"} value={confirmPw}
-              onChange={(e) => setConfirmPw(e.target.value)}
-              placeholder="Repeat new password" className="h-9 text-sm border-gray-200 max-w-xs" />
-          </div>
-        </div>
 
-        {pwError && (
-          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {pwError}
-          </div>
-        )}
-
-        <button onClick={handleChangePassword} disabled={pwSaving}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 text-white text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50">
-          {pwSaving ? (
-            <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-          ) : pwSaved ? (
-            <><Check className="h-4 w-4" /> Password Updated!</>
-          ) : (
-            "Update Password"
-          )}
-        </button>
-      </div>
-
-      {/* ── Notifications ── */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-3">
-        <div className="flex items-center gap-2 mb-1">
-          <Bell className="h-4 w-4 text-purple-500" />
-          <h2 className="text-sm font-semibold text-gray-800">Notification Preferences</h2>
-        </div>
-
-        {[
-          { key: "task_assigned",      label: "Task assignments",    desc: "When a task is assigned to you" },
-          { key: "deadline_reminder",  label: "Deadline reminders",  desc: "Before task deadlines" },
-          { key: "bug_assigned",       label: "Bug assignments",     desc: "When a bug is assigned to you" },
-          { key: "project_invite",     label: "Project invites",     desc: "When invited to a project" },
-          { key: "email_notifications",label: "Email notifications", desc: "Also receive alerts via email" },
-        ].map((pref) => (
-          <div key={pref.key} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+          {/* ── Danger Zone ── */}
+          <div className="premium-card border-rose-100 bg-rose-50/30 space-y-6">
             <div>
-              <p className="text-sm font-medium text-gray-700">{pref.label}</p>
-              <p className="text-xs text-gray-400">{pref.desc}</p>
+              <h2 className="text-sm font-black uppercase tracking-widest text-rose-600">Danger Zone</h2>
+              <p className="text-[10px] font-bold text-rose-500/60 uppercase mt-1">Terminal Session Management</p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox"
-                checked={notifPrefs[pref.key as keyof typeof notifPrefs]}
-                onChange={(e) => setNotifPrefs({ ...notifPrefs, [pref.key]: e.target.checked })}
-                className="sr-only peer" />
-              <div className="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:bg-purple-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" />
-            </label>
+            <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
+              Terminating your current active session will flush all local cached authentication tokens.
+            </p>
+            <Button onClick={() => logout()} variant="outline"
+              className="w-full h-12 rounded-xl border-rose-200 text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all">
+              Terminate Session
+            </Button>
           </div>
-        ))}
-      </div>
-
-      {/* ── Danger Zone ── */}
-      <div className="bg-white rounded-xl border border-red-100 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-red-600 mb-3">Danger Zone</h2>
-        <p className="text-xs text-gray-500 mb-3">Once you sign out, you'll need to log in again.</p>
-        <button onClick={() => logout()}
-          className="px-4 py-2 rounded-lg border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors">
-          Sign Out
-        </button>
+        </div>
       </div>
     </div>
   );

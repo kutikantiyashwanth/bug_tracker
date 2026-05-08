@@ -247,253 +247,288 @@ export default function BugsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10 animate-slide-up">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 page-title">Bug Reports</h1>
-          <p className="text-sm text-gray-500 mt-1">Track and manage reported issues</p>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-1 bg-rose-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Quality Assurance</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
+          <p className="text-slate-500 mt-2 font-medium max-w-xl">
+            Monitor, prioritize, and resolve technical debt with AI-assisted severity analysis and team collaboration.
+          </p>
         </div>
-        <Button variant="glow" size="sm" onClick={() => { resetForm(); setCreateError(""); setShowCreateDialog(true); }} className="w-full sm:w-auto">
-          <Plus className="h-4 w-4 mr-1" /> Report Bug
-        </Button>
+        
+        <div className="flex items-center gap-3">
+          <Button variant="premium" onClick={() => { resetForm(); setCreateError(""); setShowCreateDialog(true); }} className="shadow-rose-500/20 !bg-rose-600 hover:!bg-rose-700">
+            <Plus className="h-4 w-4" />
+            <span className="text-sm font-bold">Report New Bug</span>
+          </Button>
+        </div>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: "Open", value: stats.open, color: "text-red-600", bg: "bg-red-100" },
-          { label: "In Progress", value: stats.inProgress, color: "text-amber-600", bg: "bg-amber-100" },
-          { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-100" },
-          { label: "Critical", value: stats.critical, color: "text-red-600", bg: "bg-red-100" },
-        ].map((stat) => (
-          <Card key={stat.label} className="card-base">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", stat.bg)}>
-                <span className={cn("text-lg font-bold", stat.color)}>{stat.value}</span>
+          { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-600", bg: "bg-rose-50", icon: Bug },
+          { label: "In Development", value: stats.inProgress, color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
+          { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle2 },
+          { label: "Critical Priority", value: stats.critical, color: "text-rose-600", bg: "bg-rose-100/50", icon: AlertTriangle },
+        ].map((stat, i) => (
+          <div key={i} className="premium-card group relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-500">
+              <stat.icon className="h-16 w-16" />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg)}>
+                <stat.icon className={cn("h-6 w-6", stat.color)} />
               </div>
-              <span className="text-sm text-gray-500">{stat.label}</span>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col gap-3 filters-row">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-          <Input
-            placeholder="Search bugs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-            <SelectTrigger className="flex-1 sm:w-[140px] sm:flex-none">
-              <SelectValue placeholder="Severity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Severity</SelectItem>
-              <SelectItem value="minor">Minor</SelectItem>
-              <SelectItem value="major">Major</SelectItem>
-              <SelectItem value="critical">Critical</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="flex-1 sm:w-[140px] sm:flex-none">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="open">Open</SelectItem>
-              <SelectItem value="in-progress">In Progress</SelectItem>
-              <SelectItem value="resolved">Resolved</SelectItem>
-              <SelectItem value="closed">Closed</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      {/* Filters & Navigation */}
+      <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60">
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search reports by title, description or ID..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 h-12 bg-white border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
+            />
+          </div>
+          
+          <div className="flex items-center gap-3 px-2">
+            <Select value={filterSeverity} onValueChange={setFilterSeverity}>
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+                <SelectValue placeholder="Severity" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Severities</SelectItem>
+                <SelectItem value="minor">Minor</SelectItem>
+                <SelectItem value="major">Major</SelectItem>
+                <SelectItem value="critical">Critical</SelectItem>
+              </SelectContent>
+            </Select>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="all">All ({projectBugs.length})</TabsTrigger>
-          <TabsTrigger value="open">Open ({stats.open + stats.inProgress})</TabsTrigger>
-          <TabsTrigger value="resolved">Resolved ({stats.resolved})</TabsTrigger>
-        </TabsList>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+                <SelectValue placeholder="Lifecycle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="open">Open</SelectItem>
+                <SelectItem value="in-progress">Fixing</SelectItem>
+                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="closed">Closed</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-        <TabsContent value={activeTab} className="mt-4 space-y-3">
-          {filteredBugs.length === 0 ? (
-            <Card className="card-base">
-              <CardContent className="p-12 text-center">
-                <Bug className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No bugs found</p>
-                <Button variant="outline" size="sm" className="mt-4" onClick={() => { resetForm(); setShowCreateDialog(true); }}>
-                  Report a bug
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="bg-transparent gap-8 p-0 h-auto mb-8">
+            {[
+              { id: "all", label: "All Reports", count: projectBugs.length },
+              { id: "open", label: "Active Issues", count: stats.open + stats.inProgress },
+              { id: "resolved", label: "Resolved", count: stats.resolved },
+            ].map((tab) => (
+              <TabsTrigger key={tab.id} value={tab.id} 
+                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
+                <span className="text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <TabsContent value={activeTab} className="mt-0 outline-none">
+            {filteredBugs.length === 0 ? (
+              <div className="premium-card flex flex-col items-center justify-center py-24 border-dashed">
+                <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-6">
+                  <Bug className="h-10 w-10 text-slate-200" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">No bugs found</h3>
+                <p className="text-slate-500 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
+                <Button variant="outline" className="mt-6 rounded-2xl" onClick={() => { resetForm(); setShowCreateDialog(true); }}>
+                  Create Bug Report
                 </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            filteredBugs.map((bug, i) => {
-              const reporter = getUserById(bug.reportedBy);
-              const assignee = bug.assigneeId ? getUserById(bug.assigneeId) : null;
-              return (
-                <Card
-                  key={bug.id}
-                  className="card-base hover:border-gray-200 transition-all duration-200 stagger-item cursor-pointer"
-                  style={{ animationDelay: `${i * 50}ms` }}
-                  onClick={() => setShowDetailDialog(bug)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-4">
-                      <div className="mt-0.5 shrink-0">{severityIcon(bug.severity)}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <h3 className="text-sm font-semibold text-gray-900">{bug.title}</h3>
-                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">{bug.description}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {filteredBugs.map((bug, i) => {
+                  const reporter = getUserById(bug.reportedBy);
+                  const assignee = bug.assigneeId ? getUserById(bug.assigneeId) : null;
+                  return (
+                    <div
+                      key={bug.id}
+                      className="premium-card !p-0 group cursor-pointer border-slate-200/60 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
+                      onClick={() => setShowDetailDialog(bug)}
+                    >
+                      <div className="flex flex-col lg:flex-row lg:items-center p-6 gap-6">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className={cn("w-2 h-2 rounded-full", 
+                              bug.severity === 'critical' ? 'bg-rose-500 animate-pulse' : 
+                              bug.severity === 'major' ? 'bg-amber-500' : 'bg-blue-500'
+                            )} />
+                            <h3 className="text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <Badge className={cn("text-[10px]", severityColors[bug.severity])}>
-                              {bug.severity}
-                            </Badge>
-                            <div className="flex items-center gap-1.5">
-                              {statusIcon(bug.status)}
-                              <span className="text-xs text-gray-500 capitalize">{bug.status}</span>
+                          
+                          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-6">
+                            {bug.description || "No detailed description provided for this report."}
+                          </p>
+                          
+                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-slate-50 border border-slate-100">
+                              <Avatar className="h-5 w-5">
+                                <AvatarFallback className="text-[8px] bg-indigo-500 text-white">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
+                              </Avatar>
+                              <span className="text-slate-600">{reporter?.name || "Anonymous"}</span>
                             </div>
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-3.5 w-3.5" />
+                              <span>{formatRelativeTime(bug.createdAt)}</span>
+                            </div>
+                            {assignee && (
+                              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600">
+                                <ArrowUpCircle className="h-3.5 w-3.5" />
+                                <span>Assigned to {assignee.name}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
-                          <div className="flex items-center gap-1.5">
-                            <Avatar className="h-4 w-4">
-                              <AvatarFallback className="text-[7px]">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
-                            </Avatar>
-                            <span>{reporter?.name}</span>
+
+                        <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-slate-100 shrink-0">
+                          <div className="flex flex-col items-end gap-2">
+                            <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
+                              bug.severity === 'critical' ? 'bg-rose-100 text-rose-600' : 
+                              bug.severity === 'major' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                            )}>
+                              {bug.severity}
+                            </Badge>
+                            <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                              {statusIcon(bug.status)}
+                              <span className="capitalize">{bug.status.replace('-', ' ')}</span>
+                            </div>
                           </div>
-                          <span>·</span>
-                          <span>{formatRelativeTime(bug.createdAt)}</span>
-                          {assignee && (
-                            <>
-                              <span>·</span>
-                              <span className="text-violet-600">→ {assignee.name}</span>
-                            </>
-                          )}
+                          <div className="w-10 h-10 rounded-2xl bg-slate-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
+                            <Plus className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 rotate-45" />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })
-          )}
-        </TabsContent>
-      </Tabs>
+                  );
+                })}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
 
       {/* Create Bug Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={(open) => { if (!open) { setShowCreateDialog(false); setCreateError(""); } }}>
-        <DialogContent className="sm:max-w-[550px] max-h-[90vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              Report a Bug
-            </DialogTitle>
-            <DialogDescription>Provide details about the issue you found.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2 overflow-y-auto flex-1 pr-1">
-            <div className="space-y-2">
-              <Label>Title *</Label>
-              <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="Brief description of the bug..." />
+        <DialogContent className="sm:max-w-[650px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
+          <div className="bg-slate-950 p-10 flex items-center gap-6">
+            <div className="w-16 h-16 rounded-[2rem] bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
+              <AlertTriangle className="h-8 w-8 text-rose-500" />
             </div>
-
-            {/* AI Prioritization */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold text-white disabled:opacity-40 transition-all hover:opacity-90 hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
-                  {aiLoading
-                    ? <div className="h-3 w-3 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                    : <Cpu className="h-3.5 w-3.5" />
-                  }
-                  {aiLoading ? "Analyzing..." : "🤖 AI Analyze Severity"}
-                </button>
-                {aiSuggestion && (
-                  <span className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border",
-                    aiSuggestion.severity === "critical" ? "bg-red-100 text-red-700 border-red-200" :
-                    aiSuggestion.severity === "major"    ? "bg-orange-100 text-orange-700 border-orange-200" :
-                                                           "bg-blue-100 text-blue-700 border-blue-200"
-                  )}>
-                    <Sparkles className="h-3 w-3" />
-                    {aiSuggestion.severity.toUpperCase()}
-                  </span>
-                )}
+            <div>
+              <DialogTitle className="text-3xl font-black text-white tracking-tight">Report Bug</DialogTitle>
+              <DialogDescription className="text-white/40 font-medium">AI-powered defect analysis and reporting tool.</DialogDescription>
+            </div>
+          </div>
+          
+          <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Report Headline</Label>
+                <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Memory leak on dashboard chart interaction" 
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
-              {aiSuggestion && (
-                <div className="rounded-xl border border-violet-200 bg-violet-50 p-3 space-y-2">
-                  <div className="flex items-start gap-2">
-                    <Sparkles className="h-4 w-4 text-violet-600 shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-violet-800">AI Analysis Result</p>
-                      <p className="text-xs text-violet-600 mt-0.5">{aiSuggestion.reason}</p>
+
+              {/* AI Section */}
+              <div className="premium-card !p-6 bg-gradient-to-br from-indigo-50 via-slate-50 to-white border-indigo-100">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                      <Cpu className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-slate-900">Bug Intelligence</p>
+                      <p className="text-[10px] font-bold text-indigo-500 uppercase">Automated Prioritization</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 pt-1 border-t border-violet-200">
-                    <div className="text-center">
-                      <p className="text-[10px] text-violet-500 font-medium">Severity</p>
-                      <p className="text-xs font-black text-violet-800 capitalize">{aiSuggestion.severity}</p>
-                    </div>
-                    <div className="text-center border-x border-violet-200">
-                      <p className="text-[10px] text-violet-500 font-medium">Est. Time</p>
-                      <p className="text-xs font-black text-violet-800">{(aiSuggestion as any).estimatedTime || "—"}</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-[10px] text-violet-500 font-medium">Confidence</p>
-                      <p className="text-xs font-black text-violet-800">{(aiSuggestion as any).confidence || "—"}</p>
-                    </div>
-                  </div>
-                  {(aiSuggestion as any).suggestedTags?.length > 0 && (
-                    <div className="flex flex-wrap gap-1 pt-1 border-t border-violet-200">
-                      {(aiSuggestion as any).suggestedTags.slice(0, 5).map((tag: string) => (
-                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 border border-violet-200 font-medium">
-                          #{tag}
-                        </span>
+                  <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-indigo-200 text-indigo-600 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
+                    {aiLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                    {aiLoading ? "ANALYZING..." : "ANALYZE NOW"}
+                  </button>
+                </div>
+
+                {aiSuggestion ? (
+                  <div className="space-y-4 animate-slide-up">
+                    <p className="text-xs font-medium text-slate-600 leading-relaxed bg-white/50 p-4 rounded-2xl border border-white/80">
+                      {aiSuggestion.reason}
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { label: "Suggested Severity", value: aiSuggestion.severity.toUpperCase(), color: "text-rose-600" },
+                        { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-indigo-600" },
+                        { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
+                      ].map((item, idx) => (
+                        <div key={idx} className="bg-white p-3 rounded-xl border border-slate-100 text-center">
+                          <p className="text-[8px] font-black uppercase text-slate-400 mb-1">{item.label}</p>
+                          <p className={cn("text-[10px] font-black", item.color)}>{item.value}</p>
+                        </div>
                       ))}
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-[10px] font-bold text-slate-400">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="What happened? What was expected?" rows={3} />
-            </div>
-            <div className="space-y-2">
-              <Label>Steps to Reproduce</Label>
-              <Textarea
-                value={formSteps}
-                onChange={(e) => setFormSteps(e.target.value)}
-                placeholder={"1. Go to page...\n2. Click on...\n3. Observe..."}
-                rows={4}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Severity *</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Impact Description</Label>
+                <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Explain the business impact..." rows={4} 
+                  className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium text-sm" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Reproduction Path</Label>
+                <Textarea value={formSteps} onChange={(e) => setFormSteps(e.target.value)} placeholder="1. Open app&#10;2. Click btn..." rows={4} 
+                  className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-mono text-xs" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Severity Level</Label>
                 <Select value={formSeverity} onValueChange={(v) => setFormSeverity(v as Severity)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="minor">Minor</SelectItem>
-                    <SelectItem value="major">Major</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
+                    <SelectItem value="minor">Minor - Cosmetic</SelectItem>
+                    <SelectItem value="major">Major - Functional</SelectItem>
+                    <SelectItem value="critical">Critical - Blocking</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Assign Developer</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Assign Resolver</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
-                  <SelectTrigger><SelectValue placeholder="Unassigned" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Automatic Allocation" /></SelectTrigger>
                   <SelectContent>
                     {projectMembers.map((user) => user && (
                       <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
@@ -502,37 +537,42 @@ export default function BugsPage() {
                 </Select>
               </div>
             </div>
+
             <div className="space-y-2">
-              <Label>Screenshot (optional)</Label>
-              <label className="block border border-dashed border-gray-200 rounded-lg p-4 text-center hover:border-violet-600/50 transition-colors cursor-pointer">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Visual Evidence</Label>
+              <label className="group block border-2 border-dashed border-slate-200 rounded-[2rem] p-8 text-center hover:border-indigo-500/40 hover:bg-indigo-50/30 transition-all cursor-pointer">
                 <input type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
                 {screenshotPreview ? (
-                  <div className="space-y-2">
-                    <img src={screenshotPreview} alt="Screenshot preview" className="max-h-32 mx-auto rounded-lg object-contain" />
-                    <p className="text-xs text-gray-500">{screenshotFile?.name} · Click to change</p>
+                  <div className="relative inline-block">
+                    <img src={screenshotPreview} alt="Preview" className="max-h-40 rounded-2xl shadow-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 rounded-2xl flex items-center justify-center transition-opacity">
+                      <span className="text-white text-xs font-black">CHANGE IMAGE</span>
+                    </div>
                   </div>
                 ) : (
-                  <>
-                    <p className="text-sm text-gray-500">Click or drag to upload screenshot</p>
-                    <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB</p>
-                  </>
+                  <div className="space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-100 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Plus className="h-6 w-6 text-slate-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">Upload Screenshot</p>
+                      <p className="text-xs text-slate-400 font-medium">Attach visual context for faster resolution</p>
+                    </div>
+                  </div>
                 )}
               </label>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowCreateDialog(false); setCreateError(""); }}>Cancel</Button>
-            {createError && (
-              <p className="text-xs text-red-500 self-center">{createError}</p>
-            )}
-            <Button variant="destructive" onClick={handleCreateBug} disabled={!formTitle.trim() || creating}>
-              {creating
-                ? <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin mr-1" />
-                : <AlertTriangle className="h-4 w-4 mr-1" />
-              }
-              {creating ? "Submitting..." : "Submit Bug Report"}
-            </Button>
-          </DialogFooter>
+
+          <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Discard</button>
+            <div className="flex items-center gap-4">
+              {createError && <p className="text-xs font-bold text-rose-500">{createError}</p>}
+              <Button variant="premium" onClick={handleCreateBug} disabled={!formTitle.trim() || creating} className="!h-14 !px-8 shadow-indigo-500/20">
+                {creating ? <RefreshCw className="h-5 w-5 animate-spin" /> : <><Send className="h-4 w-4" /><span>SUBMIT REPORT</span></>}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -540,175 +580,177 @@ export default function BugsPage() {
       <Dialog open={!!showDetailDialog} onOpenChange={(open) => {
         if (!open) { setShowDetailDialog(null); setComments([]); setCommentText(""); }
       }}>
-        <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[750px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
           {showDetailDialog && (() => {
             const bug = showDetailDialog;
             const reporter = getUserById(bug.reportedBy);
             const assignee = bug.assigneeId ? getUserById(bug.assigneeId) : null;
             const isAssignedToMe = bug.assigneeId === currentUser?.id;
             return (
-              <>
-                <DialogHeader>
-                  <div className="flex items-center gap-2 mb-1">
-                    {severityIcon(bug.severity)}
-                    <Badge className={cn("text-[10px]", severityColors[bug.severity])}>{bug.severity}</Badge>
-                    <Badge variant="outline" className={cn("text-[10px] capitalize",
-                      bug.status === "resolved" ? "border-emerald-300 text-emerald-600" :
-                      bug.status === "in-progress" ? "border-amber-300 text-amber-600" :
-                      "border-red-300 text-red-600"
-                    )}>{bug.status}</Badge>
-                  </div>
-                  <DialogTitle className="text-lg">{bug.title}</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4 py-2">
-                  {/* Description */}
-                  <div>
-                    <h4 className="text-xs font-medium text-gray-500 mb-1">Description</h4>
-                    <p className="text-sm text-gray-900">{bug.description || "No description provided."}</p>
-                  </div>
-
-                  {/* Steps */}
-                  {bug.stepsToReproduce && (
-                    <div>
-                      <h4 className="text-xs font-medium text-gray-500 mb-1">Steps to Reproduce</h4>
-                      <pre className="text-sm whitespace-pre-wrap bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-800">
-                        {bug.stepsToReproduce}
-                      </pre>
+              <div className="flex flex-col h-[90vh]">
+                <div className="bg-slate-950 p-10 flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
+                        bug.severity === 'critical' ? 'bg-rose-500 text-white' : 
+                        bug.severity === 'major' ? 'bg-amber-500 text-white' : 'bg-blue-500 text-white'
+                      )}>
+                        {bug.severity}
+                      </Badge>
+                      <span className="text-white/20 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
                     </div>
-                  )}
-
-                  {/* Screenshot */}
-                  {bug.screenshotUrl && (
-                    <div>
-                      <h4 className="text-xs font-medium text-gray-500 mb-1">Screenshot</h4>
-                      <img src={bug.screenshotUrl} alt="Bug screenshot" className="rounded-lg border border-gray-200 max-h-48 object-contain" />
-                    </div>
-                  )}
-
-                  {/* Reporter / Assignee */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <h4 className="text-xs font-medium text-gray-500 mb-1">Reported By</h4>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-5 w-5">
-                          <AvatarFallback className="text-[8px]">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
+                    <DialogTitle className="text-3xl font-black text-white tracking-tight leading-tight">{bug.title}</DialogTitle>
+                    <div className="flex items-center gap-6 mt-6">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8 ring-2 ring-white/10">
+                          <AvatarFallback className="bg-indigo-600 text-white text-[10px] font-black">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                         </Avatar>
-                        <span>{reporter?.name}</span>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Reporter</p>
+                          <p className="text-xs font-bold text-white/80">{reporter?.name || "Anonymous"}</p>
+                        </div>
+                      </div>
+                      <div className="h-8 w-px bg-white/10" />
+                      <div className="flex items-center gap-3">
+                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/10")}>
+                          {statusIcon(bug.status)}
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Status</p>
+                          <p className="text-xs font-bold text-white/80 capitalize">{bug.status.replace('-', ' ')}</p>
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-medium text-gray-500 mb-1">Assigned To</h4>
-                      <div className="flex items-center gap-2">
-                        {assignee ? (
-                          <>
-                            <Avatar className="h-5 w-5">
-                              <AvatarFallback className="text-[8px]">{getInitials(assignee.name)}</AvatarFallback>
+                  </div>
+                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/20 hover:text-white transition-colors">
+                    <Trash2 className="h-6 w-6 rotate-45" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto no-scrollbar p-10 space-y-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="space-y-8">
+                      <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Functional Impact</h4>
+                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{bug.description || "No context provided."}</p>
+                      </div>
+
+                      {bug.stepsToReproduce && (
+                        <div>
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Reproduction Steps</h4>
+                          <div className="bg-slate-50 rounded-[1.5rem] p-6 border border-slate-100 font-mono text-xs text-slate-600 leading-relaxed">
+                            {bug.stepsToReproduce}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-8">
+                      {bug.screenshotUrl && (
+                        <div>
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Evidence</h4>
+                          <div className="group relative overflow-hidden rounded-[2rem] border border-slate-100 shadow-xl">
+                            <img src={bug.screenshotUrl} alt="BugEvidence" className="w-full object-cover" />
+                            <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="premium-card !p-6 bg-slate-50 border-slate-200">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Resolution Ownership</h4>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarFallback className="bg-slate-200 text-slate-600 font-black text-xs">{assignee ? getInitials(assignee.name) : "?"}</AvatarFallback>
                             </Avatar>
-                            <span>{assignee.name}</span>
-                          </>
-                        ) : (
-                          <span className="text-gray-500">Unassigned</span>
-                        )}
+                            <div>
+                              <p className="text-sm font-bold text-slate-900">{assignee?.name || "Unassigned"}</p>
+                              <p className="text-[10px] font-bold text-slate-400">LEAD RESOLVER</p>
+                            </div>
+                          </div>
+                          {!assignee && permissions.changeBugStatus && (
+                            <Button size="sm" variant="outline" className="rounded-xl font-black text-[10px] uppercase tracking-widest">Assign Now</Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* ── Comments / Communication ── */}
-                  <div className="border-t border-gray-200 pt-4">
-                    <h4 className="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-1.5">
-                      <MessageSquare className="h-3.5 w-3.5" />
-                      Comments ({comments.length})
-                    </h4>
+                  {/* ── Chat/Comments ── */}
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Collaboration Feed</h4>
+                      <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500">{comments.length} MESSAGES</span>
+                    </div>
 
-                    {/* Comment list */}
-                    <ScrollArea className="max-h-48 mb-3">
+                    <div className="space-y-4">
                       {loadingComments ? (
-                        <p className="text-xs text-gray-500 text-center py-4">Loading...</p>
+                        <div className="flex justify-center py-10"><RefreshCw className="h-6 w-6 animate-spin text-slate-200" /></div>
                       ) : comments.length === 0 ? (
-                        <p className="text-xs text-gray-500 text-center py-4">
-                          No comments yet. Be the first to comment!
-                        </p>
+                        <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[2rem]">
+                          <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-3" />
+                          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No activity yet</p>
+                        </div>
                       ) : (
-                        <div className="space-y-3 pr-2">
+                        <div className="space-y-4">
                           {comments.map((c) => {
                             const author = getUserById(c.userId) || c.user;
                             const isMe = c.userId === currentUser?.id;
                             return (
-                              <div key={c.id} className={cn("flex gap-2.5", isMe && "flex-row-reverse")}>
-                                <Avatar className="h-6 w-6 shrink-0">
-                                  <AvatarFallback className="text-[9px] bg-purple-100 text-purple-700">
-                                    {author ? getInitials(author.name) : "?"}
-                                  </AvatarFallback>
+                              <div key={c.id} className={cn("flex gap-4 group", isMe && "flex-row-reverse")}>
+                                <Avatar className="h-8 w-8 mt-1">
+                                  <AvatarFallback className="text-[10px] font-black bg-indigo-500 text-white">{author ? getInitials(author.name) : "?"}</AvatarFallback>
                                 </Avatar>
-                                <div className={cn(
-                                  "max-w-[75%] rounded-xl px-3 py-2 text-xs",
-                                  isMe
-                                    ? "bg-violet-100 text-violet-800 rounded-tr-none"
-                                    : "bg-gray-100 text-gray-900 rounded-tl-none"
-                                )}>
-                                  <p className={cn("font-semibold text-[10px] mb-0.5", isMe ? "text-violet-600 text-right" : "text-gray-500")}>
-                                    {isMe ? "You" : (author?.name || "Unknown")}
-                                  </p>
-                                  <p className="leading-relaxed">{c.content}</p>
-                                  <p className={cn("text-[10px] mt-1 opacity-60", isMe && "text-right")}>
-                                    {formatRelativeTime(c.createdAt)}
-                                  </p>
+                                <div className={cn("max-w-[80%] space-y-1", isMe && "text-right")}>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
+                                  <div className={cn("px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm", 
+                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-slate-100 text-slate-600 rounded-tl-none")}>
+                                    {c.content}
+                                  </div>
+                                  <p className="text-[8px] font-black text-slate-300 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
                                 </div>
                               </div>
                             );
                           })}
                         </div>
                       )}
-                    </ScrollArea>
+                    </div>
 
-                    {/* Comment input */}
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Write a comment..."
-                        value={commentText}
-                        onChange={(e) => setCommentText(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSendComment(bug.id))}
-                        className="text-sm h-9"
-                      />
-                      <button
-                        onClick={() => handleSendComment(bug.id)}
-                        disabled={!commentText.trim() || sendingComment}
-                        className="px-3 py-1.5 rounded-lg bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 transition-colors"
-                      >
-                        {sendingComment
-                          ? <div className="h-4 w-4 rounded-full border-2 border-violet-400/40 border-t-violet-600 animate-spin" />
-                          : <Send className="h-4 w-4" />
-                        }
-                      </button>
+                    <div className="relative group pt-4">
+                      <div className="absolute right-3 top-[calc(1rem+12px)] flex items-center gap-2">
+                        <button onClick={() => handleSendComment(bug.id)} disabled={!commentText.trim() || sendingComment}
+                          className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/20 hover:scale-105 transition-transform disabled:opacity-40">
+                          {sendingComment ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                        </button>
+                      </div>
+                      <Input placeholder="Sync with your team..." value={commentText} onChange={(e) => setCommentText(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendComment(bug.id)}
+                        className="h-16 pl-6 pr-16 rounded-[1.5rem] bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-medium" />
                     </div>
                   </div>
                 </div>
 
-                {/* Footer actions */}
-                <DialogFooter className="flex-row gap-2 flex-wrap">
-                  {/* Developer: Mark as resolved */}
-                  {isAssignedToMe && bug.status !== "resolved" && bug.status !== "closed" && (
-                    <button
-                      onClick={() => handleMarkResolved(bug)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-sm font-medium transition-colors"
-                    >
-                      <CheckCircle2 className="h-4 w-4" />
-                      Mark as Resolved
-                    </button>
-                  )}
+                <div className="p-8 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+                  <div className="flex items-center gap-3">
+                    {permissions.deleteBug && (
+                      <button onClick={() => { deleteBug(bug.id); setShowDetailDialog(null); }}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-rose-500 hover:bg-rose-50 transition-colors text-[10px] font-black uppercase tracking-widest border border-rose-100">
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Permanently Delete
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    {isAssignedToMe && bug.status !== "resolved" && (
+                      <Button onClick={() => handleMarkResolved(bug)} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest px-6 h-12 shadow-emerald-500/20">
+                        Confirm Resolution
+                      </Button>
+                    )}
 
-                  {/* Admin: change status */}
-                  {permissions.changeBugStatus && (
-                    <div className="flex gap-2">
-                      <Select
-                        value={bug.status}
-                        onValueChange={(v) => {
-                          handleStatusChange(bug.id, v as BugStatus);
-                          setShowDetailDialog({ ...bug, status: v as BugStatus });
-                        }}
-                      >
-                        <SelectTrigger className="w-[130px] h-9 text-sm"><SelectValue /></SelectTrigger>
+                    {permissions.changeBugStatus && (
+                      <Select value={bug.status} onValueChange={(v) => { handleStatusChange(bug.id, v as BugStatus); setShowDetailDialog({ ...bug, status: v as BugStatus }); }}>
+                        <SelectTrigger className="w-40 h-12 rounded-xl border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="open">Open</SelectItem>
                           <SelectItem value="in-progress">In Progress</SelectItem>
@@ -716,37 +758,10 @@ export default function BugsPage() {
                           <SelectItem value="closed">Closed</SelectItem>
                         </SelectContent>
                       </Select>
-
-                      <Select
-                        value={bug.assigneeId || "unassigned"}
-                        onValueChange={(v) => {
-                          const newId = v === "unassigned" ? null : v;
-                          updateBug(bug.id, { assigneeId: newId as any });
-                          setShowDetailDialog({ ...bug, assigneeId: newId as any });
-                        }}
-                      >
-                        <SelectTrigger className="w-[140px] h-9 text-sm"><SelectValue placeholder="Assign To..." /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="unassigned">Unassigned</SelectItem>
-                          {projectMembers.map((m) => m && (
-                            <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-
-                  {/* Admin: delete */}
-                  {permissions.deleteBug && (
-                    <button
-                      onClick={() => { deleteBug(bug.id); setShowDetailDialog(null); }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 text-sm font-medium transition-colors"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" /> Delete
-                    </button>
-                  )}
-                </DialogFooter>
-              </>
+                    )}
+                  </div>
+                </div>
+              </div>
             );
           })()}
         </DialogContent>

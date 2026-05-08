@@ -150,346 +150,264 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#0a0a0f" }}>
+    <div className="min-h-screen flex bg-slate-950 font-jakarta">
 
-      {/* ══ LEFT PANEL — Dark Bug Tracker Dashboard Preview ══ */}
-      <div className="hidden lg:flex lg:w-[55%] flex-col relative overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #0d0d1a 0%, #0a0a14 60%, #0d0a1a 100%)" }}>
+      {/* ── Left Panel: Visual Hero ── */}
+      <div className="hidden lg:flex lg:w-[50%] flex-col relative overflow-hidden bg-[#0f172a]">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/10 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-pink-500/10 blur-[100px]" />
+        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(#ffffff 0.5px, transparent 0.5px)", backgroundSize: "24px 24px" }} />
 
-        {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: "linear-gradient(rgba(139,92,246,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.8) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-
-        {/* Glow orbs */}
-        <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl"
-          style={{ background: "radial-gradient(circle, #7c3aed, transparent)" }} />
-        <div className="absolute bottom-[-100px] right-[-50px] w-[300px] h-[300px] rounded-full opacity-8 blur-3xl"
-          style={{ background: "radial-gradient(circle, #2563eb, transparent)" }} />
-
-        <div className="relative z-10 flex flex-col h-full p-10">
-
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-              <Bug className="h-5 w-5 text-white" />
+        <div className="relative z-10 flex flex-col h-full p-16">
+          {/* Logo Section */}
+          <div className="flex items-center gap-4 mb-20 group cursor-default">
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-xl shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
+              <Bug className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-white font-black text-lg tracking-tight">BugTracker</p>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-white/40 text-[10px]">Live · All systems operational</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Hero */}
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
-              style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}>
-              <Activity className="h-3.5 w-3.5 text-violet-400" />
-              <span className="text-violet-300 text-xs font-semibold">Real-time Bug Tracking Platform</span>
-            </div>
-            <h1 className="text-4xl font-black text-white leading-tight tracking-tight mb-3">
-              Track. Fix.<br />
-              <span style={{ background: "linear-gradient(135deg, #a78bfa, #60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                Ship faster.
-              </span>
-            </h1>
-            <p className="text-white/40 text-sm leading-relaxed max-w-sm">
-              The complete bug tracking and project management platform built for student teams and hackathons.
-            </p>
-          </div>
-
-          {/* Bug severity chart */}
-          <div className="rounded-2xl p-5 mb-4"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="flex items-center justify-between mb-4">
+              <p className="text-2xl font-black tracking-tighter text-white">Bug<span className="text-indigo-400">Tracker</span></p>
               <div className="flex items-center gap-2">
-                <BarChart2 className="h-4 w-4 text-violet-400" />
-                <span className="text-white/70 text-xs font-semibold">Bug Overview</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/30">V2.4 Enterprise</span>
               </div>
-              <span className="text-white/30 text-[10px]">Last 7 days</span>
-            </div>
-            <div className="space-y-3">
-              {STATS.map((s) => (
-                <div key={s.label}>
-                  <div className="flex justify-between text-[11px] mb-1.5">
-                    <span style={{ color: s.color }} className="font-semibold">{s.label}</span>
-                    <span className="text-white/40">{s.count} bugs</span>
-                  </div>
-                  <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
-                    <div className="h-full rounded-full transition-all duration-700"
-                      style={{ width: `${s.pct}%`, background: s.color, opacity: 0.8 }} />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
-          {/* Recent bugs */}
-          <div className="rounded-2xl p-5 flex-1"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="h-4 w-4 text-rose-400" />
-              <span className="text-white/70 text-xs font-semibold">Recent Reports</span>
-            </div>
-            <div className="space-y-3">
-              {RECENT.map((bug, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className={cn("w-2 h-2 rounded-full mt-1.5 shrink-0", SEV_COLOR[bug.sev])} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white/60 text-xs truncate">{bug.title}</p>
-                    <p className="text-white/25 text-[10px] mt-0.5">{bug.time}</p>
+          {/* Hero Content */}
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="space-y-6 max-w-lg">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl glass-dark border-white/5 animate-slide-up">
+                <Zap className="h-4 w-4 text-amber-400" />
+                <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Accelerate Your Workflow</span>
+              </div>
+              
+              <h1 className="text-6xl font-black text-white leading-[1.1] tracking-tight animate-slide-up" style={{ animationDelay: '100ms' }}>
+                Track issues,<br />
+                <span className="text-brand">optimize flow.</span>
+              </h1>
+              
+              <p className="text-lg text-white/40 leading-relaxed animate-slide-up" style={{ animationDelay: '200ms' }}>
+                The next-generation bug tracking platform built for high-performance student teams and engineering squads.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 pt-8 animate-slide-up" style={{ animationDelay: '300ms' }}>
+                {[
+                  { icon: Activity, label: "Real-time Sync", desc: "Instant updates" },
+                  { icon: Shield, label: "Role Based", desc: "Secure access" },
+                ].map((feature, i) => (
+                  <div key={i} className="p-4 rounded-2xl glass-dark border-white/5 hover:bg-white/5 transition-colors">
+                    <feature.icon className="h-5 w-5 text-indigo-400 mb-2" />
+                    <p className="text-sm font-bold text-white">{feature.label}</p>
+                    <p className="text-[10px] text-white/30 uppercase tracking-widest">{feature.desc}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          <p className="text-white/20 text-[10px] mt-6">© 2026 Student Bug Tracker · Built for teams</p>
+          {/* Bottom Badge */}
+          <div className="pt-20 mt-auto flex items-center justify-between border-t border-white/5 opacity-50">
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/40">© 2026 ANTIGRAVITY LABS</p>
+            <div className="flex gap-4">
+              <GitBranch className="h-4 w-4 text-white/20" />
+              <Shield className="h-4 w-4 text-white/20" />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ══ RIGHT PANEL — Auth Form ══ */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12"
-        style={{ background: "#0f0f1a" }}>
-        <div className="w-full max-w-[400px]">
+      {/* ── Right Panel: Auth Flow ── */}
+      <div className="flex-1 flex items-center justify-center p-8 lg:p-16 relative">
+        {/* Mobile Gradient Orbs */}
+        <div className="lg:hidden absolute inset-0 overflow-hidden -z-10">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-600/10 blur-[80px]" />
+        </div>
 
-          {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-              <Bug className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-white">BugTracker</span>
-          </div>
-
-          {/* ── STEP 1: Role Selection ── */}
+        <div className="w-full max-w-[440px] space-y-10">
+          
+          {/* STEP 1: Role Selection */}
           {step === "role" && (
-            <div className="space-y-6 animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Welcome back</h2>
-                <p className="text-white/40 text-sm mt-1">Select your role to continue</p>
+            <div className="animate-slide-up space-y-8">
+              <div className="space-y-3">
+                <h2 className="text-4xl font-black text-white tracking-tight">Welcome back</h2>
+                <p className="text-white/40 font-medium">Select your role to access your personalized workspace.</p>
               </div>
 
               <div className="space-y-3">
-                {ROLES.map((role, i) => (
+                {ROLES.map((role) => (
                   <button key={role.id} onClick={() => handleRoleSelect(role.id)}
-                    className={cn(
-                      "w-full group flex items-center gap-4 p-4 rounded-2xl border transition-all duration-200 text-left",
-                      "hover:scale-[1.01]", role.border
-                    )}
-                    style={{ background: "rgba(255,255,255,0.03)" }}>
-                    <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br", role.gradient)}>
-                      <role.icon className="h-5 w-5 text-white" />
+                    className="w-full group flex items-center gap-4 p-5 rounded-3xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 text-left">
+                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br shadow-lg group-hover:scale-110 transition-transform duration-500", role.gradient)}>
+                      <role.icon className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white">{role.label}</span>
+                        <span className="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">{role.label}</span>
                         {role.tag && (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full font-bold"
-                            style={{ background: "rgba(59,130,246,0.2)", color: "#60a5fa" }}>{role.tag}</span>
+                          <span className="text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-indigo-500/20 text-indigo-400">
+                            {role.tag}
+                          </span>
                         )}
                       </div>
-                      <p className="text-xs text-white/40 mt-0.5">{role.desc}</p>
+                      <p className="text-xs text-white/40 font-medium mt-1 leading-relaxed">{role.desc}</p>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-white/20 group-hover:text-white/60 transition-colors shrink-0" />
+                    <ArrowRight className="h-5 w-5 text-white/10 group-hover:text-white/60 group-hover:translate-x-1 transition-all" />
                   </button>
                 ))}
               </div>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }} />
+              <div className="space-y-4 pt-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-px flex-1 bg-white/5" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Quick Access</span>
+                  <div className="h-px flex-1 bg-white/5" />
                 </div>
-                <div className="relative flex justify-center">
-                  <span className="px-3 text-xs text-white/30" style={{ background: "#0f0f1a" }}>or quick access</span>
-                </div>
+
+                <button onClick={handleDemoLogin} disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all text-sm font-bold text-white/70 group">
+                  {isLoading ? (
+                    <div className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 text-amber-400 group-hover:rotate-12 transition-transform" />
+                      <span>Continue with Demo Account</span>
+                    </>
+                  )}
+                </button>
               </div>
 
-              <button onClick={handleDemoLogin} disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-sm font-semibold transition-all"
-                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "rgba(255,255,255,0.9)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}>
-                {isLoading
-                  ? <div className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white/60 animate-spin" />
-                  : <Sparkles className="h-4 w-4 text-amber-400" />
-                }
-                Try Demo Account
-              </button>
-
-              <p className="text-center text-sm text-white/30">
-                No account?{" "}
-                <Link href="/register" className="font-bold transition-colors" style={{ color: "#a78bfa" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#c4b5fd")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#a78bfa")}>
-                  Create Account →
+              <p className="text-center text-sm font-medium text-white/20">
+                New to the platform?{" "}
+                <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors underline-offset-4 hover:underline">
+                  Join our community
                 </Link>
               </p>
-
-              <p className="text-center text-xs text-white/20">Demo: admin@test.com / password123</p>
             </div>
           )}
 
-          {/* ── STEP 2: Login Form ── */}
+          {/* STEP 2: Login Form */}
           {step === "login" && roleInfo && (
-            <div className="space-y-5 animate-fade-in">
-              <button onClick={() => { setStep("role"); setError(""); }}
-                className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition-colors group mb-2">
-                <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-                Back to roles
+            <div className="animate-slide-up space-y-8">
+              <button onClick={() => setStep("role")}
+                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/30 hover:text-white/80 transition-colors group">
+                <ChevronLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                Back to Roles
               </button>
 
-              <div className="flex items-center gap-3">
-                <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center bg-gradient-to-br", roleInfo.gradient)}>
-                  <roleInfo.icon className="h-5 w-5 text-white" />
+              <div className="space-y-4">
+                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-2xl", roleInfo.gradient)}>
+                  <roleInfo.icon className="h-8 w-8 text-white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-black text-white">Sign in</h2>
-                  <p className="text-xs text-white/40">as {roleInfo.label}</p>
+                <div className="space-y-1">
+                  <h2 className="text-4xl font-black text-white tracking-tight">Sign In</h2>
+                  <p className="text-white/40 font-medium">Authenticating as <span className="text-indigo-400 font-bold">{roleInfo.label}</span></p>
                 </div>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
-                <input type="text" className="hidden" autoComplete="off" readOnly />
-                <input type="password" className="hidden" autoComplete="new-password" readOnly />
-
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.3)" }}>Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "rgba(255,255,255,0.2)" }} />
-                    <input type="email" placeholder="you@company.com" value={email}
-                      autoComplete="username"
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full pl-10 h-12 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"}
-                      onBlur={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"} />
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Email Identity</label>
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-500 transition-colors">
+                      <Mail className="h-5 w-5" />
+                    </div>
+                    <input type="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required
+                      className="w-full pl-12 pr-4 h-14 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 outline-none focus:bg-white/[0.05] focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium" />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.3)" }}>Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "rgba(255,255,255,0.2)" }} />
-                    <input type={showPassword ? "text" : "password"} placeholder="••••••••••"
-                      autoComplete="current-password"
-                      value={password} onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="w-full pl-10 pr-11 h-12 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"}
-                      onBlur={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"} />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Secure Password</label>
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-500 transition-colors">
+                      <Lock className="h-5 w-5" />
+                    </div>
+                    <input type={showPassword ? "text" : "password"} placeholder="••••••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required
+                      className="w-full pl-12 pr-12 h-14 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 outline-none focus:bg-white/[0.05] focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium" />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.2)")}>
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/60 transition-colors">
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                   </div>
                 </div>
 
                 {error && (
-                  <div className={cn("flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 animate-fade-in",
-                    errorType === "network"
-                      ? "bg-amber-500/10 border border-amber-500/20 text-amber-400"
-                      : "bg-rose-500/10 border border-rose-500/20 text-rose-400"
-                  )}>
-                    {errorType === "network" ? <WifiOff className="h-3.5 w-3.5 mt-0.5 shrink-0" /> : <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" />}
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                {/* Developer/Tester info */}
-                {selectedRole !== "admin" && (
-                  <div className="rounded-xl px-4 py-3"
-                    style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.15)" }}>
-                    <p className="text-xs font-semibold text-blue-400 mb-1">
-                      {selectedRole === "developer" ? "👨‍💻 Developer Account" : "🧪 Tester Account"}
-                    </p>
-                    <p className="text-xs text-blue-300/60">
-                      After signing in, you'll need an <strong className="text-blue-300/80">invite code</strong> from your Admin to join a project.
-                    </p>
+                  <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex gap-3 animate-shake">
+                    <AlertCircle className="h-5 w-5 text-rose-500 shrink-0" />
+                    <p className="text-xs font-bold text-rose-400 leading-relaxed">{error}</p>
                   </div>
                 )}
 
                 <button type="submit" disabled={isLoading}
-                  className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 disabled:opacity-50 transition-all hover:opacity-90 hover:scale-[1.01]"
-                  style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)", boxShadow: "0 8px 32px rgba(124,58,237,0.3)" }}>
-                  {isLoading
-                    ? <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                    : <>{selectedRole === "admin" ? "Sign in to Dashboard" : "Sign in"} <ArrowRight className="h-4 w-4" /></>
-                  }
+                  className="btn-premium w-full h-14 shadow-indigo-500/20 group">
+                  {isLoading ? (
+                    <div className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <>
+                      <span className="text-base font-bold">Access Dashboard</span>
+                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </form>
 
-              <p className="text-center text-sm text-white/30">
-                No account?{" "}
-                <Link href="/register" className="font-bold" style={{ color: "#a78bfa" }}>Create one free →</Link>
-              </p>
+              <div className="text-center space-y-4">
+                <p className="text-sm font-medium text-white/20">
+                  Don't have an account?{" "}
+                  <Link href="/register" className="text-white/60 hover:text-white font-bold transition-colors">
+                    Get started today
+                  </Link>
+                </p>
+                <div className="p-4 rounded-2xl glass-dark border-white/5">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Developer Preview Credentials</p>
+                  <p className="text-xs font-mono text-indigo-400/80 mt-1">admin@test.com / password123</p>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* ── STEP 3: Invite Code ── */}
+          {/* STEP 3: Invite Code Flow */}
           {step === "invite" && roleInfo && (
-            <div className="space-y-5 animate-fade-in">
-              <div className="flex items-center gap-3 p-4 rounded-2xl"
-                style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}>
-                <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />
-                <div>
-                  <p className="text-sm font-bold text-emerald-400">Signed in successfully!</p>
-                  <p className="text-xs text-emerald-400/60 mt-0.5">Now join your project to get started</p>
-                </div>
+            <div className="animate-slide-up space-y-8 text-center">
+              <div className="mx-auto w-20 h-20 rounded-3xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                <CheckCircle2 className="h-10 w-10 text-emerald-400" />
+              </div>
+              
+              <div className="space-y-2">
+                <h2 className="text-3xl font-black text-white">Authenticated</h2>
+                <p className="text-white/40 font-medium">To finalize your setup, please enter your project access code.</p>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center bg-gradient-to-br", roleInfo.gradient)}>
-                  <roleInfo.icon className="h-5 w-5 text-white" />
+              <div className="space-y-6 text-left">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Project Workspace Code</label>
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-500 transition-colors">
+                      <Hash className="h-5 w-5" />
+                    </div>
+                    <input placeholder="XXXX-XXXX-XXXX" value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} required
+                      className="w-full pl-12 pr-4 h-16 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 outline-none focus:bg-white/[0.05] focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all font-mono text-lg tracking-widest" />
+                  </div>
+                  <p className="text-[10px] font-bold text-white/20 text-center uppercase tracking-widest">ASK YOUR TEAM LEAD FOR A WORKSPACE KEY</p>
                 </div>
-                <div>
-                  <h2 className="text-xl font-black text-white">Join a Project</h2>
-                  <p className="text-xs text-white/40">Enter the invite code from your team lead</p>
-                </div>
+
+                <button onClick={handleJoinProject} disabled={joining || !inviteCode.trim()}
+                  className="btn-premium w-full h-16 shadow-indigo-500/20">
+                  {joining ? (
+                    <div className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <span className="text-base font-bold uppercase tracking-widest">Enter Workspace</span>
+                  )}
+                </button>
+
+                <button onClick={() => router.push("/dashboard")}
+                  className="w-full py-4 text-xs font-black uppercase tracking-[0.2em] text-white/20 hover:text-white/60 transition-colors">
+                  Setup Workspace Later
+                </button>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.3)" }}>Project Invite Code</label>
-                <div className="relative">
-                  <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "rgba(255,255,255,0.2)" }} />
-                  <input placeholder="xxxxxxxx-xxxx-xxxx-xxxx" value={inviteCode}
-                    onChange={(e) => { setInviteCode(e.target.value); setError(""); }}
-                    autoFocus
-                    className="w-full pl-10 h-12 rounded-xl font-mono text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"}
-                    onBlur={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"} />
-                </div>
-                <p className="text-xs text-white/25">Ask your Admin / Team Lead for the invite code</p>
-              </div>
-
-              {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 animate-fade-in">
-                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" /><span>{error}</span>
-                </div>
-              )}
-
-              <button onClick={handleJoinProject} disabled={joining || !inviteCode.trim()}
-                className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 disabled:opacity-40 transition-all hover:opacity-90 hover:scale-[1.01]"
-                style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)", boxShadow: "0 8px 32px rgba(124,58,237,0.3)" }}>
-                {joining
-                  ? <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                  : <>Join Project & Open Dashboard <ArrowRight className="h-4 w-4" /></>
-                }
-              </button>
-
-              <button onClick={() => router.push("/dashboard")}
-                className="w-full text-sm text-white/25 hover:text-white/50 transition-colors py-1">
-                Skip for now — I'll join later
-              </button>
             </div>
           )}
         </div>

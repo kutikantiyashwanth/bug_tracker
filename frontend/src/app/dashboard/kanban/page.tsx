@@ -140,11 +140,11 @@ export default function KanbanPage() {
     const assignee = task.assigneeId ? getUserById(task.assigneeId) : null;
     const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== "done";
 
-    const priorityConfig: Record<string, { label: string; cls: string }> = {
-      critical: { label: "Critical", cls: "bg-red-100 text-red-700 border border-red-200" },
-      high:     { label: "High",     cls: "bg-orange-100 text-orange-700 border border-orange-200" },
-      medium:   { label: "Medium",   cls: "bg-amber-100 text-amber-700 border border-amber-200" },
-      low:      { label: "Low",      cls: "bg-slate-100 text-slate-600 border border-slate-200" },
+    const priorityConfig: Record<string, { label: string; cls: string; dot: string }> = {
+      critical: { label: "CRITICAL", cls: "text-rose-600 bg-rose-50", dot: "bg-rose-500" },
+      high:     { label: "HIGH",     cls: "text-orange-600 bg-orange-50", dot: "bg-orange-500" },
+      medium:   { label: "MEDIUM",   cls: "text-amber-600 bg-amber-50", dot: "bg-amber-500" },
+      low:      { label: "LOW",      cls: "text-slate-500 bg-slate-50", dot: "bg-slate-400" },
     };
     const pc = priorityConfig[task.priority] || priorityConfig.medium;
 
@@ -154,32 +154,31 @@ export default function KanbanPage() {
         onDragStart={() => handleDragStart(task.id)}
         onDragEnd={() => { setDraggedTask(null); setDragOverColumn(null); }}
         className={cn(
-          "group relative rounded-xl bg-white border border-gray-200 p-3.5 cursor-grab active:cursor-grabbing transition-smooth",
-          "hover:border-violet-300 hover:shadow-md hover-glow",
-          draggedTask === task.id && "opacity-50 rotate-1 shadow-2xl"
+          "group relative rounded-[1.5rem] bg-white border border-slate-200/60 p-5 cursor-grab active:cursor-grabbing transition-all duration-300",
+          "hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1",
+          draggedTask === task.id && "opacity-50 rotate-2 scale-95 shadow-2xl"
         )}
-        style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.06)", willChange: "transform" }}
       >
         {/* Menu */}
-        <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="relative">
             <button
               onClick={(e) => { e.stopPropagation(); setShowEditMenu(showEditMenu === task.id ? null : task.id); }}
-              className="p-1 rounded-md hover:bg-gray-100 transition-colors"
+              className="w-8 h-8 rounded-xl hover:bg-slate-50 flex items-center justify-center transition-colors"
             >
-              <MoreHorizontal className="h-3.5 w-3.5 text-gray-400" />
+              <MoreHorizontal className="h-4 w-4 text-slate-400" />
             </button>
             {showEditMenu === task.id && (
-              <div className="absolute right-0 top-7 w-36 py-1 rounded-xl border border-gray-100 bg-white shadow-lg z-10 animate-scale-in">
+              <div className="absolute right-0 top-10 w-48 py-2 rounded-2xl border border-slate-100 bg-white shadow-2xl z-20 animate-in fade-in zoom-in duration-200">
                 <button
                   onClick={() => openEditDialog(task)}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-violet-50 hover:text-violet-700 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                 >
-                  <Edit3 className="h-3.5 w-3.5" /> Edit
+                  <Edit3 className="h-3.5 w-3.5" /> Edit Task
                 </button>
                 <button
                   onClick={() => { deleteTask(task.id); setShowEditMenu(null); }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-rose-600 hover:bg-rose-50 transition-colors"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Delete
                 </button>
@@ -189,51 +188,51 @@ export default function KanbanPage() {
         </div>
 
         {/* Priority & Tags */}
-        <div className="flex items-center gap-1.5 mb-2.5 flex-wrap">
-          <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded-full", pc.cls)}>
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <div className={cn("flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest", pc.cls)}>
+            <div className={cn("w-1 h-1 rounded-full animate-pulse", pc.dot)} />
             {pc.label}
-          </span>
+          </div>
           {task.tags.slice(0, 2).map((tag) => (
-            <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+            <span key={tag} className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 border border-slate-100">
               {tag}
             </span>
           ))}
         </div>
 
         {/* Title */}
-        <h4 className="text-sm font-semibold text-gray-900 leading-snug pr-6">{task.title}</h4>
+        <h4 className="text-sm font-black text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">{task.title}</h4>
         {task.description && (
-          <p className="text-xs text-gray-500 mt-1 line-clamp-2">{task.description}</p>
+          <p className="text-[11px] text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">{task.description}</p>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-gray-100">
+        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-50">
           <div className="flex items-center gap-2">
             {assignee ? (
-              <div className="flex items-center gap-1.5">
-                <Avatar className="h-5 w-5">
-                  <AvatarFallback className="text-[8px] font-bold"
-                    style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)", color: "white" }}>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6 ring-2 ring-white">
+                  <AvatarFallback className="text-[8px] font-black bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
                     {getInitials(assignee.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-[10px] text-gray-500 font-medium">{assignee.name.split(" ")[0]}</span>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{assignee.name.split(" ")[0]}</span>
               </div>
             ) : (
-              <div className="h-5 w-5 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center">
-                <User className="h-3 w-3 text-gray-300" />
+              <div className="h-6 w-6 rounded-full border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50">
+                <User className="h-3 w-3 text-slate-300" />
               </div>
             )}
           </div>
           {task.dueDate && (
             <div className={cn(
-              "flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full",
+              "flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg",
               isOverdue
-                ? "bg-red-100 text-red-600"
-                : "bg-gray-100 text-gray-500"
+                ? "bg-rose-50 text-rose-600"
+                : "bg-slate-50 text-slate-400"
             )}>
               {isOverdue ? <AlertCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-              {new Date(task.dueDate).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+              {new Date(task.dueDate).toLocaleString("en-US", { month: "short", day: "numeric" })}
             </div>
           )}
         </div>
@@ -243,21 +242,31 @@ export default function KanbanPage() {
 
   return (
     <RoleGuard allowedRoles={["admin", "developer"]}>
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="space-y-10 animate-slide-up">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Kanban Board</h1>
-          <p className="text-sm text-gray-500 mt-1">{projectTasks.length} tasks across {columns.length} columns</p>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-1 bg-violet-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Flow Orchestration</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Project <span className="text-violet-600 underline decoration-violet-500/20 underline-offset-8">Kanban</span></h1>
+          <p className="text-slate-500 mt-2 font-medium max-w-xl">
+            Visualize your team's workflow and manage task velocity through interactive column orchestration.
+          </p>
         </div>
-        {permissions.createTask && (
-          <Button variant="glow" size="sm" onClick={() => openCreateDialog("todo")}>
-            <Plus className="h-4 w-4 mr-1" /> New Task
-          </Button>
-        )}
+        
+        <div className="flex items-center gap-3">
+          {permissions.createTask && (
+            <Button variant="premium" onClick={() => openCreateDialog("todo")} className="shadow-violet-500/20">
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="text-sm font-bold">Initiate Task</span>
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Board */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="flex gap-6 overflow-x-auto pb-10 no-scrollbar snap-x">
         {columns.map((column) => {
           const colTasks = getColumnTasks(column.id);
           return (
@@ -267,37 +276,35 @@ export default function KanbanPage() {
               onDragLeave={handleDragLeave}
               onDrop={() => handleDrop(column.id)}
               className={cn(
-                "flex flex-col rounded-2xl border-t-[3px] min-h-[400px] transition-all duration-200",
-                column.topColor, column.bg,
-                "border border-gray-200",
-                dragOverColumn === column.id && "kanban-column-over ring-2 ring-violet-300"
+                "flex-shrink-0 w-80 flex flex-col rounded-[2rem] bg-slate-100/40 border border-slate-200/60 p-4 transition-all duration-300 snap-start",
+                dragOverColumn === column.id && "bg-violet-50/50 border-violet-300/50 ring-4 ring-violet-500/5"
               )}
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between px-3 py-3">
-                <div className="flex items-center gap-2">
-                  <div className={cn("w-2.5 h-2.5 rounded-full", column.dotColor)} />
-                  <h3 className={cn("text-sm font-bold", column.textColor)}>{column.label}</h3>
-                  <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded-full", column.textColor, "bg-white/70")}>
-                    {colTasks.length}
-                  </span>
+              <div className="flex items-center justify-between px-4 py-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-2 h-6 rounded-full", column.dotColor.replace('bg-', 'bg-'))} />
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">{column.label}</h3>
+                    <p className="text-[10px] font-bold text-slate-400">{colTasks.length} ITEMS</p>
+                  </div>
                 </div>
                 <button
                   onClick={() => openCreateDialog(column.id)}
-                  className={cn("p-1 rounded-lg hover:bg-white/80 transition-colors", column.textColor)}
+                  className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
 
               {/* Tasks */}
-              <div className="flex-1 px-2 pb-2 space-y-2 overflow-y-auto max-h-[600px]">
+              <div className="flex-1 space-y-4 min-h-[400px]">
                 {colTasks.map((task) => (
                   <TaskCard key={task.id} task={task} />
                 ))}
                 {colTasks.length === 0 && (
-                  <div className="flex items-center justify-center h-24 border-2 border-dashed border-gray-200 rounded-xl bg-white/40">
-                    <p className="text-xs text-gray-400 font-medium">Drop tasks here</p>
+                  <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-white/40">
+                    <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Awaiting Flow</p>
                   </div>
                 )}
               </div>
@@ -308,37 +315,45 @@ export default function KanbanPage() {
 
       {/* Create Task Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Create New Task</DialogTitle>
-            <DialogDescription>Add a task to the {columns.find((c) => c.id === createInColumn)?.label} column.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
+        <DialogContent className="sm:max-w-[550px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
+          <div className="bg-slate-950 p-10 flex items-center gap-6">
+            <div className="w-16 h-16 rounded-[2rem] bg-violet-500/20 flex items-center justify-center border border-violet-500/30">
+              <Plus className="h-8 w-8 text-violet-500" />
+            </div>
+            <div>
+              <DialogTitle className="text-3xl font-black text-white tracking-tight">New Task</DialogTitle>
+              <DialogDescription className="text-white/40 font-medium">Define a new work item in the {columns.find((c) => c.id === createInColumn)?.label} column.</DialogDescription>
+            </div>
+          </div>
+
+          <div className="p-10 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-2">
-              <Label>Title</Label>
-              <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="Task title..." />
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Task Headline</Label>
+              <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Implement OIDC authentication flow" 
+                className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Describe the task..." rows={3} />
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Requirement Details</Label>
+              <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Provide context and requirements..." rows={4}
+                className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Priority</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Business Priority</Label>
                 <Select value={formPriority} onValueChange={(v) => setFormPriority(v as Priority)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
+                    <SelectItem value="low">Low - Maintenance</SelectItem>
+                    <SelectItem value="medium">Medium - Functional</SelectItem>
+                    <SelectItem value="high">High - Feature</SelectItem>
+                    <SelectItem value="critical">Critical - Systemic</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Assignee</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Owner Assignment</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
-                  <SelectTrigger><SelectValue placeholder="Unassigned" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Unassigned" /></SelectTrigger>
                   <SelectContent>
                     {projectMembers.map((user) => user && (
                       <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
@@ -347,45 +362,58 @@ export default function KanbanPage() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Due Date &amp; Time</Label>
-                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Timeline Deadline</Label>
+                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} 
+                  className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs" />
               </div>
               <div className="space-y-2">
-                <Label>Tags</Label>
-                <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} placeholder="frontend, api..." />
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Categorization Tags</Label>
+                <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} placeholder="Separate with commas" 
+                  className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs" />
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>Cancel</Button>
-            <Button variant="glow" onClick={handleCreateTask} disabled={!formTitle.trim()}>Create Task</Button>
-          </DialogFooter>
+
+          <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Discard</button>
+            <Button variant="premium" onClick={handleCreateTask} disabled={!formTitle.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
+              <Plus className="h-5 w-5 mr-2" /> INITIATE TASK
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* Edit Task Dialog */}
       <Dialog open={!!editTask} onOpenChange={(open) => !open && setEditTask(null)}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Edit Task</DialogTitle>
-            <DialogDescription>Update the task details below.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
+        <DialogContent className="sm:max-w-[550px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
+          <div className="bg-slate-950 p-10 flex items-center gap-6">
+            <div className="w-16 h-16 rounded-[2rem] bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+              <Edit3 className="h-8 w-8 text-indigo-500" />
+            </div>
+            <div>
+              <DialogTitle className="text-3xl font-black text-white tracking-tight">Modify Task</DialogTitle>
+              <DialogDescription className="text-white/40 font-medium">Update the parameters of this existing work item.</DialogDescription>
+            </div>
+          </div>
+
+          <div className="p-10 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-2">
-              <Label>Title</Label>
-              <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} />
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Task Headline</Label>
+              <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} 
+                className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} rows={3} />
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Requirement Details</Label>
+              <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} rows={4}
+                className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Priority</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Business Priority</Label>
                 <Select value={formPriority} onValueChange={(v) => setFormPriority(v as Priority)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="low">Low</SelectItem>
                     <SelectItem value="medium">Medium</SelectItem>
@@ -395,9 +423,9 @@ export default function KanbanPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Assignee</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Owner Assignment</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
-                  <SelectTrigger><SelectValue placeholder="Unassigned" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Unassigned" /></SelectTrigger>
                   <SelectContent>
                     {projectMembers.map((user) => user && (
                       <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
@@ -406,21 +434,26 @@ export default function KanbanPage() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Due Date &amp; Time</Label>
-                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Timeline Deadline</Label>
+                <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} 
+                  className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs" />
               </div>
               <div className="space-y-2">
-                <Label>Tags</Label>
-                <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} />
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Categorization Tags</Label>
+                <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} 
+                  className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs" />
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditTask(null)}>Cancel</Button>
-            <Button variant="glow" onClick={handleEditTask} disabled={!formTitle.trim()}>Save Changes</Button>
-          </DialogFooter>
+
+          <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
+            <button onClick={() => setEditTask(null)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Cancel</button>
+            <Button variant="premium" onClick={handleEditTask} disabled={!formTitle.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
+              <CheckCircle2 className="h-5 w-5 mr-2" /> SAVE MODIFICATIONS
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -155,230 +155,161 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-gray-50" style={{ borderRight: "1px solid #e8ecf4" }}>
-
-      {/* ── Logo ── */}
-      <div className="flex items-center gap-3 px-5 h-16 shrink-0" style={{ borderBottom: "1px solid #e8ecf4" }}>
-        <div className="relative">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center animate-neon-pulse"
-            style={{ background: "linear-gradient(135deg, #8b5cf6, #06b6d4)" }}>
-            <Bug className="h-[18px] w-[18px] text-white" />
+  const SidebarContent = () =>       {/* ── Logo ── */}
+      <div className="flex items-center gap-3 px-6 h-20 shrink-0">
+        <div className="relative group cursor-pointer">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
+            <Bug className="h-5 w-5 text-white" />
           </div>
-          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white animate-pulse" />
+          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-pulse" />
         </div>
         <div>
-          <p className="text-sm font-black tracking-tight text-gradient">BugTracker</p>
-          <div className={cn("inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full",
-            userRole === "admin"     ? "pill-violet" :
-            userRole === "developer" ? "pill-cyan" :
-                                       "pill-amber"
+          <p className="text-lg font-black tracking-tighter text-white">Bug<span className="text-purple-400">Tracker</span></p>
+          <div className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest bg-white/5 text-white/50",
+            userRole === "admin"     ? "text-violet-400" :
+            userRole === "developer" ? "text-cyan-400" :
+                                       "text-amber-400"
           )}>
-            <meta.icon className="h-2.5 w-2.5" />
+            <meta.icon className="h-2 w-2" />
             {meta.label}
           </div>
         </div>
       </div>
 
       {/* ── Project Selector ── */}
-      <div className="px-4 py-3 shrink-0" style={{ borderBottom: "1px solid #e8ecf4" }}>
+      <div className="px-4 py-4 shrink-0">
         {(!Array.isArray(projects) || projects.length === 0) ? (
-          permissions.createProject ? (
-            <Link href="/dashboard/projects"
-              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all animate-border-glow"
-              style={{ background: "rgba(109,40,217,0.12)", border: "1px solid rgba(109,40,217,0.3)" }}>
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)" }}>
-                <Plus className="h-3.5 w-3.5 text-white" />
-              </div>
-              <span className="text-sm font-semibold text-purple-700">Create a Project</span>
-            </Link>
-          ) : (
-            <Link href="/dashboard/projects"
-              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all"
-              style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.3)" }}>
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #f59e0b, #f97316)" }}>
-                <Plus className="h-3.5 w-3.5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-amber-700">Join a Project</p>
-                <p className="text-[10px] text-amber-600/70">Enter your invite code</p>
-              </div>
-            </Link>
-          )
+          <Link href="/dashboard/projects"
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all glass hover:bg-white/10 group">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/5 group-hover:bg-white/20 transition-colors">
+              <Plus className="h-4 w-4 text-white" />
+            </div>
+            <span className="text-sm font-semibold text-white/80">Setup Workspace</span>
+          </Link>
         ) : (
-          <>
+          <div className="relative">
             <button onClick={() => setProjectMenuOpen(!projectMenuOpen)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left group"
-              style={{ background: "#f8f9fc" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.1)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#f8f9fc")}>
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-black shrink-0"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)" }}>
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all glass-dark hover:bg-white/5 text-left group">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-black shrink-0 bg-gradient-to-tr from-purple-600 to-blue-600 shadow-inner">
                 {activeProject?.name.substring(0, 2).toUpperCase() || "??"}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-800 truncate">{activeProject?.name || "Select Project"}</p>
-                <p className="text-[10px]" style={{ color: "#6b7280" }}>{activeProject?.members?.length || 0} members</p>
+                <p className="text-sm font-bold text-white truncate">{activeProject?.name || "Select Project"}</p>
+                <p className="text-[10px] text-white/40 font-medium tracking-tight">{activeProject?.members?.length || 0} collaborators</p>
               </div>
-              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200", projectMenuOpen && "rotate-180")} style={{ color: "rgba(124,58,237,0.6)" }} />
+              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/30", projectMenuOpen && "rotate-180")} />
             </button>
 
             {projectMenuOpen && (
-              <div className="mt-1.5 rounded-2xl overflow-hidden animate-scale-in z-50"
-                style={{ border: "1px solid rgba(124,58,237,0.25)", background: "#ffffff", boxShadow: "0 16px 48px rgba(0,0,0,0.15)" }}>
-                {projects.map((project) => (
-                  <button key={project.id}
-                    onClick={() => { setActiveProject(project.id); setProjectMenuOpen(false); }}
-                    className={cn("w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-all",
-                      project.id === activeProjectId ? "text-purple-700 font-semibold" : "text-gray-700 hover:text-white"
-                    )}
-                    style={project.id === activeProjectId ? { background: "rgba(109,40,217,0.15)" } : {}}
-                    onMouseEnter={(e) => { if (project.id !== activeProjectId) e.currentTarget.style.background = "rgba(109,40,217,0.04)"; }}
-                    onMouseLeave={(e) => { if (project.id !== activeProjectId) e.currentTarget.style.background = ""; }}>
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0"
-                      style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)" }}>
-                      {project.name.substring(0, 2).toUpperCase()}
-                    </div>
-                    <span className="truncate flex-1 font-medium">{project.name}</span>
-                    {project.id === activeProjectId && <Check className="h-3.5 w-3.5 text-purple-600" />}
-                  </button>
-                ))}
-                <div style={{ borderTop: "1px solid rgba(109,40,217,0.15)" }}>
-                  {permissions.createProject && (
-                    <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2.5 text-sm transition-all"
-                      style={{ color: "#6b7280" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(109,40,217,0.04)"; e.currentTarget.style.color = "#e2e8f0"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6b7280"; }}>
-                      <Plus className="h-4 w-4" /><span>New Project</span>
-                    </Link>
-                  )}
+              <div className="absolute top-full left-0 right-0 mt-2 p-2 rounded-2xl glass-dark border-white/10 shadow-2xl z-50 animate-slide-up">
+                <div className="max-h-60 overflow-y-auto no-scrollbar space-y-1">
+                  {projects.map((project) => (
+                    <button key={project.id}
+                      onClick={() => { setActiveProject(project.id); setProjectMenuOpen(false); }}
+                      className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all",
+                        project.id === activeProjectId ? "bg-white/10 text-white" : "text-white/60 hover:bg-white/5 hover:text-white"
+                      )}>
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0 bg-white/10">
+                        {project.name.substring(0, 2).toUpperCase()}
+                      </div>
+                      <span className="truncate flex-1 font-semibold">{project.name}</span>
+                      {project.id === activeProjectId && <Check className="h-4 w-4 text-purple-400" />}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-2 pt-2 border-t border-white/5">
+                  <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all">
+                    <Plus className="h-4 w-4" />
+                    <span className="font-semibold">New Project</span>
+                  </Link>
                 </div>
               </div>
             )}
-
-            {activeProject && permissions.createProject && (
-              <button onClick={handleCopyInvite}
-                className="mt-1.5 w-full flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all text-xs"
-                style={{ color: "#9ca3af" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(109,40,217,0.08)"; e.currentTarget.style.color = "rgba(196,181,253,0.8)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#9ca3af"; }}>
-                {copied ? <Check className="h-3 w-3 text-emerald-400 shrink-0" /> : <Copy className="h-3 w-3 shrink-0" />}
-                <span className="font-mono truncate">{activeProject.inviteCode}</span>
-                <span className="ml-auto shrink-0">{copied ? "Copied!" : "Invite"}</span>
-              </button>
-            )}
-          </>
+          </div>
         )}
       </div>
 
       {/* ── Navigation ── */}
-      <ScrollArea className="flex-1 py-4">
-        <div className="px-3 space-y-5">
+      <ScrollArea className="flex-1 px-4">
+        <div className="space-y-8 py-4">
           {navGroups.map((group) => (
-            <div key={group.label}>
-              <p className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest" style={{ color: "rgba(109,40,217,0.5)" }}>{group.label}</p>
-              <div className="space-y-0.5">
-                {group.items.map((item) => {
-                  const isActive = pathname === item.href;
-                  const Icon = iconMap[item.iconKey];
+            <div key={group.label} className="space-y-1">
+              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">{group.label}</p>
+              {group.items.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = iconMap[item.iconKey];
+                return (
+                  <Link key={item.href} href={item.href} onClick={() => setSidebarOpen(false)}
+                    className={cn(
+                      "nav-link group relative",
+                      isActive ? "active" : "hover:bg-white/5 hover:text-white"
+                    )}>
+                    <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300",
+                      isActive ? "bg-white/20 text-white" : "bg-white/5 text-white/30 group-hover:bg-white/10 group-hover:text-white"
+                    )}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="font-semibold flex-1 tracking-tight">{item.label}</span>
+                    {item.label === "Notifications" && unreadCount > 0 && (
+                      <span className="flex items-center justify-center h-5 min-w-5 px-1.5 rounded-lg text-[10px] text-white font-black bg-rose-500 shadow-lg shadow-rose-500/20">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
+
+          {/* ── Team Section ── */}
+          {activeProject?.members && activeProject.members.length > 0 && (
+            <div className="space-y-1 pt-4">
+              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Collaborators</p>
+              <div className="space-y-1 px-2">
+                {activeProject.members.slice(0, 5).map((member) => {
+                  const user = getUserById(member.userId);
+                  if (!user) return null;
                   return (
-                    <Link key={item.href} href={item.href} onClick={() => setSidebarOpen(false)}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-smooth group gpu",
-                        isActive
-                          ? "text-white font-semibold"
-                          : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-                      )}
-                      style={isActive ? { background: "linear-gradient(135deg, #6d28d9, #2563eb)", boxShadow: "0 4px 12px rgba(109,40,217,0.3)" } : {}}>
-                      {Icon && (
-                        <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all",
-                          isActive ? "text-white" : "text-gray-400 group-hover:text-purple-600"
-                        )}
-                          style={isActive ? { background: "rgba(255,255,255,0.2)" } : { background: "#f1f3f9" }}>
-                          <Icon className="h-3.5 w-3.5" />
-                        </div>
-                      )}
-                      <span className="flex-1">{item.label}</span>
-                      {item.label === "Notifications" && unreadCount > 0 && (
-                        <span className="flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full text-[10px] text-white font-black animate-bounce-in"
-                          style={{ background: "linear-gradient(135deg, #f43f5e, #f97316)" }}>
-                          {unreadCount}
-                        </span>
-                      )}
-                    </Link>
+                    <div key={member.userId} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all group cursor-pointer">
+                      <div className="relative shrink-0">
+                        <Avatar className="h-8 w-8 border border-white/10 group-hover:border-white/30 transition-colors">
+                          <AvatarFallback className="text-[10px] font-black bg-gradient-to-br from-slate-700 to-slate-900 text-white/80">
+                            {getInitials(user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-900" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-white/70 group-hover:text-white truncate">{user.name}</p>
+                        <p className="text-[9px] font-medium text-white/30 uppercase tracking-tighter">{(member.role as string).toLowerCase()}</p>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
             </div>
-          ))}
+          )}
         </div>
-
-        {/* ── Team ── */}
-        {activeProject?.members && activeProject.members.length > 0 && (
-          <div className="px-3 mt-5">
-            <p className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest" style={{ color: "rgba(109,40,217,0.5)" }}>Team</p>
-            <div className="space-y-0.5">
-              {activeProject.members.slice(0, 5).map((member) => {
-                const user = getUserById(member.userId);
-                if (!user) return null;
-                return (
-                  <div key={member.userId} className="flex items-center gap-3 px-3 py-2 rounded-xl transition-all"
-                    style={{}}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.04)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
-                    <div className="relative shrink-0">
-                      <Avatar className="h-7 w-7">
-                        <AvatarFallback className="text-[9px] font-bold"
-                          style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)", color: "white" }}>
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
-                    </div>
-                    <span className="text-xs text-gray-500 truncate flex-1 font-medium">{user.name}</span>
-                    <span className={cn("text-[9px] px-1.5 py-0.5 rounded-full font-semibold capitalize",
-                      (member.role as string).toLowerCase() === "admin" ? "pill-violet" :
-                      (member.role as string).toLowerCase() === "developer" ? "pill-blue" :
-                      "pill-amber"
-                    )}>
-                      {(member.role as string).toLowerCase()}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </ScrollArea>
 
-      <div className="p-3 shrink-0" style={{ borderTop: "1px solid #e8ecf4" }}>
-        <div className="flex items-center gap-3 px-2 py-2 rounded-2xl transition-all cursor-pointer"
-          style={{ background: "transparent" }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(109,40,217,0.08)")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-          <div className="relative shrink-0">
-            <Avatar className="h-9 w-9">
-              <AvatarFallback className="text-xs font-black"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)", color: "white" }}>
-                {getInitials(currentUser?.name || "U")}
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-800 truncate">{currentUser?.name || "User"}</p>
-            <p className="text-[10px] capitalize" style={{ color: "#9ca3af" }}>{(currentUser?.role || "user").toLowerCase()}</p>
+      {/* ── User Profile ── */}
+      <div className="p-4 shrink-0">
+        <div className="p-3 rounded-2xl glass-dark border-white/5 flex items-center gap-3 group relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <Avatar className="h-10 w-10 border border-white/10">
+            <AvatarFallback className="text-xs font-black bg-gradient-to-tr from-indigo-500 to-purple-600 text-white">
+              {getInitials(currentUser?.name || "U")}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0 z-10">
+            <p className="text-sm font-bold text-white truncate">{currentUser?.name || "Anonymous"}</p>
+            <p className="text-[10px] font-medium text-white/40 uppercase tracking-widest">{(currentUser?.role || "USER").toLowerCase()}</p>
           </div>
           <button onClick={() => { logout(); router.push("/login"); }}
-            className="p-1.5 rounded-lg transition-all"
-            style={{ color: "#d1d5db" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#fb7185"; e.currentTarget.style.background = "rgba(244,63,94,0.1)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#d1d5db"; e.currentTarget.style.background = ""; }}
+            className="p-2 rounded-xl text-white/20 hover:text-rose-400 hover:bg-rose-500/10 transition-all z-10"
             title="Sign out">
-            <LogOut className="h-3.5 w-3.5" />
+            <LogOut className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -387,94 +318,97 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-[#f8fafc]">
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-[256px] flex-col fixed inset-y-0 left-0 z-30" style={{ boxShadow: "1px 0 0 rgba(0,0,0,0.04)" }}>
+      <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
         <SidebarContent />
       </aside>
 
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden"
+        <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-md lg:hidden"
           onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Mobile Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-50 w-[272px] shadow-card-lg transform transition-transform duration-300 ease-spring lg:hidden",
+        "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <button className="absolute right-3 top-3 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
+        <button className="absolute right-4 top-4 p-2 rounded-xl text-white/20 hover:text-white hover:bg-white/5 transition-all"
           onClick={() => setSidebarOpen(false)}>
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
         <SidebarContent />
       </aside>
 
-      {/* Main */}
-      <main className="flex-1 lg:ml-[256px] flex flex-col min-h-screen dashboard-main">
+      {/* Main Content Area */}
+      <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
 
-        {/* Top bar */}
-        <header className="sticky top-0 z-20 h-16 bg-white flex items-center px-4 lg:px-6 gap-4"
-          style={{ borderBottom: "1px solid #e8ecf4", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-          <button className="lg:hidden p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
+        {/* Top bar / Header */}
+        <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
+          <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
             onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
 
-          <div className="flex-1 flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs" style={{ color: "rgba(124,58,237,0.6)" }}>Dashboard</span>
-              <span style={{ color: "rgba(109,40,217,0.3)" }}>/</span>
-              <span className="text-sm font-bold text-gray-800">{currentLabel}</span>
+          <div className="flex-1 flex items-center">
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
+                <span>Workspace</span>
+                <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{currentLabel}</h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
-              style={{ background: "rgba(109,40,217,0.04)", border: "1px solid rgba(109,40,217,0.2)", color: "#6b7280" }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(109,40,217,0.4)"; e.currentTarget.style.color = "#7c3aed"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(109,40,217,0.2)"; e.currentTarget.style.color = "#6b7280"; }}>
-              <Search className="h-3.5 w-3.5" />
-              <span className="text-xs">Search...</span>
-              <kbd className="ml-1 text-[10px] rounded-md px-1.5 py-0.5 font-mono"
-                style={{ background: "rgba(109,40,217,0.1)", border: "1px solid rgba(109,40,217,0.2)", color: "rgba(196,181,253,0.7)" }}>⌘K</kbd>
-            </button>
-
-            <Link href="/dashboard/notifications">
-              <button className="relative p-2.5 rounded-xl transition-all"
-                style={{ color: "#6b7280" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(109,40,217,0.1)"; e.currentTarget.style.color = "#7c3aed"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6b7280"; }}>
-                <Bell className="h-[18px] w-[18px]" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white"
-                    style={{ background: "linear-gradient(135deg, #f43f5e, #f97316)" }} />
-                )}
+          <div className="flex items-center gap-4">
+            {/* Search Bar */}
+            <div className="hidden md:block relative">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
+                <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                <span className="text-sm font-medium">Search anything...</span>
+                <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
               </button>
-            </Link>
+            </div>
 
-            <Link href="/dashboard/settings">
-              <div className="relative cursor-pointer group">
-                <Avatar className="h-9 w-9 ring-2 ring-transparent group-hover:ring-purple-500/40 transition-all">
-                  <AvatarFallback className="text-xs font-black"
-                    style={{ background: "linear-gradient(135deg, #7c3aed, #3b82f6)", color: "white" }}>
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard/notifications">
+                <button className="relative p-3 rounded-2xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
+                  )}
+                </button>
+              </Link>
+
+              <div className="h-8 w-[1px] bg-slate-200 mx-1" />
+
+              <Link href="/dashboard/settings" className="flex items-center gap-3 group">
+                <div className="text-right hidden xl:block">
+                  <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
+                  <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Profile</p>
+                </div>
+                <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-slate-200">
+                  <AvatarFallback className="text-xs font-black bg-slate-100 text-slate-600">
                     {getInitials(currentUser?.name || "U")}
                   </AvatarFallback>
                 </Avatar>
-                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white" />
-              </div>
-            </Link>
+              </Link>
+            </div>
           </div>
         </header>
 
-        {/* Page content */}
-        <div className="flex-1 p-4 lg:p-6 page-enter">
+        {/* Scrollable Page Content */}
+        <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up">
           {children}
         </div>
+      </main>
+    </div>
+    </div>
       </main>
     </div>
 

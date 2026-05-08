@@ -132,437 +132,292 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 max-w-7xl">
+    <div className="space-y-10 animate-slide-up">
 
-      {/* ── Header ── */}
-      <div className="stagger-item flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+      {/* ── Header / Greeting ── */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 page-title">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-1 bg-indigo-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Dashboard Overview</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
             {greeting},{" "}
-            <span className="text-gradient">{currentUser?.name?.split(" ")[0] || "there"}</span>
-            {" "}👋
+            <span className="text-brand">{currentUser?.name?.split(" ")[0] || "there"}</span>
+            {" "}✨
           </h1>
-          <p className="text-sm mt-1" style={{ color: "#6b7280" }}>
+          <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
             {activeProject
-              ? <>Here's what's happening on <span className="font-semibold text-gray-700">{activeProject.name}</span></>
-              : "Select or create a project to get started"}
+              ? <>You're currently viewing metrics for <span className="text-indigo-600 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
+              : "Select a project from the sidebar to view detailed analytics and manage your team."}
           </p>
         </div>
-        <button
-          onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-          className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-purple-600 px-3 py-1.5 rounded-xl hover:bg-purple-50 transition-smooth border border-transparent hover:border-purple-100 self-start gpu">
-          <RefreshCw className="h-3.5 w-3.5" /> Refresh
-        </button>
+        
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
+            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
+            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh Data</span>
+          </button>
+          
+          <button className="btn-premium shadow-indigo-500/25">
+            <Plus className="h-4 w-4" />
+            <span className="text-sm font-bold">Quick Action</span>
+          </button>
+        </div>
       </div>
 
-      {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stat-grid">
+      {/* ── Key Metrics ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, i) => (
           <div key={i}
-            className={cn("stagger-item card-base card-lift card-shine hover-glow p-5 rounded-2xl", card.accent)}
-            style={{ animationDelay: `${i * 60}ms` }}>
-            <div className="flex items-start justify-between mb-4">
-              <div className={cn("w-10 h-10 animate-pop-in", card.iconClass)} style={{ animationDelay: `${i * 60 + 150}ms` }}>
-                <card.icon className="h-5 w-5" />
-              </div>
-              {card.trend && (
-                <span className={cn(
-                  "flex items-center gap-0.5 text-[11px] font-bold px-2 py-0.5 rounded-full",
-                  card.up ? "pill-emerald" : "pill-rose"
-                )}>
-                  {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                  {card.trend}
-                </span>
-              )}
+            className="premium-card group relative overflow-hidden"
+            style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-125 transition-transform duration-700">
+              <card.icon className="h-24 w-24" />
             </div>
-            <p className="text-2xl font-black text-gray-900 animate-count-up">{card.value}</p>
-            <p className="text-sm font-semibold mt-0.5" style={{ color: "#374151" }}>{card.label}</p>
-            {card.sub && <p className="text-xs mt-1 text-gray-400">{card.sub}</p>}
+            
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner", card.iconClass)}>
+                  <card.icon className="h-6 w-6" />
+                </div>
+                {card.trend && (
+                  <div className={cn(
+                    "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
+                    card.up ? "bg-emerald-100 text-emerald-600" : "bg-rose-100 text-rose-600"
+                  )}>
+                    {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                    {card.trend}
+                  </div>
+                )}
+              </div>
+              
+              <div className="space-y-1">
+                <p className="text-3xl font-black text-slate-900 tracking-tight">{card.value}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{card.label}</p>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400">{card.sub}</span>
+                <ArrowUpRight className="h-3 w-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* ── Progress + Distribution + Activity ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
-        {/* Progress */}
-        <div className="stagger-item card-base rounded-2xl p-5 space-y-5" style={{ animationDelay: "200ms" }}>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-purple">
-              <TrendingUp className="h-4 w-4" />
-            </div>
-            <h3 className="text-sm font-black text-gray-800">Progress Overview</h3>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-gray-500 font-medium">Task Completion</span>
-                <span className="font-bold text-gray-800">{stats.completionRate}%</span>
-              </div>
-              <div className="progress-track">
-                <div className="progress-purple" style={{ width: `${stats.completionRate}%` }} />
-              </div>
-              <div className="flex justify-between mt-1.5 text-[10px] text-gray-400">
-                <span>{stats.completed} done</span><span>{stats.total - stats.completed} left</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-gray-500 font-medium">Bug Fix Rate</span>
-                <span className="font-bold text-gray-800">{stats.bugFixRate}%</span>
-              </div>
-              <div className="progress-track">
-                <div className="progress-blue" style={{ width: `${stats.bugFixRate}%` }} />
-              </div>
-              <div className="flex justify-between mt-1.5 text-[10px] text-gray-400">
-                <span>{stats.resolvedBugs} fixed</span><span>{stats.openBugs} open</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100">
-              <div className="text-center p-3 rounded-xl" style={{ background: "rgba(109,40,217,0.08)", border: "1px solid rgba(109,40,217,0.1)" }}>
-                <p className="text-xl font-black text-purple-700">{stats.inProgress}</p>
-                <p className="text-[10px] font-bold mt-0.5 text-purple-500">In Progress</p>
-              </div>
-              <div className="text-center p-3 rounded-xl" style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.1)" }}>
-                <p className="text-xl font-black text-amber-600">{stats.testing}</p>
-                <p className="text-[10px] font-bold mt-0.5 text-amber-500">Testing</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Task Distribution */}
-        <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "240ms" }}>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-blue">
-              <BarChart3 className="h-4 w-4" />
-            </div>
-            <h3 className="text-sm font-black text-gray-800">Task Distribution</h3>
-          </div>
-          <div className="space-y-3">
-            {tasksByStatus.map((item) => (
-              <div key={item.label}>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                    <span className="text-gray-600 font-medium">{item.label}</span>
-                  </div>
-                  <span className="font-bold text-gray-800">{item.count}</span>
+      {/* ── Main Dashboard Sections ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        
+        {/* Productivity Analytics */}
+        <div className="xl:col-span-2 space-y-8">
+          <div className="premium-card !p-0 overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                  <TrendingUp className="h-5 w-5 text-white" />
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full transition-all duration-700"
-                    style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%`, backgroundColor: item.color }} />
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">Performance Analytics</h3>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <span className="text-xs text-gray-400">Total tasks</span>
-            <span className="text-sm font-bold text-gray-800">{stats.total}</span>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "280ms" }}>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-teal">
-              <Activity className="h-4 w-4" />
-            </div>
-            <h3 className="text-sm font-black text-gray-800">Recent Activity</h3>
-          </div>
-          <ScrollArea className="h-[220px]">
-            {projectActivities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full py-8">
-                <Activity className="h-8 w-8 text-gray-200 mb-2" />
-                <p className="text-xs text-gray-400">No activity yet</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {projectActivities.map((a) => {
-                  const user = getUserById(a.userId);
-                  return (
-                    <div key={a.id} className="flex gap-3 group">
-                      <Avatar className="h-7 w-7 shrink-0 mt-0.5">
-                        <AvatarFallback className="text-[9px] font-bold"
-                          style={{ background: "linear-gradient(135deg, #6c5ce7, #2dd4bf)", color: "white" }}>
-                          {user ? getInitials(user.name) : "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          <span className="font-semibold text-gray-800">{user?.name || "Someone"}</span>{" "}
-                          <span className="text-gray-400">{a.details}</span>
-                        </p>
-                        <p className="text-[10px] mt-0.5 text-gray-400">{formatRelativeTime(a.createdAt)}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </ScrollArea>
-        </div>
-      </div>
-
-      {/* ── Deadlines + Bugs ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-        {/* Upcoming Deadlines */}
-        <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "320ms" }}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-amber">
-                <Calendar className="h-4 w-4" />
-              </div>
-              <h3 className="text-sm font-black text-gray-800">Upcoming Deadlines</h3>
-            </div>
-            <span className="text-xs text-gray-400 font-medium">{stats.upcomingDeadlines.length} tasks</span>
-          </div>
-
-          {stats.upcomingDeadlines.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center mb-3">
-                <CheckCircle2 className="h-6 w-6 text-emerald-500" />
-              </div>
-              <p className="text-sm font-semibold text-gray-600">All clear!</p>
-              <p className="text-xs text-gray-400 mt-0.5">No upcoming deadlines</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {stats.upcomingDeadlines.map((task) => {
-                const daysLeft = Math.ceil((new Date(task.dueDate!).getTime() - Date.now()) / 86400000);
-                const urgency = daysLeft <= 2 ? { color: "#f43f5e", bg: "pill-rose",    text: "", label: "Urgent" }
-                              : daysLeft <= 5 ? { color: "#f59e0b", bg: "pill-amber",   text: "", label: "Soon" }
-                              : { color: "#10b981", bg: "pill-emerald", text: "", label: "On track" };
-                return (
-                  <div key={task.id} className="flex items-center gap-3 p-3 rounded-xl transition-all group"
-                    style={{ background: "#f8f9fc" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f3f9")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "#f8f9fc")}>
-                    <div className="w-1 h-10 rounded-full shrink-0" style={{ backgroundColor: urgency.color }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 truncate">{task.title}</p>
-                      <p className="text-[10px] flex items-center gap-1 mt-0.5" style={{ color: "#9ca3af" }}>
-                        <Clock className="h-2.5 w-2.5" />
-                        {formatDate(task.dueDate!)} · {daysLeft}d left
-                      </p>
-                    </div>
-                    <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-semibold", urgency.bg, urgency.text)}>
-                      {urgency.label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Recent Bugs */}
-        <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "360ms" }}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-rose">
-                <AlertTriangle className="h-4 w-4" />
-              </div>
-              <h3 className="text-sm font-black text-gray-800">Recent Bugs</h3>
-            </div>
-            <span className="text-xs text-gray-400 font-medium">{projectBugs.length} total</span>
-          </div>
-
-          {projectBugs.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-                <Bug className="h-6 w-6 text-gray-300" />
-              </div>
-              <p className="text-sm font-semibold text-gray-600">No bugs yet</p>
-              <p className="text-xs text-gray-400 mt-0.5">Great work keeping things clean!</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {projectBugs.slice(0, 4).map((bug) => {
-                const reporter = getUserById(bug.reportedBy);
-                const severityConfig = {
-                  critical: { dot: "bg-red-500", badge: "bg-red-100 text-red-600" },
-                  major:    { dot: "bg-orange-400", badge: "bg-orange-100 text-orange-600" },
-                  minor:    { dot: "bg-sky-400", badge: "bg-sky-100 text-sky-600" },
-                }[bug.severity] || { dot: "bg-gray-400", badge: "bg-gray-100 text-gray-600" };
-                const statusConfig = {
-                  "open":        "pill-rose",
-                  "in-progress": "pill-amber",
-                  "resolved":    "pill-emerald",
-                  "closed":      "pill-gray",
-                }[bug.status] || "pill-gray";
-                return (
-                  <div key={bug.id} className="flex items-center gap-3 p-3 rounded-xl transition-all"
-                    style={{ background: "#f8f9fc" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f3f9")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "#f8f9fc")}>
-                    <div className={cn("w-2.5 h-2.5 rounded-full shrink-0 mt-0.5", severityConfig.dot)} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 truncate">{bug.title}</p>
-                      <p className="text-[10px] mt-0.5" style={{ color: "#9ca3af" }}>
-                        {reporter?.name || "Unknown"} · {formatRelativeTime(bug.createdAt)}
-                      </p>
-                    </div>
-                    <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-semibold", statusConfig)}>
-                      {bug.status}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-      {/* ── Analytics: Productivity Chart + Bug Breakdown ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
-        {/* Productivity Chart — 7 day area chart */}
-        <div className="stagger-item card-base rounded-2xl p-5 lg:col-span-2" style={{ animationDelay: "400ms" }}>
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-violet">
-                <TrendingUp className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-black text-gray-800">Productivity Chart</h3>
-                <p className="text-[10px]" style={{ color: "#9ca3af" }}>Last 7 days activity</p>
+              <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-500" /> Tasks</div>
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Bugs</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 text-[10px]" style={{ color: "#6b7280" }}>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-violet-500 inline-block" />Tasks Done</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />Bugs Fixed</span>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={180}>
-            <AreaChart data={productivityData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="gradTasks" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="gradBugs" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f3f9" />
-              <XAxis dataKey="day" tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip
-                contentStyle={{ background: "rgba(8,11,26,0.95)", border: "1px solid rgba(124,58,237,0.3)", borderRadius: "12px", color: "#e2e8f0", fontSize: 12 }}
-                cursor={{ stroke: "rgba(124,58,237,0.3)" }}
-              />
-              <Area type="monotone" dataKey="tasksDone" name="Tasks Done" stroke="#7c3aed" strokeWidth={2} fill="url(#gradTasks)" dot={{ fill: "#7c3aed", r: 3 }} />
-              <Area type="monotone" dataKey="bugsResolved" name="Bugs Fixed" stroke="#10b981" strokeWidth={2} fill="url(#gradBugs)" dot={{ fill: "#10b981", r: 3 }} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Bug Severity Pie */}
-        <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "440ms" }}>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-rose">
-              <Bug className="h-4 w-4" />
-            </div>
-            <div>
-              <h3 className="text-sm font-black text-gray-800">Bug Severity</h3>
-              <p className="text-[10px]" style={{ color: "#9ca3af" }}>Breakdown by type</p>
-            </div>
-          </div>
-          {bugSeverityData.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40">
-              <Bug className="h-10 w-10 mb-2 text-gray-200" />
-              <p className="text-xs text-gray-400">No bugs yet</p>
-            </div>
-          ) : (
-            <>
-              <ResponsiveContainer width="100%" height={140}>
-                <PieChart>
-                  <Pie data={bugSeverityData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3} dataKey="value">
-                    {bugSeverityData.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} stroke="transparent" />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ background: "rgba(8,11,26,0.95)", border: "1px solid rgba(124,58,237,0.3)", borderRadius: "12px", color: "#e2e8f0", fontSize: 12 }} />
-                </PieChart>
+            
+            <div className="p-8">
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={productivityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="gradTasks" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="gradBugs" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dx={-10} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}
+                  />
+                  <Area type="monotone" dataKey="tasksDone" name="Tasks" stroke="#6366f1" strokeWidth={4} fill="url(#gradTasks)" dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                  <Area type="monotone" dataKey="bugsResolved" name="Bugs" stroke="#10b981" strokeWidth={4} fill="url(#gradBugs)" dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                </AreaChart>
               </ResponsiveContainer>
-              <div className="space-y-1.5 mt-2">
-                {bugSeverityData.map((d) => (
-                  <div key={d.name} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }} />
-                      <span style={{ color: "#4b5563" }}>{d.name}</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Task Distribution */}
+            <div className="premium-card">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <BarChart3 className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">Task Flow</h3>
+              </div>
+              
+              <div className="space-y-6">
+                {tasksByStatus.map((item) => (
+                  <div key={item.label} className="group">
+                    <div className="flex justify-between text-xs font-bold mb-2">
+                      <span className="text-slate-500 group-hover:text-slate-900 transition-colors uppercase tracking-widest">{item.label}</span>
+                      <span className="text-slate-900">{item.count}</span>
                     </div>
-                    <span className="font-bold text-gray-700">{d.value}</span>
+                    <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-1000 ease-out shadow-sm"
+                        style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%`, backgroundColor: item.color }} />
+                    </div>
                   </div>
                 ))}
               </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* ── Success Metrics ── */}
-      <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "480ms" }}>
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-amber">
-            <Award className="h-4 w-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-black text-gray-800">Success Metrics</h3>
-            <p className="text-[10px]" style={{ color: "#9ca3af" }}>Weekly performance indicators</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { icon: CheckCircle2, label: "Tasks Done This Week", value: metrics.tasksThisWeek, color: "icon-emerald", neon: "text-emerald-700", sub: "completed" },
-            { icon: Bug,          label: "Bugs Fixed This Week", value: metrics.resolvedThisWeek, color: "icon-violet", neon: "text-purple-700", sub: "resolved" },
-            { icon: Flame,        label: "Overdue Tasks",        value: metrics.overdueCount, color: "icon-rose", neon: "text-rose-600", sub: "need attention" },
-            { icon: Target,       label: "Completion Rate",      value: `${stats.completionRate}%`, color: "icon-blue", neon: "text-blue-700", sub: "of all tasks" },
-          ].map((m, i) => (
-            <div key={i} className="text-center p-4 rounded-2xl bg-gray-50 border border-gray-100">
-              <div className={cn("w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center", m.color)}>
-                <m.icon className="h-5 w-5" />
+              
+              <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-400 uppercase">Total Workforce</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-black text-slate-900">{stats.total}</span>
+                  <span className="text-[10px] font-bold text-slate-400">TASKS</span>
+                </div>
               </div>
-              <p className={cn("text-2xl font-black", m.neon)}>{m.value}</p>
-              <p className="text-xs font-semibold text-gray-500 mt-1">{m.label}</p>
-              <p className="text-[10px] mt-0.5 text-gray-400">{m.sub}</p>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── Tasks vs Bugs Bar Chart ── */}
-      <div className="stagger-item card-base rounded-2xl p-5" style={{ animationDelay: "520ms" }}>
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center icon-cyan">
-              <BarChart3 className="h-4 w-4" />
+            {/* Success Metrics */}
+            <div className="premium-card">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                  <Award className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">Success Rate</h3>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: "Efficiency", value: `${stats.completionRate}%`, sub: "Task Completion", color: "text-indigo-600", bg: "bg-indigo-50" },
+                  { label: "Stability", value: `${stats.bugFixRate}%`, sub: "Bug Resolution", color: "text-emerald-600", bg: "bg-emerald-50" },
+                ].map((m, i) => (
+                  <div key={i} className={cn("p-6 rounded-2xl flex flex-col items-center justify-center text-center", m.bg)}>
+                    <p className={cn("text-3xl font-black mb-1", m.color)}>{m.value}</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{m.label}</p>
+                    <p className="text-[9px] font-medium text-slate-400 mt-1">{m.sub}</p>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 space-y-4">
+                <div className="p-4 rounded-2xl bg-slate-50 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
+                      <Target className="h-4 w-4 text-slate-400" />
+                    </div>
+                    <span className="text-xs font-bold text-slate-600">Active Sprint Progress</span>
+                  </div>
+                  <span className="text-sm font-black text-slate-900">74%</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-black text-gray-800">Tasks vs Bugs — Daily</h3>
-              <p className="text-[10px]" style={{ color: "#9ca3af" }}>Created vs resolved per day</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-[10px]" style={{ color: "#6b7280" }}>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />Tasks Created</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500 inline-block" />Bugs Reported</span>
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={productivityData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }} barGap={4}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f3f9" />
-            <XAxis dataKey="day" tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip contentStyle={{ background: "rgba(8,11,26,0.95)", border: "1px solid rgba(124,58,237,0.3)", borderRadius: "12px", color: "#e2e8f0", fontSize: 12 }} cursor={{ fill: "rgba(124,58,237,0.05)" }} />
-            <Bar dataKey="tasksCreated" name="Tasks Created" fill="#3b82f6" radius={[4,4,0,0]} maxBarSize={24} />
-            <Bar dataKey="bugsReported" name="Bugs Reported" fill="#f43f5e" radius={[4,4,0,0]} maxBarSize={24} />
-          </BarChart>
-        </ResponsiveContainer>
+
+        {/* Sidebar Sections */}
+        <div className="space-y-8">
+          
+          {/* Recent Activity Feed */}
+          <div className="premium-card flex flex-col h-[500px]">
+            <div className="flex items-center gap-4 mb-8 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
+                <Activity className="h-5 w-5 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">Team Pulse</h3>
+            </div>
+            
+            <ScrollArea className="flex-1 -mx-2 px-2">
+              {projectActivities.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 opacity-20">
+                  <Activity className="h-12 w-12 mb-4" />
+                  <p className="text-sm font-bold uppercase tracking-widest">No pulse detected</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {projectActivities.map((a, i) => {
+                    const user = getUserById(a.userId);
+                    return (
+                      <div key={a.id} className="flex gap-4 group relative">
+                        {i !== projectActivities.length - 1 && (
+                          <div className="absolute left-4 top-10 bottom-0 w-[2px] bg-slate-100" />
+                        )}
+                        <Avatar className="h-9 w-9 shrink-0 ring-4 ring-white shadow-sm z-10">
+                          <AvatarFallback className="text-[10px] font-black bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
+                            {user ? getInitials(user.name) : "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 pt-1">
+                          <p className="text-xs leading-relaxed text-slate-600">
+                            <span className="font-bold text-slate-900">{user?.name || "Member"}</span>{" "}
+                            {a.details}
+                          </p>
+                          <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">{formatRelativeTime(a.createdAt)}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </ScrollArea>
+            
+            <button className="mt-6 w-full py-3 rounded-xl bg-slate-50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-all shrink-0">
+              View Full History
+            </button>
+          </div>
+
+          {/* Upcoming Deadlines */}
+          <div className="premium-card">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                  <Calendar className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">Timeline</h3>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-600">
+                {stats.upcomingDeadlines.length}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {stats.upcomingDeadlines.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-xs font-bold text-slate-400 uppercase">Nothing scheduled</p>
+                </div>
+              ) : (
+                stats.upcomingDeadlines.map((task) => {
+                  const daysLeft = Math.ceil((new Date(task.dueDate!).getTime() - Date.now()) / 86400000);
+                  const isUrgent = daysLeft <= 2;
+                  return (
+                    <div key={task.id} className="group p-4 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-sm transition-all flex items-center gap-4">
+                      <div className={cn("w-1.5 h-10 rounded-full", isUrgent ? "bg-rose-500 shadow-lg shadow-rose-500/20" : "bg-indigo-400")} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-slate-900 truncate tracking-tight">{task.title}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Clock className="h-3 w-3 text-slate-400" />
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{formatDate(task.dueDate!)} · {daysLeft}d remaining</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
