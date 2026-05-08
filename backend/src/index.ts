@@ -1411,26 +1411,8 @@ app.post("/api/v1/test-email", authMiddleware, async (req: any, res) => {
     const { to } = req.body;
     if (!to) return res.status(400).json({ error: "Recipient email 'to' is required" });
     
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
-    const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-    const port = parseInt(process.env.SMTP_PORT || '587');
-    
-    if (!user || !pass) {
-      return res.status(500).json({ success: false, error: "SMTP not configured" });
-    }
-
-    const nodemailer = require('nodemailer');
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure: port === 465,
-      auth: { user, pass },
-      tls: { rejectUnauthorized: false },
-    });
-    
-    const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
-    await transporter.sendMail({ from, to, subject: "Test Email from Bug Tracker", html: "<h1>Test</h1><p>Working!</p>" });
+    const { sendEmail } = require("./lib/email");
+    await sendEmail(to, "Test Email from Bug Tracker", "<h1>Test</h1><p>SMTP is working!</p>");
     
     res.json({ success: true, message: `Test email sent to ${to}` });
   } catch (error: any) {
