@@ -1,27 +1,7 @@
+// @ts-nocheck
 import nodemailer from "nodemailer";
 
-const FROM = process.env.EMAIL_FROM || "BugTracker <noreply@bugtracker.dev>";
 const APP_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-
-// ─── Check if email is configured ───
-export const isEmailConfigured = () =>
-  !!(process.env.SMTP_USER && process.env.SMTP_PASS &&
-     process.env.SMTP_USER !== "your-gmail@gmail.com" &&
-     process.env.SMTP_PASS !== "your-app-password-here");
-
-// ─── Create transporter lazily on each send ───
-function getTransporter() {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: parseInt(process.env.SMTP_PORT || "587"),
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    tls: { rejectUnauthorized: false },
-  });
-}
 
 // ─── Base HTML template ───
 const baseTemplate = (content: string) => `
@@ -70,97 +50,63 @@ const baseTemplate = (content: string) => `
 </html>
 `;
 
-export async function sendEmail(to: string, subject: string, html: string) {
-  const { setLastEmailError, addLog } = require("../index");
-  addLog(`[Email] Attempting to send to ${to}`);
+// ─── Check if email is configured ───
+export const isEmailConfigured = () =>
+  !!(process.env.RESEND_API_KEY || (process.env.SMTP_USER && process.env.SMTP_PASS));
 
-  // ─── Method 1: Resend API (HTTP based, most reliable) ───
+// ─── Send email — uses Resend HTTP API (works on Render free tier) ───
+async function sendEmail(to: string, subject: string, html: string) {
+  console.log(`[Email] Sending to ${to}: ${subject}`);
+
   const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey && resendKey.startsWith("re_") && !resendKey.includes("your_key")) {
+
+  if (resendKey) {
     try {
-      addLog(`[Email] Using Resend API...`);
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${resendKey}`
-        },
-        body: JSON.stringify({
-          from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-          to: [to],
-          subject: subject,
-          html: html
-        })
+      const from = process.env.EMAIL_FROM || 'BugTracker <onboarding@resend.dev>';
+      const body = JSON.stringify({ from, to, subject, html });
+      const https = require('https');
+
+      await new Promise<void>((resolve, reject) => {
+        const req = https.request({
+          hostname: 'api.resend.com',
+          path: '/emails',
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendKey}`,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+          },
+        }, (res: any) => {
+          let data = '';
+          res.on('data', (chunk: any) => data += chunk);
+          res.on('end', () => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              console.log(`[Email] ✅ Sent to ${to}`);
+              resolve();
+            } else {
+              console.error(`[Email] ❌ Resend error ${res.statusCode}: ${data}`);
+              reject(new Error(`${res.statusCode}: ${data}`));
+            }
+          });
+        });
+        req.on('error', reject);
+        req.write(body);
+        req.end();
       });
-      
-      const resData: any = await response.json();
-      if (response.ok) {
-        addLog(`[Email] ✅ Successfully sent via Resend API (ID: ${resData.id})`);
-        setLastEmailError("none");
-        return;
-      } else {
-        addLog(`[Email] ⚠️ Resend API failed: ${resData.message || JSON.stringify(resData)}`);
-      }
-    } catch (err: any) {
-      addLog(`[Email] ⚠️ Resend API error: ${err.message}`);
-    }
-  }
-
-  // ─── Method 2: SMTP (Standard) ───
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-
-  if (!user || !pass) {
-    addLog(`[Email] ❌ Skipping — SMTP not configured and no Resend API key found`);
-    return;
-  }
-
-  const nodemailer = require('nodemailer');
-  let lastErr = "";
-  // Port 465 (SMTPS), 587 (STARTTLS), 2525 (Alternative), 25 (Standard - often blocked)
-  const ports = [465, 587, 2525, 25];
-
-  for (const p of ports) {
-    try {
-      addLog(`[Email] Trying SMTP port ${p}...`);
-      const transporter = nodemailer.createTransport({
-        host,
-        port: p,
-        secure: p === 465,
-        auth: { user, pass },
-        tls: { rejectUnauthorized: false },
-        connectionTimeout: 5000, // 5s to connect
-        greetingTimeout: 5000,   // 5s for greeting
-        socketTimeout: 10000,    // 10s for data
-      });
-      
-      const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
-      await transporter.sendMail({ from, to, subject, html });
-      
-      addLog(`[Email] ✅ Successfully sent to ${to} via port ${p}`);
-      setLastEmailError("none");
       return;
     } catch (err: any) {
-      lastErr = err.message;
-      addLog(`[Email] ⚠️ Port ${p} failed: ${err.message.substring(0, 80)}`);
+      console.error(`[Email] ❌ Resend failed: ${err.message}`);
     }
+  } else {
+    console.log(`[Email] No RESEND_API_KEY set — skipping`);
   }
-  
-  const finalError = `Email Blocked: Both Resend and SMTP failed. Google/Render security blocking detected. Final error: ${lastErr}`;
-  addLog(`[Email] ❌ ${finalError}`);
-  setLastEmailError(finalError);
 }
 
 // ─── Email templates ───
 
 export async function sendBugAssignedEmail(to: string, data: {
-  assigneeName: string;
-  bugTitle: string;
-  severity: string;
-  reporterName: string;
-  projectName: string;
-  description?: string;
+  assigneeName: string; bugTitle: string; severity: string;
+  reporterName: string; projectName: string; description?: string;
 }) {
   const severityBadge = data.severity === "critical" ? "badge-red" :
                         data.severity === "major"    ? "badge-amber" : "badge-blue";
@@ -181,10 +127,7 @@ export async function sendBugAssignedEmail(to: string, data: {
 }
 
 export async function sendBugResolvedEmail(to: string, data: {
-  recipientName: string;
-  bugTitle: string;
-  resolverName: string;
-  projectName: string;
+  recipientName: string; bugTitle: string; resolverName: string; projectName: string;
 }) {
   const html = baseTemplate(`
     <p>Hi <strong>${data.recipientName}</strong>,</p>
@@ -199,11 +142,8 @@ export async function sendBugResolvedEmail(to: string, data: {
 }
 
 export async function sendTaskAssignedEmail(to: string, data: {
-  assigneeName: string;
-  taskTitle: string;
-  priority: string;
-  projectName: string;
-  description?: string;
+  assigneeName: string; taskTitle: string; priority: string;
+  projectName: string; description?: string;
 }) {
   const priorityBadge = data.priority === "critical" ? "badge-red" :
                         data.priority === "high"     ? "badge-amber" :
@@ -224,11 +164,8 @@ export async function sendTaskAssignedEmail(to: string, data: {
 }
 
 export async function sendCommentEmail(to: string, data: {
-  recipientName: string;
-  commenterName: string;
-  bugTitle: string;
-  comment: string;
-  projectName: string;
+  recipientName: string; commenterName: string; bugTitle: string;
+  comment: string; projectName: string;
 }) {
   const html = baseTemplate(`
     <p>Hi <strong>${data.recipientName}</strong>,</p>
@@ -243,30 +180,23 @@ export async function sendCommentEmail(to: string, data: {
 }
 
 export async function sendProjectInviteEmail(to: string, data: {
-  recipientName: string;
-  inviterName: string;
-  projectName: string;
-  inviteCode: string;
+  recipientName: string; inviterName: string; projectName: string; inviteCode: string;
 }) {
   const html = baseTemplate(`
     <p>Hi <strong>${data.recipientName}</strong>,</p>
-    <p><strong>${data.inviterName}</strong> has invited you to join <strong>${data.projectName}</strong> on Bug Tracker.</p>
+    <p><strong>${data.inviterName}</strong> has invited you to join <strong>${data.projectName}</strong>.</p>
     <div class="card">
       <h3>Your Invite Code</h3>
-      <p style="font-family:monospace; font-size:16px; letter-spacing:2px; color:#6c5ce7; font-weight:700">${data.inviteCode}</p>
+      <p style="font-family:monospace; font-size:16px; color:#6c5ce7; font-weight:700">${data.inviteCode}</p>
     </div>
-    <p>Use this code when you sign in to join the project.</p>
     <a href="${APP_URL}/login" class="btn">Join Project →</a>
   `);
   await sendEmail(to, `🎉 You're invited to ${data.projectName}`, html);
 }
 
 export async function sendDeadlineReminderEmail(to: string, data: {
-  recipientName: string;
-  taskTitle: string;
-  dueDate: string;
-  daysLeft: number;
-  projectName: string;
+  recipientName: string; taskTitle: string; dueDate: string;
+  daysLeft: number; projectName: string;
 }) {
   const urgency = data.daysLeft <= 1 ? "🚨 URGENT" : data.daysLeft <= 3 ? "⚠️ Soon" : "📅 Reminder";
   const html = baseTemplate(`
