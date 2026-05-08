@@ -86,13 +86,14 @@ async function sendEmail(to: string, subject: string, html: string) {
 
   const nodemailer = require('nodemailer');
 
+  const { setLastEmailError, addLog } = require("../index");
   let lastErr = "";
   // Port 465 (SMTPS), 587 (STARTTLS), 2525 (Alternative), 25 (Standard - often blocked)
   const ports = [465, 587, 2525, 25];
 
   for (const p of ports) {
     try {
-      console.log(`[Email] Trying port ${p}...`);
+      addLog(`[Email] Trying port ${p}...`);
       const transporter = nodemailer.createTransport({
         host,
         port: p,
@@ -107,19 +108,17 @@ async function sendEmail(to: string, subject: string, html: string) {
       const from = process.env.EMAIL_FROM || `BugTracker <${user}>`;
       await transporter.sendMail({ from, to, subject, html });
       
-      console.log(`[Email] ✅ Successfully sent to ${to} via port ${p}`);
-      const { setLastEmailError } = require("../index");
+      addLog(`[Email] ✅ Successfully sent to ${to} via port ${p}`);
       setLastEmailError("none");
       return;
     } catch (err: any) {
       lastErr = err.message;
-      console.log(`[Email] ⚠️ Port ${p} failed: ${err.message.substring(0, 80)}`);
+      addLog(`[Email] ⚠️ Port ${p} failed: ${err.message.substring(0, 80)}`);
     }
   }
   
-  const { setLastEmailError } = require("../index");
   const finalError = `SMTP Blocked: All ports (465, 587, 2525, 25) failed. Render often blocks SMTP. Final error: ${lastErr}`;
-  console.error(`[Email] ❌ ${finalError}`);
+  addLog(`[Email] ❌ ${finalError}`);
   setLastEmailError(finalError);
 }
 

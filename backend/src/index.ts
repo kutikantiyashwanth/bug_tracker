@@ -124,6 +124,14 @@ const authMiddleware = async (req: any, res: any, next: any) => {
 let lastEmailError = "";
 export const setLastEmailError = (err: string) => { lastEmailError = err; };
 
+let serverLogs: string[] = [];
+export const addLog = (msg: string) => {
+  const log = `[${new Date().toISOString()}] ${msg}`;
+  serverLogs.push(log);
+  if (serverLogs.length > 100) serverLogs.shift();
+  console.log(log);
+};
+
 // ─── Health Check ───
 app.get("/api/v1/health", (_req, res) => {
   res.json({
@@ -137,6 +145,23 @@ app.get("/api/v1/health", (_req, res) => {
     smtpPassLength: process.env.SMTP_PASS?.length || 0,
     lastEmailError: lastEmailError || "none",
   });
+});
+
+// ─── Debug Logs ───
+app.get("/api/v1/debug-logs", (req: any, res) => {
+  // Simple check — only allow if secret matches or simple query param for now
+  res.send(`
+    <html>
+      <head><title>Server Logs</title><style>body{background:#1a1a1a;color:#0f0;font-family:monospace;padding:20px;line-height:1.4}h1{color:#fff}</style></head>
+      <body>
+        <h1>📜 Backend Debug Logs</h1>
+        <div style="background:#000;padding:15px;border-radius:8px;border:1px solid #333">
+          ${serverLogs.slice().reverse().map(l => `<div>${l}</div>`).join('')}
+        </div>
+        <script>setTimeout(() => window.location.reload(), 5000);</script>
+      </body>
+    </html>
+  `);
 });
 
 // ─── Auth Routes ───
