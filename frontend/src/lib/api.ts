@@ -1,20 +1,20 @@
-import axios, { AxiosRequestConfig } from 'axios';
+﻿import axios, { AxiosRequestConfig } from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
-// ── In-memory request cache ───────────────────────────────────────────────
+// â”€â”€ In-memory request cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface CacheEntry { data: any; ts: number }
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL = 120_000; // 2 minutes — longer TTL = fewer round trips
+const CACHE_TTL = 120_000; // 2 minutes â€” longer TTL = fewer round trips
 
-// Pending requests deduplication — prevents double-fetching same endpoint
+// Pending requests deduplication â€” prevents double-fetching same endpoint
 const pending = new Map<string, Promise<any>>();
 
-// ── Axios instance ────────────────────────────────────────────────────────
+// â”€â”€ Axios instance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 20000, // 20s — Render free tier cold starts can take 15s+
+  timeout: 20000, // 20s â€” Render free tier cold starts can take 15s+
 });
 
 // Attach JWT on every request
@@ -40,7 +40,7 @@ api.interceptors.response.use(
   }
 );
 
-// ── Cached GET helper ─────────────────────────────────────────────────────
+// â”€â”€ Cached GET helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const cachedGet = async (url: string, config?: AxiosRequestConfig): Promise<any> => {
   const key = url;
 
@@ -71,13 +71,13 @@ export const invalidateCache = (prefix: string) => {
   }
 };
 
-// Clear entire cache — call on login/logout so stale data never shows
+// Clear entire cache â€” call on login/logout so stale data never shows
 export const clearAllCache = () => {
   cache.clear();
   pending.clear();
 };
 
-// ── Backend keep-alive ping ───────────────────────────────────────────────
+// â”€â”€ Backend keep-alive ping â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Render free tier sleeps after 15 min. Ping every 10 min to keep it warm.
 // Only runs in browser, only when user is logged in.
 let keepAliveInterval: ReturnType<typeof setInterval> | null = null;
@@ -88,7 +88,7 @@ export const startKeepAlive = () => {
   keepAliveInterval = setInterval(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
-    // Fire-and-forget health check — don't await, don't show errors
+    // Fire-and-forget health check â€” don't await, don't show errors
     fetch(`${API_URL.replace('/api/v1', '')}/api/v1/health`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
@@ -103,7 +103,7 @@ export const stopKeepAlive = () => {
   }
 };
 
-// ── Auth API ──────────────────────────────────────────────────────────────
+// â”€â”€ Auth API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const authApi = {
   register: (data: { name: string; email: string; password: string; role: string; skills?: string[] }) =>
     api.post('/auth/register', data),
@@ -112,7 +112,7 @@ export const authApi = {
   getMe: () => api.get('/auth/me'),
 };
 
-// ── Projects API ──────────────────────────────────────────────────────────
+// â”€â”€ Projects API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const projectsApi = {
   getAll: () => cachedGet('/projects'),
   create: (data: { name: string; description: string }) => {
@@ -125,7 +125,7 @@ export const projectsApi = {
   },
 };
 
-// ── Tasks API ─────────────────────────────────────────────────────────────
+// â”€â”€ Tasks API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const tasksApi = {
   getAll: (projectId: string) => cachedGet(`/projects/${projectId}/tasks`),
   create: (data: any) => {
@@ -146,7 +146,7 @@ export const tasksApi = {
   },
 };
 
-// ── Bugs API ──────────────────────────────────────────────────────────────
+// â”€â”€ Bugs API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const bugsApi = {
   getAll: (projectId: string) => cachedGet(`/projects/${projectId}/bugs`),
   create: (data: any) => {
@@ -161,17 +161,17 @@ export const bugsApi = {
   },
 };
 
-// ── Activities API ────────────────────────────────────────────────────────
+// â”€â”€ Activities API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const activitiesApi = {
   getAll: (projectId: string) => cachedGet(`/projects/${projectId}/activities`),
 };
 
-// ── Analytics API ─────────────────────────────────────────────────────────
+// â”€â”€ Analytics API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const analyticsApi = {
   get: (projectId: string) => cachedGet(`/projects/${projectId}/analytics`),
 };
 
-// ── Notifications API ─────────────────────────────────────────────────────
+// â”€â”€ Notifications API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const notificationsApi = {
   getAll: () => cachedGet('/notifications'),
   markRead: (id: string) => {
@@ -184,84 +184,3 @@ export const notificationsApi = {
   },
 };
 
-// ── Auth API ──────────────────────────────────────────────────────────────
-export const authApi = {
-  register: (data: { name: string; email: string; password: string; role: string; skills?: string[] }) =>
-    api.post('/auth/register', data),
-  login: (data: { email: string; password: string }) =>
-    api.post('/auth/login', data),
-  getMe: () => api.get('/auth/me'),
-};
-
-// ── Projects API ──────────────────────────────────────────────────────────
-export const projectsApi = {
-  getAll: () => cachedGet('/projects'),
-  create: (data: { name: string; description: string }) => {
-    invalidateCache('/projects');
-    return api.post('/projects', data);
-  },
-  join: (inviteCode: string) => {
-    invalidateCache('/projects');
-    return api.post('/projects/join', { inviteCode });
-  },
-};
-
-// ── Tasks API ─────────────────────────────────────────────────────────────
-export const tasksApi = {
-  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/tasks`),
-  create: (data: any) => {
-    invalidateCache(`/projects/${data.projectId}/tasks`);
-    return api.post(`/projects/${data.projectId}/tasks`, data);
-  },
-  update: (id: string, data: any) => {
-    // Invalidate tasks for all projects (we don't know which project here)
-    for (const key of cache.keys()) {
-      if (key.includes('/tasks')) cache.delete(key);
-    }
-    return api.patch(`/tasks/${id}`, data);
-  },
-  delete: (id: string) => {
-    for (const key of cache.keys()) {
-      if (key.includes('/tasks')) cache.delete(key);
-    }
-    return api.delete(`/tasks/${id}`);
-  },
-};
-
-// ── Bugs API ──────────────────────────────────────────────────────────────
-export const bugsApi = {
-  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/bugs`),
-  create: (data: any) => {
-    invalidateCache(`/projects/${data.projectId}/bugs`);
-    return api.post(`/projects/${data.projectId}/bugs`, data);
-  },
-  update: (id: string, data: any) => {
-    for (const key of cache.keys()) {
-      if (key.includes('/bugs')) cache.delete(key);
-    }
-    return api.patch(`/bugs/${id}`, data);
-  },
-};
-
-// ── Activities API ────────────────────────────────────────────────────────
-export const activitiesApi = {
-  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/activities`),
-};
-
-// ── Analytics API ─────────────────────────────────────────────────────────
-export const analyticsApi = {
-  get: (projectId: string) => cachedGet(`/projects/${projectId}/analytics`),
-};
-
-// ── Notifications API ─────────────────────────────────────────────────────
-export const notificationsApi = {
-  getAll: () => cachedGet('/notifications'),
-  markRead: (id: string) => {
-    invalidateCache('/notifications');
-    return api.patch(`/notifications/${id}/read`);
-  },
-  markAllRead: () => {
-    invalidateCache('/notifications');
-    return api.patch('/notifications/read-all');
-  },
-};
