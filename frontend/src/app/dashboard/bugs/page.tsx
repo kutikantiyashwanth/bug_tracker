@@ -253,11 +253,11 @@ export default function BugsPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-rose-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Quality Assurance</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Bug Tracker</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Reports</span></h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
-            Monitor, prioritize, and resolve technical debt with AI-assisted severity analysis and team collaboration.
+            Track, prioritize and fix bugs. Use AI to suggest severity automatically.
           </p>
         </div>
         
@@ -443,16 +443,16 @@ export default function BugsPage() {
               <AlertTriangle className="h-8 w-8 text-rose-500" />
             </div>
             <div>
-              <DialogTitle className="text-3xl font-black text-white tracking-tight">Report Bug</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">AI-powered defect analysis and reporting tool.</DialogDescription>
+              <DialogTitle className="text-3xl font-black text-white tracking-tight">Report a Bug</DialogTitle>
+              <DialogDescription className="text-white/40 font-medium">Describe the issue. AI will suggest a severity level.</DialogDescription>
             </div>
           </div>
           
           <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Report Headline</Label>
-                <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Memory leak on dashboard chart interaction" 
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Bug Title</Label>
+                <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Login button not working on mobile" 
                   className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
 
@@ -464,8 +464,8 @@ export default function BugsPage() {
                       <Cpu className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-slate-900">Bug Intelligence</p>
-                      <p className="text-[10px] font-bold text-indigo-500 uppercase">Automated Prioritization</p>
+                      <p className="text-sm font-black text-slate-900">AI Severity Suggestion</p>
+                      <p className="text-[10px] font-bold text-indigo-500 uppercase">Powered by keyword analysis</p>
                     </div>
                   </div>
                   <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
@@ -495,7 +495,7 @@ export default function BugsPage() {
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-[10px] font-bold text-slate-400">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
+                    <p className="text-[10px] font-bold text-slate-400">ENTER A TITLE TO GET AI SUGGESTION</p>
                   </div>
                 )}
               </div>
@@ -503,12 +503,12 @@ export default function BugsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Impact Description</Label>
-                <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Explain the business impact..." rows={4} 
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Description</Label>
+                <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="What went wrong? What did you expect to happen?" rows={4} 
                   className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium text-sm" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Reproduction Path</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Steps to Reproduce</Label>
                 <Textarea value={formSteps} onChange={(e) => setFormSteps(e.target.value)} placeholder="1. Open app&#10;2. Click btn..." rows={4} 
                   className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-mono text-xs" />
               </div>
@@ -527,9 +527,9 @@ export default function BugsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Assign Resolver</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Assign To</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
-                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Automatic Allocation" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Unassigned" /></SelectTrigger>
                   <SelectContent>
                     {projectMembers.map((user) => user && (
                       <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
@@ -540,7 +540,7 @@ export default function BugsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Visual Evidence</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Screenshot (optional)</Label>
               <label className="group block border-2 border-dashed border-slate-200 rounded-[2rem] p-8 text-center hover:border-indigo-500/40 hover:bg-indigo-50/30 transition-all cursor-pointer">
                 <input type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
                 {screenshotPreview ? (

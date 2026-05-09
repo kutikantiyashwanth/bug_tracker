@@ -99,9 +99,9 @@ export default function SettingsPage() {
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Account Preferences</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Account <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
         <p className="text-slate-500 mt-2 font-medium max-w-xl">
-          Customize your professional profile, manage security protocols, and configure your notification ecosystem.
+          Update your profile, change your password, and manage notification preferences.
         </p>
       </div>
 
@@ -116,8 +116,8 @@ export default function SettingsPage() {
                   <User className="h-5 w-5 text-indigo-500" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Personal Identity</h2>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Public Professional Profile</p>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Your Profile</h2>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Name, email and skills</p>
                 </div>
               </div>
             </div>
@@ -146,12 +146,12 @@ export default function SettingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Legal Name</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Name</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)}
                   className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">System Identifier (Email)</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email Address</Label>
                 <Input value={email} readOnly
                   className="h-14 rounded-2xl bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed font-bold" />
               </div>
@@ -159,7 +159,7 @@ export default function SettingsPage() {
 
             {/* Skills */}
             <div className="space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Technical Competencies</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Skills</Label>
               <div className="flex flex-wrap gap-2">
                 {skills.map((s) => (
                   <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
@@ -172,7 +172,7 @@ export default function SettingsPage() {
               </div>
               <div className="flex gap-3 mt-4">
                 <Input
-                  placeholder="e.g. React, Microservices, Penetration Testing"
+                  placeholder="e.g. React, Node.js, Python"
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
@@ -196,9 +196,9 @@ export default function SettingsPage() {
               {profileSaving ? (
                 <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
               ) : profileSaved ? (
-                <><Check className="h-5 w-5 mr-2" /> PROFILE UPDATED</>
+                <><Check className="h-5 w-5 mr-2" /> Profile Saved</>
               ) : (
-                <><Save className="h-5 w-5 mr-2" /> SYNCHRONIZE PROFILE</>
+                <><Save className="h-5 w-5 mr-2" /> Save Profile</>
               )}
             </Button>
           </div>
@@ -210,14 +210,14 @@ export default function SettingsPage() {
                 <Shield className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Cryptographic Security</h2>
-                <p className="text-[10px] font-bold text-slate-400 uppercase">Manage Authentication Credentials</p>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Change Password</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Update your login credentials</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Current Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Current Password</Label>
                 <div className="relative">
                   <Input type={showPw ? "text" : "password"} value={currentPw}
                     onChange={(e) => setCurrentPw(e.target.value)}
@@ -230,17 +230,17 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">New Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">New Password</Label>
                 <Input type={showPw ? "text" : "password"} value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
-                  placeholder="Minimum 8 characters" 
+                  placeholder="Minimum 6 characters" 
                   className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirm Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirm New Password</Label>
                 <Input type={showPw ? "text" : "password"} value={confirmPw}
                   onChange={(e) => setConfirmPw(e.target.value)}
-                  placeholder="Verify new secret" 
+                  placeholder="Re-enter new password" 
                   className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
             </div>
@@ -256,9 +256,9 @@ export default function SettingsPage() {
               {pwSaving ? (
                 <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
               ) : pwSaved ? (
-                <><Check className="h-4 w-4 mr-2" /> CREDENTIALS UPDATED</>
+                <><Check className="h-4 w-4 mr-2" /> Password Updated</>
               ) : (
-                "Update Security Credentials"
+                "Update Password"
               )}
             </Button>
           </div>
@@ -273,18 +273,18 @@ export default function SettingsPage() {
                 <Bell className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Event Protocol</h2>
-                <p className="text-[10px] font-bold text-slate-400 uppercase">Notification Configuration</p>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Notifications</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Choose what alerts you receive</p>
               </div>
             </div>
 
             <div className="space-y-2">
               {[
-                { key: "task_assigned",      label: "Task Velocity",    desc: "Assignment alerts" },
-                { key: "deadline_reminder",  label: "Timeline Drift",  desc: "Deadline proximity" },
-                { key: "bug_assigned",       label: "Defect Analysis",     desc: "Bug report allocation" },
-                { key: "project_invite",     label: "Workspace Access",     desc: "Collaborative invitations" },
-                { key: "email_notifications",label: "Remote Sync", desc: "External SMTP relay" },
+                { key: "task_assigned",       label: "Task Assigned",       desc: "When a task is assigned to you" },
+                { key: "deadline_reminder",   label: "Deadline Reminder",   desc: "When a task deadline is near" },
+                { key: "bug_assigned",        label: "Bug Assigned",        desc: "When a bug is assigned to you" },
+                { key: "project_invite",      label: "Project Invite",      desc: "When you're invited to a project" },
+                { key: "email_notifications", label: "Email Notifications", desc: "Also send alerts to your email" },
               ].map((pref) => (
                 <div key={pref.key} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                   <div>
@@ -307,14 +307,14 @@ export default function SettingsPage() {
           <div className="premium-card border-rose-100 bg-rose-50/30 space-y-6">
             <div>
               <h2 className="text-sm font-black uppercase tracking-widest text-rose-600">Danger Zone</h2>
-              <p className="text-[10px] font-bold text-rose-500/60 uppercase mt-1">Terminal Session Management</p>
+              <p className="text-[10px] font-bold text-rose-500/60 uppercase mt-1">Irreversible actions</p>
             </div>
             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
-              Terminating your current active session will flush all local cached authentication tokens.
+              Logging out will clear your local session. You can log back in at any time.
             </p>
             <Button onClick={() => logout()} variant="outline"
-              className="w-full h-12 rounded-xl border-rose-200 text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all">
-              Terminate Session
+              className="w-full h-12 rounded-xl border-rose-200 text-rose-600 font-bold text-sm hover:bg-rose-600 hover:text-white transition-all">
+              Log Out
             </Button>
           </div>
         </div>

@@ -76,14 +76,14 @@ export default function AnalyticsPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Mission Intelligence</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Project Analytics</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Performance <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Analytics</span></h1>
           <p className="text-slate-500 font-medium max-w-xl">
             {activeProject ? (
-              <>Synthesizing data for <span className="text-indigo-600 font-black">{activeProject.name}</span>. Deep-dive into velocity metrics and defect density.</>
+              <>Showing data for <span className="text-indigo-600 font-black">{activeProject.name}</span>. Track task completion, bug fix rates and weekly activity.</>
             ) : (
-              "Please select a project from the workspace to initialize intelligence protocols."
+              "Select a project from the sidebar to view analytics."
             )}
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function AnalyticsPage() {
           <button onClick={fetchAnalytics} disabled={loading}
             className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all">
             <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors", loading && "animate-spin")} />
-            <span className="text-xs font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-600">Sync Intelligence</span>
+            <span className="text-xs font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-600">Refresh</span>
           </button>
         </div>
       </div>
@@ -102,8 +102,8 @@ export default function AnalyticsPage() {
             <BarChart3 className="h-10 w-10 text-slate-300" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-xl font-bold text-slate-900">No Intelligence Data Available</h3>
-            <p className="text-slate-500 text-sm max-w-xs">Select an active project to synchronize real-time velocity and defect metrics.</p>
+            <h3 className="text-xl font-bold text-slate-900">No data yet</h3>
+            <p className="text-slate-500 text-sm max-w-xs">Select a project to view analytics.</p>
           </div>
         </div>
       )}
@@ -121,36 +121,32 @@ export default function AnalyticsPage() {
           {/* ── KPI Cards ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              {
-                icon: CheckCircle2, label: "Mission Velocity",
+              { icon: CheckCircle2, label: "Task Completion",
                 value: `${data.taskStats.completionRate}%`,
-                sub: `${data.taskStats.completed}/${data.taskStats.total} TASKS FINALIZED`,
-                iconCls: "bg-emerald-50 text-emerald-600 border-emerald-100", 
+                sub: `${data.taskStats.completed}/${data.taskStats.total} tasks done`,
+                iconCls: "bg-emerald-50 text-emerald-600 border-emerald-100",
                 accent: "border-emerald-500/10 hover:border-emerald-500/30",
-                trend: data.taskStats.completionRate >= 50 ? "PEAK PERFORMANCE" : "ACCELERATION NEEDED",
+                trend: data.taskStats.completionRate >= 50 ? "ON TRACK" : "NEEDS ATTENTION",
                 up: data.taskStats.completionRate >= 50,
               },
-              {
-                icon: Bug, label: "Defect Density",
+              { icon: Bug, label: "Bug Fix Rate",
                 value: `${data.bugStats.fixRate}%`,
-                sub: `${data.bugStats.resolved + data.bugStats.closed}/${data.bugStats.total} THREATS NEUTRALIZED`,
-                iconCls: "bg-rose-50 text-rose-600 border-rose-100", 
+                sub: `${data.bugStats.resolved + data.bugStats.closed}/${data.bugStats.total} bugs fixed`,
+                iconCls: "bg-rose-50 text-rose-600 border-rose-100",
                 accent: "border-rose-500/10 hover:border-rose-500/30",
-                trend: data.bugStats.critical > 0 ? `${data.bugStats.critical} CRITICAL DEFECTS` : "CLEAN STATUS",
+                trend: data.bugStats.critical > 0 ? `${data.bugStats.critical} CRITICAL` : "ALL CLEAR",
                 up: data.bugStats.critical === 0,
               },
-              {
-                icon: Zap, label: "Weekly Momentum",
+              { icon: Zap, label: "This Week",
                 value: data.successMetrics.tasksCompletedThisWeek,
-                sub: `${data.successMetrics.bugsResolvedThisWeek} BUGS RESOLVED`,
-                iconCls: "bg-indigo-50 text-indigo-600 border-indigo-100", 
+                sub: `${data.successMetrics.bugsResolvedThisWeek} bugs resolved`,
+                iconCls: "bg-indigo-50 text-indigo-600 border-indigo-100",
                 accent: "border-indigo-500/10 hover:border-indigo-500/30",
               },
-              {
-                icon: Activity, label: "System Cycles",
+              { icon: Activity, label: "Total Activity",
                 value: data.successMetrics.totalActivities,
-                sub: "TOTAL OPERATIONS LOGGED",
-                iconCls: "bg-slate-900 text-white border-slate-800", 
+                sub: "actions logged",
+                iconCls: "bg-slate-900 text-white border-slate-800",
                 accent: "border-slate-900/10 hover:border-slate-900/30",
               },
             ].map((card, i) => (
@@ -184,17 +180,17 @@ export default function AnalyticsPage() {
                   <BarChart3 className="h-6 w-6 text-indigo-500" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Velocity Diagnostics</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Operational flow over last 7 sessions</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Weekly Activity</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Tasks and bugs over the last 7 days</p>
                 </div>
               </div>
               {/* Legend */}
               <div className="flex flex-wrap items-center gap-6">
                 {[
                   { color: "#6366f1", label: "TASKS CREATED" },
-                  { color: "#10b981", label: "TASKS FINALIZED" },
-                  { color: "#f43f5e", label: "BUGS DETECTED" },
-                  { color: "#f59e0b", label: "BUGS NEUTRALIZED" },
+                  { color: "#10b981", label: "TASKS DONE" },
+                  { color: "#f43f5e", label: "BUGS REPORTED" },
+                  { color: "#f59e0b", label: "BUGS FIXED" },
                 ].map((l) => (
                   <div key={l.label} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-md shadow-sm" style={{ background: l.color }} />
@@ -232,17 +228,17 @@ export default function AnalyticsPage() {
                   <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Task Lifecycle</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Velocity Distribution</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Tasks by Status</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">How tasks are distributed</p>
                 </div>
               </div>
               <div className="space-y-6">
                 {[
-                  { label: "FINALIZED",        count: data.taskStats.completed,  color: "#10b981" },
-                  { label: "ACTIVE", count: data.taskStats.inProgress, color: "#6366f1" },
-                  { label: "VALIDATION",     count: data.taskStats.testing,    color: "#f59e0b" },
-                  { label: "PENDING",       count: data.taskStats.todo,       color: "#3b82f6" },
-                  { label: "BACKLOG",     count: data.taskStats.backlog,    color: "#94a3b8" },
+                  { label: "Done",        count: data.taskStats.completed,  color: "#10b981" },
+                  { label: "In Progress", count: data.taskStats.inProgress, color: "#6366f1" },
+                  { label: "Testing",     count: data.taskStats.testing,    color: "#f59e0b" },
+                  { label: "To Do",       count: data.taskStats.todo,       color: "#3b82f6" },
+                  { label: "Backlog",     count: data.taskStats.backlog,    color: "#94a3b8" },
                 ].map((item) => (
                   <div key={item.label} className="space-y-2">
                     <div className="flex justify-between items-end">
@@ -268,16 +264,16 @@ export default function AnalyticsPage() {
                   <Bug className="h-6 w-6 text-rose-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Threat Matrix</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Defect Severity Analysis</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Bugs by Severity</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Breakdown of open bugs</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 {[
-                  { label: "CRITICAL THREATS", count: data.bugStats.critical, color: "#f43f5e" },
-                  { label: "MAJOR DEFECTS",    count: data.bugStats.major,    color: "#f97316" },
-                  { label: "MINOR ISSUES",    count: data.bugStats.minor,    color: "#3b82f6" },
+                  { label: "Critical", count: data.bugStats.critical, color: "#f43f5e" },
+                  { label: "Major",    count: data.bugStats.major,    color: "#f97316" },
+                  { label: "Minor",    count: data.bugStats.minor,    color: "#3b82f6" },
                 ].map((item) => (
                   <div key={item.label} className="p-4 rounded-[1.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all">
                     <div className="flex items-center gap-3">
@@ -316,8 +312,8 @@ export default function AnalyticsPage() {
                   <Calendar className="h-6 w-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Timeline Alerts</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Critical Proximity Deadlines</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Upcoming Deadlines</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Tasks due soon</p>
                 </div>
               </div>
               {data.upcomingDeadlines.length === 0 ? (
@@ -325,7 +321,7 @@ export default function AnalyticsPage() {
                   <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
                     <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                   </div>
-                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">No Critical Deadlines</p>
+                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">No upcoming deadlines</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -338,7 +334,7 @@ export default function AnalyticsPage() {
                         <div className="flex-1 min-w-0 space-y-1">
                           <p className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{task.title}</p>
                           <p className="text-[10px] font-bold text-slate-400 uppercase">
-                            {task.daysLeft <= 1 ? <span className="text-rose-500">DUE IMMINENTLY</span> : <span className="text-indigo-500">{task.daysLeft} DAYS UNTIL EXPIRY</span>}
+                            {task.daysLeft <= 1 ? <span className="text-rose-500">Due today</span> : <span className="text-indigo-500">{task.daysLeft} days left</span>}
                           </p>
                         </div>
                         <Badge className={cn("font-black text-[9px] uppercase tracking-widest px-2",
@@ -363,37 +359,33 @@ export default function AnalyticsPage() {
                 <Target className="h-6 w-6 text-indigo-600" />
               </div>
               <div>
-                <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Intelligence Success Matrix</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase">Key Performance Indicators vs Benchmarks</p>
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Goals & Benchmarks</h3>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">How you're tracking against targets</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                {
-                  label: "VELOCITY TARGET",
+                { label: "Task Completion Rate",
                   value: `${data.taskStats.completionRate}%`,
-                  target: "BENCHMARK: 80%",
+                  target: "Target: 80%",
                   met: data.taskStats.completionRate >= 80,
                   icon: CheckCircle2, color: "#10b981",
                 },
-                {
-                  label: "NEUTRALIZATION RATE",
+                { label: "Bug Fix Rate",
                   value: `${data.bugStats.fixRate}%`,
-                  target: "BENCHMARK: 70%",
+                  target: "Target: 70%",
                   met: data.bugStats.fixRate >= 70,
                   icon: Bug, color: "#f43f5e",
                 },
-                {
-                  label: "WEEKLY THROUGHPUT",
+                { label: "Bugs Fixed This Week",
                   value: data.successMetrics.bugsResolvedThisWeek,
-                  target: "STATUS: ACTIVE",
+                  target: "Status: Active",
                   met: data.successMetrics.bugsResolvedThisWeek > 0,
                   icon: TrendingUp, color: "#6366f1",
                 },
-                {
-                  label: "OPERATIONAL CYCLES",
+                { label: "Tasks Done This Week",
                   value: data.successMetrics.tasksCompletedThisWeek,
-                  target: "STATUS: SYNCHRONIZED",
+                  target: "Status: Active",
                   met: data.successMetrics.tasksCompletedThisWeek > 0,
                   icon: Zap, color: "#f59e0b",
                 },
