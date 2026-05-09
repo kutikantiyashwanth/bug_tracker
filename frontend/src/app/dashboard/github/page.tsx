@@ -147,7 +147,14 @@ export default function GitHubPage() {
               onChange={(e) => setRepoInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSaveRepo()}
               placeholder="https://github.com/your-username/your-repo"
-              className="h-12 bg-white/5 border-white/10 focus:border-indigo-500/50 text-white placeholder:text-white/30 rounded-2xl font-mono text-sm"
+              className="h-12 rounded-2xl font-mono text-sm"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                color: "#ffffff",
+              }}
+              onFocus={(e) => { e.currentTarget.style.border = "1px solid rgba(99,102,241,0.7)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.2)"; }}
+              onBlur={(e)  => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.25)"; e.currentTarget.style.boxShadow = "none"; }}
             />
             <Button
               onClick={handleSaveRepo}
@@ -163,7 +170,12 @@ export default function GitHubPage() {
 
           {repoUrl && (
             <p className="text-xs text-slate-400 font-medium">
-              Connected to: <span className="text-white font-bold">{repoUrl}</span>
+              Connected to: <span className="text-white font-bold break-all">{repoUrl}</span>
+            </p>
+          )}
+          {!repoUrl && (
+            <p className="text-xs text-slate-500 font-medium">
+              Paste your GitHub repo URL above, e.g. <span className="text-slate-400 font-mono">https://github.com/username/repo</span>
             </p>
           )}
         </div>
