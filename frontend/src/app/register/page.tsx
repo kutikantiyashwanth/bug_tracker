@@ -328,6 +328,10 @@ export default function RegisterPage() {
                     {role === "developer" && "💻 Developers can create tasks, fix bugs, and collaborate"}
                     {role === "tester" && "🧪 Testers can report bugs, test features, and provide feedback"}
                   </p>
+                  {/* DEBUG: Show current role value */}
+                  <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
+                    <strong>DEBUG - Current role value:</strong> {role}
+                  </div>
                 </div>
               </div>
 
