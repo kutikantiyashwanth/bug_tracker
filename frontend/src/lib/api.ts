@@ -2,10 +2,10 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
-// ── In-memory request cache (stale-while-revalidate pattern) ──────────────
+// ── In-memory request cache ───────────────────────────────────────────────
 interface CacheEntry { data: any; ts: number }
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL = 60_000; // 60 seconds — data is "fresh" for 60s
+const CACHE_TTL = 120_000; // 2 minutes — longer TTL = fewer round trips
 
 // Pending requests deduplication — prevents double-fetching same endpoint
 const pending = new Map<string, Promise<any>>();
@@ -14,13 +14,12 @@ const pending = new Map<string, Promise<any>>();
 export const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
-  // Aggressive timeout — fail fast rather than hang
-  timeout: 15000,
+  timeout: 20000, // 20s — Render free tier cold starts can take 15s+
 });
 
 // Attach JWT on every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -32,15 +31,16 @@ api.interceptors.response.use(
     const url = error.config?.url || '';
     const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/register');
     if (error.response?.status === 401 && !isAuthEndpoint) {
-      localStorage.removeItem('token');
-      if (typeof window !== 'undefined') window.location.href = '/login';
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
 );
 
 // ── Cached GET helper ─────────────────────────────────────────────────────
-// Deduplicates in-flight requests and serves cached responses within TTL.
 export const cachedGet = async (url: string, config?: AxiosRequestConfig): Promise<any> => {
   const key = url;
 
@@ -75,6 +75,113 @@ export const invalidateCache = (prefix: string) => {
 export const clearAllCache = () => {
   cache.clear();
   pending.clear();
+};
+
+// ── Backend keep-alive ping ───────────────────────────────────────────────
+// Render free tier sleeps after 15 min. Ping every 10 min to keep it warm.
+// Only runs in browser, only when user is logged in.
+let keepAliveInterval: ReturnType<typeof setInterval> | null = null;
+
+export const startKeepAlive = () => {
+  if (typeof window === 'undefined') return;
+  if (keepAliveInterval) return; // already running
+  keepAliveInterval = setInterval(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    // Fire-and-forget health check — don't await, don't show errors
+    fetch(`${API_URL.replace('/api/v1', '')}/api/v1/health`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => {}); // silently ignore failures
+  }, 10 * 60 * 1000); // every 10 minutes
+};
+
+export const stopKeepAlive = () => {
+  if (keepAliveInterval) {
+    clearInterval(keepAliveInterval);
+    keepAliveInterval = null;
+  }
+};
+
+// ── Auth API ──────────────────────────────────────────────────────────────
+export const authApi = {
+  register: (data: { name: string; email: string; password: string; role: string; skills?: string[] }) =>
+    api.post('/auth/register', data),
+  login: (data: { email: string; password: string }) =>
+    api.post('/auth/login', data),
+  getMe: () => api.get('/auth/me'),
+};
+
+// ── Projects API ──────────────────────────────────────────────────────────
+export const projectsApi = {
+  getAll: () => cachedGet('/projects'),
+  create: (data: { name: string; description: string }) => {
+    invalidateCache('/projects');
+    return api.post('/projects', data);
+  },
+  join: (inviteCode: string) => {
+    invalidateCache('/projects');
+    return api.post('/projects/join', { inviteCode });
+  },
+};
+
+// ── Tasks API ─────────────────────────────────────────────────────────────
+export const tasksApi = {
+  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/tasks`),
+  create: (data: any) => {
+    invalidateCache(`/projects/${data.projectId}/tasks`);
+    return api.post(`/projects/${data.projectId}/tasks`, data);
+  },
+  update: (id: string, data: any) => {
+    for (const key of cache.keys()) {
+      if (key.includes('/tasks')) cache.delete(key);
+    }
+    return api.patch(`/tasks/${id}`, data);
+  },
+  delete: (id: string) => {
+    for (const key of cache.keys()) {
+      if (key.includes('/tasks')) cache.delete(key);
+    }
+    return api.delete(`/tasks/${id}`);
+  },
+};
+
+// ── Bugs API ──────────────────────────────────────────────────────────────
+export const bugsApi = {
+  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/bugs`),
+  create: (data: any) => {
+    invalidateCache(`/projects/${data.projectId}/bugs`);
+    return api.post(`/projects/${data.projectId}/bugs`, data);
+  },
+  update: (id: string, data: any) => {
+    for (const key of cache.keys()) {
+      if (key.includes('/bugs')) cache.delete(key);
+    }
+    return api.patch(`/bugs/${id}`, data);
+  },
+};
+
+// ── Activities API ────────────────────────────────────────────────────────
+export const activitiesApi = {
+  getAll: (projectId: string) => cachedGet(`/projects/${projectId}/activities`),
+};
+
+// ── Analytics API ─────────────────────────────────────────────────────────
+export const analyticsApi = {
+  get: (projectId: string) => cachedGet(`/projects/${projectId}/analytics`),
+};
+
+// ── Notifications API ─────────────────────────────────────────────────────
+export const notificationsApi = {
+  getAll: () => cachedGet('/notifications'),
+  markRead: (id: string) => {
+    invalidateCache('/notifications');
+    return api.patch(`/notifications/${id}/read`);
+  },
+  markAllRead: () => {
+    invalidateCache('/notifications');
+    return api.patch('/notifications/read-all');
+  },
 };
 
 // ── Auth API ──────────────────────────────────────────────────────────────

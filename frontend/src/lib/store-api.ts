@@ -4,7 +4,7 @@ import {
   User, Project, Task, Bug, ActivityLog, Notification,
   TaskStatus, Priority, Severity, BugStatus, Role, TimeEntry, ActiveTimer,
 } from "./types";
-import { authApi, projectsApi, tasksApi, bugsApi, activitiesApi, notificationsApi, invalidateCache, clearAllCache } from "./api";
+import { authApi, projectsApi, tasksApi, bugsApi, activitiesApi, notificationsApi, invalidateCache, clearAllCache, startKeepAlive, stopKeepAlive } from "./api";
 import { getSocket, disconnectSocket } from "./socket";
 
 // ── Normalize DB uppercase enums → frontend lowercase ──
@@ -152,6 +152,8 @@ export const useStore = create<AppState>()(
             isLoading: false,
             error: null,
           });
+          // Start keep-alive to prevent Render cold starts
+          startKeepAlive();
           // Fetch projects and notifications after login
           get().fetchProjects().catch(() => {});
           get().fetchNotifications().catch(() => {});
@@ -201,6 +203,7 @@ export const useStore = create<AppState>()(
         localStorage.removeItem('token');
         localStorage.removeItem('student-bug-tracker-api-store');
         clearAllCache();
+        stopKeepAlive();
         disconnectSocket();
         set({ 
           currentUser: null, 
@@ -226,6 +229,8 @@ export const useStore = create<AppState>()(
               role: user.role?.toLowerCase() as Role || 'developer'
             };
             set({ currentUser: normalizedUser, isAuthenticated: true });
+            // Start keep-alive to prevent Render cold starts
+            startKeepAlive();
             // Re-connect socket on page refresh
             setTimeout(() => get().connectSocket(), 100);
           }

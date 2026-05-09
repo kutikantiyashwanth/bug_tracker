@@ -335,14 +335,12 @@
 /* --- PAGE TRANSITION --- */
 .page-enter {
   animation: slide-up 0.4s var(--ease-out) forwards;
-  will-change: opacity, transform;
 }
 
 /* --- INTERACTIVE MICRO-ANIMATIONS --- */
 button:not(:disabled) {
   transition: box-shadow 0.15s ease, opacity 0.15s ease;
 }
-/* Only apply hover lift to buttons that don't have style="transform:none" */
 button:not(:disabled):not([style*="transform"]):hover { transform: translateY(-1px) translateZ(0); }
 button:not(:disabled):active { transform: scale(0.96) translateZ(0) !important; }
 
@@ -382,12 +380,11 @@ input:focus-visible, textarea:focus-visible {
 
 /* --- HOVER GLOW ON CARDS --- */
 .hover-glow {
-  transition: box-shadow 0.25s ease, transform 0.25s var(--spring);
-  will-change: transform, box-shadow;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 .hover-glow:hover {
   box-shadow: 0 0 0 2px rgba(109,40,217,0.2), var(--shadow-md);
-  transform: translateY(-2px) translateZ(0);
+  transform: translateY(-2px);
 }
 
 /* --- ANIMATED GRADIENT BORDER --- */
@@ -413,7 +410,6 @@ input:focus-visible, textarea:focus-visible {
 /* --- SMOOTH TRANSITIONS FOR INTERACTIVE ELEMENTS --- */
 .transition-smooth {
   transition: all 0.2s var(--ease-out);
-  will-change: transform, opacity;
 }
 
 /* --- LOADING PULSE --- */
@@ -449,9 +445,9 @@ input:focus-visible, textarea:focus-visible {
   transform: translateX(-50%) translateY(0) translateZ(0);
 }
 
-/* --- PERFORMANCE: GPU LAYERS --- */
-.gpu { transform: translateZ(0); will-change: transform; }
-.gpu-opacity { will-change: opacity; }
+/* --- PERFORMANCE: GPU LAYERS (use sparingly) --- */
+.gpu { transform: translateZ(0); }
+.gpu-opacity { }
 
 /* GitHub page — URL input */
 .github-url-input {
