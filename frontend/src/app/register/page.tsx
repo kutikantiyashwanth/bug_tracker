@@ -1,10 +1,12 @@
 "use client";
+// Force recompile - Role selector added
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useStore } from "@/lib/store-api";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
   Bug, ArrowRight, User, Mail, Lock, Eye, EyeOff,
@@ -22,7 +24,7 @@ export default function RegisterPage() {
   const [name,     setName]     = useState("");
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
-  const role: Role               = "developer";
+  const [role,     setRole]     = useState<Role>("developer");
   const [skills,   setSkills]   = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
   const [showPw,   setShowPw]   = useState(false);
@@ -52,6 +54,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    console.log("🔍 Frontend: Submitting registration with role:", role);
     try {
       await register(name, email, password, role, skills);
       router.push("/dashboard/projects");
@@ -282,6 +285,49 @@ export default function RegisterPage() {
                       )}>{pwLabel[pwStrength]}</span>
                     </div>
                   )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Your Role</label>
+                  <div className="relative group">
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-indigo-600 transition-colors z-10 pointer-events-none" />
+                    <Select value={role} onValueChange={(value) => setRole(value as Role)}>
+                      <SelectTrigger className={cn(inputBase, "pl-12 h-14 text-base shadow-sm border border-slate-200")}
+                        style={inputStyle}
+                        onFocus={onFocusInput}
+                        onBlur={onBlurInput}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="developer">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-blue-500" />
+                            <span className="font-bold">Developer</span>
+                            <span className="text-xs text-slate-400">- Build features & fix bugs</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="tester">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-amber-500" />
+                            <span className="font-bold">Tester</span>
+                            <span className="text-xs text-slate-400">- Test & report issues</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="admin">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-purple-500" />
+                            <span className="font-bold">Admin</span>
+                            <span className="text-xs text-slate-400">- Full project control</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-medium ml-1">
+                    {role === "admin" && "👑 Admins can manage projects, users, and all settings"}
+                    {role === "developer" && "💻 Developers can create tasks, fix bugs, and collaborate"}
+                    {role === "tester" && "🧪 Testers can report bugs, test features, and provide feedback"}
+                  </p>
                 </div>
               </div>
 

@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
 import prisma from '../lib/prisma';
 import { signAccessToken } from '../lib/jwt';
 import { AppError } from '../middleware/errorHandler';
@@ -7,7 +7,7 @@ import { AuthRequest } from '../types';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, skills } = req.body;
 
     if (!name || !email || !password) {
       throw new AppError('Name, email and password are required', 400);
@@ -30,8 +30,14 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const mappedRole = roleMap[role] || 'DEVELOPER';
 
     const user = await prisma.user.create({
-      data: { name, email, password: hashed, role: mappedRole },
-      select: { id: true, email: true, name: true, role: true, createdAt: true },
+      data: { 
+        name, 
+        email, 
+        password: hashed, 
+        role: mappedRole,
+        skills: skills || []
+      },
+      select: { id: true, email: true, name: true, role: true, skills: true, createdAt: true },
     });
 
     const token = signAccessToken({ userId: user.id, email: user.email, role: user.role });

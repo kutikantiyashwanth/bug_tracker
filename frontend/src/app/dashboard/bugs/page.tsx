@@ -270,23 +270,23 @@ export default function BugsPage() {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {[
           { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-600", bg: "bg-rose-50", icon: Bug },
           { label: "In Development", value: stats.inProgress, color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
           { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle2 },
           { label: "Critical Priority", value: stats.critical, color: "text-rose-600", bg: "bg-rose-100/50", icon: AlertTriangle },
         ].map((stat, i) => (
-          <div key={i} className="premium-card group relative overflow-hidden">
+          <div key={i} className="premium-card group relative overflow-hidden animate-slide-up" style={{ animationDelay: `${100 + i * 50}ms` }}>
             <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-500">
               <stat.icon className="h-16 w-16" />
             </div>
             <div className="flex items-center gap-4">
-              <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg)}>
-                <stat.icon className={cn("h-6 w-6", stat.color)} />
+              <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg)}>
+                <stat.icon className={cn("h-5 w-5 md:h-6 md:w-6", stat.color)} />
               </div>
               <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+                <p className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
               </div>
             </div>
@@ -296,20 +296,20 @@ export default function BugsPage() {
 
       {/* Filters & Navigation */}
       <div className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60 animate-slide-up" style={{ animationDelay: '300ms' }}>
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
-              placeholder="Search reports by title, description or ID..."
+              placeholder="Search reports..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 h-12 bg-white border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
             />
           </div>
           
-          <div className="flex items-center gap-3 px-2">
+          <div className="flex items-center gap-2 md:gap-3 px-2 overflow-x-auto no-scrollbar">
             <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-32 md:w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-[10px] md:text-xs shrink-0">
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
               <SelectContent>
@@ -321,7 +321,7 @@ export default function BugsPage() {
             </Select>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-32 md:w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-[10px] md:text-xs shrink-0">
                 <SelectValue placeholder="Lifecycle" />
               </SelectTrigger>
               <SelectContent>
@@ -335,24 +335,24 @@ export default function BugsPage() {
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-transparent gap-8 p-0 h-auto mb-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full animate-slide-up" style={{ animationDelay: '400ms' }}>
+          <TabsList className="bg-transparent gap-4 md:gap-8 p-0 h-auto mb-6 md:mb-8 overflow-x-auto no-scrollbar w-full justify-start">
             {[
-              { id: "all", label: "All Reports", count: projectBugs.length },
-              { id: "open", label: "Active Issues", count: stats.open + stats.inProgress },
+              { id: "all", label: "All", count: projectBugs.length },
+              { id: "open", label: "Active", count: stats.open + stats.inProgress },
               { id: "resolved", label: "Resolved", count: stats.resolved },
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
-                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
-                <span className="text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
-                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
+                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group shrink-0">
+                <span className="text-[10px] md:text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[9px] md:text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-0 outline-none">
             {filteredBugs.length === 0 ? (
-              <div className="premium-card flex flex-col items-center justify-center py-24 border-dashed">
+              <div className="premium-card flex flex-col items-center justify-center py-20 border-dashed">
                 <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-6">
                   <Bug className="h-10 w-10 text-slate-200" />
                 </div>
@@ -370,58 +370,59 @@ export default function BugsPage() {
                   return (
                     <div
                       key={bug.id}
-                      className="premium-card !p-0 group cursor-pointer border-slate-200/60 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
+                      className="premium-card !p-0 group cursor-pointer border-slate-200/60 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 animate-slide-up"
+                      style={{ animationDelay: `${500 + i * 50}ms` }}
                       onClick={() => setShowDetailDialog(bug)}
                     >
-                      <div className="flex flex-col lg:flex-row lg:items-center p-6 gap-6">
+                      <div className="flex flex-col lg:flex-row lg:items-center p-4 md:p-6 gap-4 md:gap-6">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className={cn("w-2 h-2 rounded-full", 
+                          <div className="flex items-center gap-3 mb-2 md:mb-3">
+                            <div className={cn("w-2 h-2 rounded-full shrink-0", 
                               bug.severity === 'critical' ? 'bg-rose-500 animate-pulse' : 
                               bug.severity === 'major' ? 'bg-amber-500' : 'bg-blue-500'
                             )} />
-                            <h3 className="text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
                           </div>
                           
-                          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-6">
+                          <p className="text-xs md:text-sm text-slate-500 line-clamp-2 leading-relaxed mb-4 md:mb-6">
                             {bug.description || "No detailed description provided for this report."}
                           </p>
                           
-                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                          <div className="flex flex-wrap items-center gap-3 md:gap-4 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400">
                             <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-slate-50 border border-slate-100">
-                              <Avatar className="h-5 w-5">
-                                <AvatarFallback className="text-[8px] bg-indigo-500 text-white">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
+                              <Avatar className="h-4 w-4 md:h-5 md:w-5">
+                                <AvatarFallback className="text-[7px] md:text-[8px] bg-indigo-500 text-white">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                               </Avatar>
-                              <span className="text-slate-600">{reporter?.name || "Anonymous"}</span>
+                              <span className="text-slate-600 truncate max-w-[80px] md:max-w-none">{reporter?.name || "Anonymous"}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Clock className="h-3.5 w-3.5" />
+                              <Clock className="h-3 md:h-3.5 w-3 md:w-3.5" />
                               <span>{formatRelativeTime(bug.createdAt)}</span>
                             </div>
                             {assignee && (
                               <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600">
-                                <ArrowUpCircle className="h-3.5 w-3.5" />
-                                <span>Assigned to {assignee.name}</span>
+                                <ArrowUpCircle className="h-3 md:h-3.5 w-3 md:w-3.5" />
+                                <span className="truncate max-w-[80px] md:max-w-none">Assigned to {assignee.name}</span>
                               </div>
                             )}
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-slate-100 shrink-0">
-                          <div className="flex flex-col items-end gap-2">
-                            <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
+                        <div className="flex items-center justify-between lg:justify-end gap-4 lg:pl-6 lg:border-l border-slate-100 shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0">
+                          <div className="flex flex-row lg:flex-col items-center lg:items-end gap-3 lg:gap-2">
+                            <Badge className={cn("text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2 md:px-3 py-1 rounded-full", 
                               bug.severity === 'critical' ? 'bg-rose-100 text-rose-600' : 
                               bug.severity === 'major' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
                             )}>
                               {bug.severity}
                             </Badge>
-                            <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-slate-400">
                               {statusIcon(bug.status)}
                               <span className="capitalize">{bug.status.replace('-', ' ')}</span>
                             </div>
                           </div>
-                          <div className="w-10 h-10 rounded-2xl bg-slate-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
-                            <Plus className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 rotate-45" />
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-slate-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
+                            <Plus className="h-4 md:h-5 w-4 md:w-5 text-slate-300 group-hover:text-indigo-500 rotate-45" />
                           </div>
                         </div>
                       </div>

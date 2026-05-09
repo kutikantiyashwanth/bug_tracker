@@ -170,6 +170,8 @@ app.post("/api/v1/auth/register", async (req, res) => {
   try {
     const { email, name, password, role, skills } = req.body;
 
+    console.log("📝 Registration request received:", { email, name, role, skills });
+
     if (!email || !name || !password) {
       return res.status(400).json({ error: "Email, name, and password are required" });
     }
@@ -181,12 +183,15 @@ app.post("/api/v1/auth/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const mappedRole = role?.toUpperCase() || "DEVELOPER";
+    console.log("🔄 Role mapping:", { received: role, mapped: mappedRole });
+
     const user = await prisma.user.create({
       data: {
         email,
         name,
         password: hashedPassword,
-        role: role?.toUpperCase() || "DEVELOPER",
+        role: mappedRole,
         skills: Array.isArray(skills) ? skills : [],
       },
       select: {
@@ -198,6 +203,8 @@ app.post("/api/v1/auth/register", async (req, res) => {
         createdAt: true,
       },
     });
+
+    console.log("✅ User created successfully:", { id: user.id, email: user.email, role: user.role });
 
     const token = jwt.sign(
       { userId: user.id, email: user.email },

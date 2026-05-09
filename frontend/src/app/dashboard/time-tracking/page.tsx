@@ -41,8 +41,8 @@ export default function TimeTrackingPage() {
   const [showLogDialog, setShowLogDialog] = useState(false);
   const [formHours, setFormHours] = useState("0");
   const [formMinutes, setFormMinutes] = useState("0");
+  const [formSeconds, setFormSeconds] = useState("0");
   const [formDescription, setFormDescription] = useState("");
-  const [formBillable, setFormBillable] = useState(false);
   const [formType, setFormType] = useState<"task" | "bug">("task");
   const [formEntityId, setFormEntityId] = useState("");
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -76,17 +76,15 @@ export default function TimeTrackingPage() {
     return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const formatMinutes = (totalMinutes: number) => {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${hours}h ${minutes}m`;
+  const formatPreciseTime = (totalSeconds: number) => {
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return `${h}h ${m}m ${s}s`;
   };
 
-  const totalProjectTime = getProjectTime();
-  const totalUserTime = currentUser ? getUserTime(currentUser.id) : 0;
-  const billableTime = projectTimeEntries
-    .filter((e) => e.billable)
-    .reduce((total, e) => total + e.hours * 60 + e.minutes, 0);
+  const totalProjectSeconds = getProjectTime();
+  const totalUserSeconds = currentUser ? getUserTime(currentUser.id) : 0;
 
   const handleStartTimer = () => {
     if (activeTimer) {
@@ -100,7 +98,8 @@ export default function TimeTrackingPage() {
     if (!currentUser || !activeProjectId) return;
     const hours = parseInt(formHours) || 0;
     const minutes = parseInt(formMinutes) || 0;
-    if (hours === 0 && minutes === 0) return;
+    const seconds = parseInt(formSeconds) || 0;
+    if (hours === 0 && minutes === 0 && seconds === 0) return;
 
     logTime({
       projectId: activeProjectId,
@@ -109,25 +108,25 @@ export default function TimeTrackingPage() {
       userId: currentUser.id,
       hours,
       minutes,
+      seconds,
       description: formDescription,
-      billable: formBillable,
+      billable: false,
       date: new Date().toISOString().split("T")[0],
     });
 
     setShowLogDialog(false);
     setFormHours("0");
     setFormMinutes("0");
+    setFormSeconds("0");
     setFormDescription("");
-    setFormBillable(false);
     setFormEntityId("");
   };
 
   const stats = useMemo(() => ({
-    total: totalProjectTime,
-    user: totalUserTime,
-    billable: billableTime,
+    total: totalProjectSeconds,
+    user: totalUserSeconds,
     entries: projectTimeEntries.length,
-  }), [totalProjectTime, totalUserTime, billableTime, projectTimeEntries.length]);
+  }), [totalProjectSeconds, totalUserSeconds, projectTimeEntries.length]);
 
   return (
     <div className="space-y-10 animate-slide-up max-w-5xl">
@@ -136,11 +135,13 @@ export default function TimeTrackingPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Resource Utilization</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Current Project</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Time <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+            {activeProject?.name || "Global"} <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Tracker</span>
+          </h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
-            Precision chronometry for project execution. Monitor velocity and resource allocation with granular temporal audit logs.
+            Monitoring temporal execution for <span className="font-bold text-slate-900">{activeProject?.name}</span>. Precise chronometry for resource auditing.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -190,12 +191,11 @@ export default function TimeTrackingPage() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {[
-          { label: "PROJECT TOTAL",  value: formatMinutes(stats.total),    icon: Clock,       bg: "bg-slate-900 text-white", border: "border-slate-800" },
-          { label: "INDIVIDUAL FOCUS",   value: formatMinutes(stats.user),     icon: Users,       bg: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
-          { label: "BILLABLE OUTPUT",    value: formatMinutes(stats.billable), icon: DollarSign,  bg: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
-          { label: "AUDIT ENTRIES",     value: stats.entries,                 icon: Calendar,    bg: "bg-amber-50 text-amber-600", border: "border-amber-100" },
+          { label: "PROJECT TOTAL",  value: formatPreciseTime(stats.total),    icon: Clock,       bg: "bg-slate-900 text-white", border: "border-slate-800" },
+          { label: "YOUR FOCUS",     value: formatPreciseTime(stats.user),     icon: Users,       bg: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
+          { label: "AUDIT ENTRIES",  value: stats.entries,                    icon: Calendar,    bg: "bg-amber-50 text-amber-600", border: "border-amber-100" },
         ].map((stat) => (
           <div key={stat.label} className="premium-card p-8 flex flex-col items-center text-center group hover:scale-105 transition-all">
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border shadow-sm transition-all group-hover:rotate-12", stat.bg, stat.border)}>
@@ -218,11 +218,11 @@ export default function TimeTrackingPage() {
             </div>
             <div>
               <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Temporal Audit Feed</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Verifiable Resource Consumption Logs</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Resource Consumption Logs</p>
             </div>
           </div>
           <div className="px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-100">
-            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Global Sync Active</span>
+            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Active Project: {activeProject?.name}</span>
           </div>
         </div>
 
@@ -249,7 +249,7 @@ export default function TimeTrackingPage() {
                   const user = getUserById(entry.userId);
                   const task = entry.taskId && Array.isArray(tasks) ? tasks.find((t) => t.id === entry.taskId) : null;
                   const bug = entry.bugId && Array.isArray(bugs) ? bugs.find((b) => b.id === entry.bugId) : null;
-                  const totalMinutes = entry.hours * 60 + entry.minutes;
+                  const totalSeconds = (entry.hours * 3600) + (entry.minutes * 60) + (entry.seconds || 0);
                   
                   return (
                     <div key={entry.id} className="group py-6 flex items-center gap-6 hover:bg-slate-50/50 transition-all px-4 rounded-[1.5rem]">
@@ -262,11 +262,6 @@ export default function TimeTrackingPage() {
                       <div className="flex-1 min-w-0 space-y-1">
                         <div className="flex items-center gap-3">
                           <p className="text-sm font-black text-slate-900 uppercase tracking-tight">{user?.name || "System Actor"}</p>
-                          {entry.billable && (
-                            <span className="text-[8px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100 font-black uppercase tracking-widest">
-                              BILLABLE
-                            </span>
-                          )}
                         </div>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                           <p className="text-xs font-medium text-slate-500">{entry.description || "Routine maintenance and project development operations."}</p>
@@ -282,7 +277,7 @@ export default function TimeTrackingPage() {
                       </div>
 
                       <div className="text-right shrink-0 space-y-1">
-                        <p className="text-2xl font-black font-mono text-slate-900 tracking-tight">{formatMinutes(totalMinutes)}</p>
+                        <p className="text-2xl font-black font-mono text-slate-900 tracking-tight">{formatPreciseTime(totalSeconds)}</p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{formatRelativeTime(entry.createdAt)}</p>
                       </div>
                     </div>
@@ -301,13 +296,13 @@ export default function TimeTrackingPage() {
               <Clock className="h-8 w-8 text-indigo-500" />
             </div>
             <div>
-              <DialogTitle className="text-3xl font-black text-white tracking-tight">Manual Log</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Inject temporal data into the system audit feed.</DialogDescription>
+              <DialogTitle className="text-3xl font-black text-white tracking-tight">Log Time Session</DialogTitle>
+              <DialogDescription className="text-white/40 font-medium">Inject temporal data into the <span className="text-white font-bold">{activeProject?.name}</span> audit feed.</DialogDescription>
             </div>
           </div>
 
-          <div className="p-10 space-y-8">
-            <div className="grid grid-cols-2 gap-6">
+          <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+            <div className="grid grid-cols-3 gap-4 md:gap-6">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Hours</Label>
                 <Input type="number" min="0" value={formHours} onChange={(e) => setFormHours(e.target.value)} 
@@ -316,6 +311,11 @@ export default function TimeTrackingPage() {
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Minutes</Label>
                 <Input type="number" min="0" max="59" value={formMinutes} onChange={(e) => setFormMinutes(e.target.value)} 
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-black text-lg" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Seconds</Label>
+                <Input type="number" min="0" max="59" value={formSeconds} onChange={(e) => setFormSeconds(e.target.value)} 
                   className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-black text-lg" />
               </div>
             </div>
@@ -353,19 +353,11 @@ export default function TimeTrackingPage() {
                 </Select>
               </div>
             </div>
-
-            <label className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-white hover:border-indigo-200 transition-all group">
-              <input type="checkbox" checked={formBillable} onChange={(e) => setFormBillable(e.target.checked)} className="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500/20" />
-              <div className="space-y-1">
-                <p className="text-xs font-black uppercase tracking-widest text-slate-900">Billable Output</p>
-                <p className="text-[10px] font-bold text-slate-400 uppercase">Associate this temporal session with project budget cycles.</p>
-              </div>
-            </label>
           </div>
 
           <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
             <button onClick={() => setShowLogDialog(false)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Discard</button>
-            <Button variant="premium" onClick={handleLogTime} disabled={parseInt(formHours) === 0 && parseInt(formMinutes) === 0} className="!h-14 !px-10 shadow-indigo-500/20">
+            <Button variant="premium" onClick={handleLogTime} disabled={parseInt(formHours) === 0 && parseInt(formMinutes) === 0 && parseInt(formSeconds) === 0} className="!h-14 !px-10 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> INJECT RECORD
             </Button>
           </div>

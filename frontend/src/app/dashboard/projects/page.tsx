@@ -92,34 +92,34 @@ export default function ProjectsPage() {
       </div>
 
       {projects.length === 0 ? (
-        <div className="premium-card flex flex-col items-center justify-center py-32 border-dashed">
-          <div className="w-24 h-24 rounded-[2.5rem] bg-indigo-50 flex items-center justify-center mb-8 border border-indigo-100 shadow-inner">
-            <FolderOpen className="h-10 w-10 text-indigo-400" />
+        <div className="premium-card animate-slide-up flex flex-col items-center justify-center py-20 md:py-32 border-dashed" style={{ animationDelay: '200ms' }}>
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] md:rounded-[2.5rem] bg-indigo-50 flex items-center justify-center mb-6 md:mb-8 border border-indigo-100 shadow-inner">
+            <FolderOpen className="h-8 w-8 md:h-10 md:w-10 text-indigo-400" />
           </div>
           {isAdmin ? (
-            <div className="text-center max-w-sm">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">No Active Workspaces</h3>
-              <p className="text-slate-500 mt-2 font-medium mb-10">
+            <div className="text-center max-w-sm px-6">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">No Active Workspaces</h3>
+              <p className="text-slate-500 mt-2 font-medium mb-8 md:mb-10 text-sm md:text-base">
                 You haven't initialized any projects yet. Create a workspace to start tracking bugs with your team.
               </p>
-              <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="h-14 px-8">
+              <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="h-12 md:h-14 px-6 md:px-8 w-full md:w-auto">
                 <Plus className="h-5 w-5 mr-2" /> Create First Project
               </Button>
             </div>
           ) : (
-            <div className="text-center max-w-sm">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">Join a Workspace</h3>
-              <p className="text-slate-500 mt-2 font-medium mb-10">
+            <div className="text-center max-w-sm px-6">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Join a Workspace</h3>
+              <p className="text-slate-500 mt-2 font-medium mb-8 md:mb-10 text-sm md:text-base">
                 You're not a member of any project. Use an invite code from your administrator to get started.
               </p>
-              <Button variant="premium" onClick={() => setShowJoinDialog(true)} className="h-14 px-8">
+              <Button variant="premium" onClick={() => setShowJoinDialog(true)} className="h-12 md:h-14 px-6 md:px-8 w-full md:w-auto">
                 <Users className="h-5 w-5 mr-2" /> Enter Invite Code
               </Button>
             </div>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {Array.isArray(projects) && projects.map((project, i) => {
           const projectTasks = Array.isArray(tasks) ? tasks.filter((t) => t.projectId === project.id) : [];
           const projectBugs = Array.isArray(bugs) ? bugs.filter((b) => b.projectId === project.id) : [];
@@ -131,9 +131,10 @@ export default function ProjectsPage() {
             <div
               key={project.id}
               className={cn(
-                "premium-card group cursor-pointer transition-all duration-500 relative",
+                "premium-card group cursor-pointer transition-all duration-500 relative animate-slide-up",
                 isActive ? "border-indigo-500/40 ring-4 ring-indigo-500/5 bg-gradient-to-br from-indigo-50/50 to-white" : "hover:border-indigo-500/20"
               )}
+              style={{ animationDelay: `${200 + i * 100}ms` }}
               onClick={() => setActiveProject(project.id)}
             >
               <div className="flex flex-col h-full space-y-6">

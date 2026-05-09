@@ -123,13 +123,13 @@ export default function NotificationsPage() {
       </div>
 
       {/* ── Summary Cards ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {[
-          { type: "task_assigned",     label: "TASK ALERTS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-100" },
-          { type: "deadline_reminder", label: "TIMELINES",    icon: Clock,    bg: "bg-amber-50",   text: "text-amber-600",   border: "border-amber-100" },
+          { type: "task_assigned",     label: "TASKS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-100" },
+          { type: "deadline_reminder", label: "DEADLINES",    icon: Clock,    bg: "bg-amber-50",   text: "text-amber-600",   border: "border-amber-100" },
           { type: "bug_assigned",      label: "DEFECTS",      icon: Bug,      bg: "bg-rose-50",    text: "text-rose-600",    border: "border-rose-100" },
-          { type: "project_invite",    label: "INVITATIONS",  icon: UserPlus, bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100" },
-        ].map((item) => {
+          { type: "project_invite",    label: "INVITES",  icon: UserPlus, bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100" },
+        ].map((item, i) => {
           const count  = notifications.filter((n) => n.type === item.type).length;
           const unread = notifications.filter((n) => n.type === item.type && !n.read).length;
           const isActive = filter === item.type;
@@ -138,19 +138,20 @@ export default function NotificationsPage() {
               key={item.type}
               onClick={() => setFilter(isActive ? "all" : item.type)}
               className={cn(
-                "premium-card p-6 text-left group transition-all",
+                "premium-card p-4 md:p-6 text-left group transition-all animate-slide-up",
                 isActive ? "ring-2 ring-indigo-500/20 bg-indigo-50/30 border-indigo-200" : "hover:border-slate-300"
               )}
+              style={{ animationDelay: `${100 + i * 50}ms` }}
             >
-              <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 border shadow-sm transition-all group-hover:scale-110", item.bg, item.text, item.border)}>
-                <item.icon className="h-6 w-6" />
+              <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 border shadow-sm transition-all group-hover:scale-110", item.bg, item.text, item.border)}>
+                <item.icon className="h-5 w-5 md:h-6 md:w-6" />
               </div>
-              <p className={cn("text-[10px] font-black uppercase tracking-widest", isActive ? item.text : "text-slate-400")}>{item.label}</p>
-              <div className="flex items-end justify-between mt-2">
-                <span className="text-2xl font-black text-slate-900">{count}</span>
+              <p className={cn("text-[8px] md:text-[10px] font-black uppercase tracking-widest", isActive ? item.text : "text-slate-400")}>{item.label}</p>
+              <div className="flex items-end justify-between mt-1 md:mt-2">
+                <span className="text-xl md:text-2xl font-black text-slate-900">{count}</span>
                 {unread > 0 && (
-                  <span className={cn("text-[10px] font-black px-2.5 py-1 rounded-lg", item.bg, item.text)}>
-                    {unread} NEW
+                  <span className={cn("text-[8px] md:text-[9px] font-black px-1.5 py-0.5 md:px-2.5 md:py-1 rounded-lg", item.bg, item.text)}>
+                    {unread}
                   </span>
                 )}
               </div>

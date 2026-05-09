@@ -266,8 +266,8 @@ export default function KanbanPage() {
       </div>
 
       {/* Board */}
-      <div className="flex gap-6 overflow-x-auto pb-10 no-scrollbar snap-x">
-        {columns.map((column) => {
+      <div className="flex gap-4 md:gap-6 overflow-x-auto pb-10 no-scrollbar snap-x cursor-grab active:cursor-grabbing">
+        {columns.map((column, colIdx) => {
           const colTasks = getColumnTasks(column.id);
           return (
             <div
@@ -276,35 +276,38 @@ export default function KanbanPage() {
               onDragLeave={handleDragLeave}
               onDrop={() => handleDrop(column.id)}
               className={cn(
-                "flex-shrink-0 w-80 flex flex-col rounded-[2rem] bg-slate-100/40 border border-slate-200/60 p-4 transition-all duration-300 snap-start",
+                "flex-shrink-0 w-[280px] md:w-80 flex flex-col rounded-[2rem] bg-slate-100/40 border border-slate-200/60 p-3 md:p-4 transition-all duration-300 snap-center animate-slide-up",
                 dragOverColumn === column.id && "bg-violet-50/50 border-violet-300/50 ring-4 ring-violet-500/5"
               )}
+              style={{ animationDelay: `${colIdx * 100}ms` }}
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between px-4 py-4 mb-4">
+              <div className="flex items-center justify-between px-3 md:px-4 py-3 md:py-4 mb-3 md:mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={cn("w-2 h-6 rounded-full", column.dotColor.replace('bg-', 'bg-'))} />
+                  <div className={cn("w-1.5 md:w-2 h-5 md:h-6 rounded-full", column.dotColor.replace('bg-', 'bg-'))} />
                   <div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">{column.label}</h3>
-                    <p className="text-[10px] font-bold text-slate-400">{colTasks.length} ITEMS</p>
+                    <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-900">{column.label}</h3>
+                    <p className="text-[8px] md:text-[10px] font-bold text-slate-400">{colTasks.length} ITEMS</p>
                   </div>
                 </div>
                 <button
                   onClick={() => openCreateDialog(column.id)}
-                  className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm"
+                  className="w-7 h-7 md:w-8 md:h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
 
               {/* Tasks */}
-              <div className="flex-1 space-y-4 min-h-[400px]">
-                {colTasks.map((task) => (
-                  <TaskCard key={task.id} task={task} />
+              <div className="flex-1 space-y-3 md:space-y-4 min-h-[400px]">
+                {colTasks.map((task, taskIdx) => (
+                  <div key={task.id} className="animate-slide-up" style={{ animationDelay: `${colIdx * 100 + taskIdx * 50}ms` }}>
+                    <TaskCard task={task} />
+                  </div>
                 ))}
                 {colTasks.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-white/40">
-                    <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Awaiting Flow</p>
+                  <div className="flex flex-col items-center justify-center h-24 md:h-32 border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-white/40">
+                    <p className="text-[9px] md:text-[10px] font-black text-slate-300 uppercase tracking-widest text-center px-4">Awaiting Flow</p>
                   </div>
                 )}
               </div>

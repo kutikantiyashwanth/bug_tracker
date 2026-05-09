@@ -105,11 +105,11 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Left Column: Profile & Security */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-6 md:space-y-8 animate-slide-up" style={{ animationDelay: '100ms' }}>
           {/* ── Profile ── */}
-          <div className="premium-card space-y-8">
+          <div className="premium-card space-y-6 md:space-y-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
@@ -123,21 +123,23 @@ export default function SettingsPage() {
             </div>
 
             {/* Avatar row */}
-            <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100">
+            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100">
               <Avatar className="h-20 w-20 ring-4 ring-white shadow-xl shadow-indigo-500/10">
                 <AvatarFallback className="text-2xl font-black bg-indigo-600 text-white">
                   {getInitials(currentUser.name)}
                 </AvatarFallback>
               </Avatar>
-              <div className="space-y-1">
+              <div className="space-y-1 text-center sm:text-left">
                 <p className="text-xl font-black text-slate-900 tracking-tight">{currentUser.name}</p>
                 <p className="text-sm font-medium text-slate-500">{currentUser.email}</p>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
                   <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
                     {currentUser.role?.toUpperCase()}
                   </Badge>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active System Status</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Status</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -263,7 +265,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Right Column: Notifications & Danger Zone */}
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8 animate-slide-up" style={{ animationDelay: '200ms' }}>
           {/* ── Notifications ── */}
           <div className="premium-card space-y-6">
             <div className="flex items-center gap-3">

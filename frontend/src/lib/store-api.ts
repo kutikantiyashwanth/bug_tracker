@@ -139,9 +139,15 @@ export const useStore = create<AppState>()(
             throw new Error('Invalid response from server');
           }
 
+          // Normalize the role to lowercase for frontend consistency
+          const normalizedUser = {
+            ...user,
+            role: user.role?.toLowerCase() as Role || 'developer'
+          };
+
           localStorage.setItem('token', token);
           set({ 
-            currentUser: user, 
+            currentUser: normalizedUser, 
             isAuthenticated: true, 
             isLoading: false,
             error: null,
@@ -160,12 +166,23 @@ export const useStore = create<AppState>()(
 
       register: async (name: string, email: string, password: string, role: Role, skills: string[] = []) => {
         set({ isLoading: true, error: null });
+        console.log("🔍 Store: Calling API with role:", role);
         try {
           const response = await authApi.register({ name, email, password, role, skills });
+          console.log("✅ Store: API response:", response.data);
           const { token, user } = response.data.data;
+          console.log("👤 Store: User role from response:", user.role);
+          
+          // Normalize the role to lowercase for frontend consistency
+          const normalizedUser = {
+            ...user,
+            role: user.role.toLowerCase() as Role
+          };
+          console.log("🔄 Store: Normalized user role:", normalizedUser.role);
+          
           localStorage.setItem('token', token);
           set({ 
-            currentUser: user, 
+            currentUser: normalizedUser, 
             isAuthenticated: true, 
             isLoading: false,
             projects: [],
@@ -203,7 +220,12 @@ export const useStore = create<AppState>()(
           const response = await authApi.getMe();
           const user = response.data?.data ?? response.data;
           if (user?.id) {
-            set({ currentUser: user, isAuthenticated: true });
+            // Normalize the role to lowercase for frontend consistency
+            const normalizedUser = {
+              ...user,
+              role: user.role?.toLowerCase() as Role || 'developer'
+            };
+            set({ currentUser: normalizedUser, isAuthenticated: true });
             // Re-connect socket on page refresh
             setTimeout(() => get().connectSocket(), 100);
           }
@@ -561,9 +583,11 @@ export const useStore = create<AppState>()(
         const startTime = new Date(timer.startTime);
         const endTime = new Date();
         const diffMs = endTime.getTime() - startTime.getTime();
-        const totalMinutes = Math.floor(diffMs / 60000);
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
+        const totalSeconds = Math.floor(diffMs / 1000);
+        
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
 
         get().logTime({
           projectId,
@@ -572,6 +596,7 @@ export const useStore = create<AppState>()(
           userId: user.id,
           hours,
           minutes,
+          seconds,
           description: timer.description,
           billable: false,
           date: new Date().toISOString().split("T")[0],
@@ -589,23 +614,23 @@ export const useStore = create<AppState>()(
       },
       getTaskTime: (taskId) => {
         const entries = get().timeEntries.filter((e) => e.taskId === taskId);
-        return entries.reduce((total, e) => total + e.hours * 60 + e.minutes, 0);
+        return entries.reduce((total, e) => total + (e.hours * 3600) + (e.minutes * 60) + (e.seconds || 0), 0);
       },
       getBugTime: (bugId) => {
         const entries = get().timeEntries.filter((e) => e.bugId === bugId);
-        return entries.reduce((total, e) => total + e.hours * 60 + e.minutes, 0);
+        return entries.reduce((total, e) => total + (e.hours * 3600) + (e.minutes * 60) + (e.seconds || 0), 0);
       },
       getUserTime: (userId, projectId) => {
         const pid = projectId || get().activeProjectId;
         const entries = get().timeEntries.filter(
           (e) => e.userId === userId && e.projectId === pid
         );
-        return entries.reduce((total, e) => total + e.hours * 60 + e.minutes, 0);
+        return entries.reduce((total, e) => total + (e.hours * 3600) + (e.minutes * 60) + (e.seconds || 0), 0);
       },
       getProjectTime: (projectId) => {
         const pid = projectId || get().activeProjectId;
         const entries = get().timeEntries.filter((e) => e.projectId === pid);
-        return entries.reduce((total, e) => total + e.hours * 60 + e.minutes, 0);
+        return entries.reduce((total, e) => total + (e.hours * 3600) + (e.minutes * 60) + (e.seconds || 0), 0);
       },
     }),
     {

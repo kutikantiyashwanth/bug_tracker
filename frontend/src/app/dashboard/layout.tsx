@@ -322,22 +322,22 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex min-h-screen bg-[#f8fafc]">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
+        <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0a0f1d] shadow-2xl">
           <SidebarContent />
         </aside>
 
         {/* Mobile overlay */}
         {sidebarOpen && (
-          <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-md lg:hidden"
+          <div className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden"
             onClick={() => setSidebarOpen(false)} />
         )}
 
         {/* Mobile Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0a0f1d] transform transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden",
+          sidebarOpen ? "translate-x-0 shadow-[0_0_50px_rgba(0,0,0,0.3)]" : "-translate-x-full"
         )}>
-          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/20 hover:text-white hover:bg-white/5 transition-all"
+          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/10 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5" />
           </button>
@@ -347,10 +347,10 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white border-b border-slate-200 shadow-sm flex items-center px-6 lg:px-8 gap-6">
-            <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
+          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-[0_1px_10px_rgba(0,0,0,0.02)] flex items-center px-6 lg:px-8 gap-6">
+            <button className="lg:hidden w-11 h-11 rounded-xl flex items-center justify-center text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 transition-all"
               onClick={() => setSidebarOpen(true)}>
-              <Menu className="h-5 w-5" />
+              <Menu className="h-6 w-6" />
             </button>
 
             <div className="flex-1 flex items-center">
@@ -403,8 +403,10 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           </header>
 
           {/* Scrollable Page Content */}
-          <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up">
-            {children}
+          <div className="flex-1 p-4 md:p-6 lg:p-10 max-w-[1600px] w-full mx-auto">
+            <div className="animate-fade-in">
+              {children}
+            </div>
           </div>
         </main>
       </div>

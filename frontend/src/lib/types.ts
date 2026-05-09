@@ -91,6 +91,7 @@ export interface TimeEntry {
   userId: string;
   hours: number;
   minutes: number;
+  seconds: number;
   description: string;
   billable: boolean;
   date: string;

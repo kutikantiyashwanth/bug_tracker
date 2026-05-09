@@ -132,11 +132,11 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-10 animate-slide-up">
+    <div className="space-y-6 md:space-y-10">
 
       {/* ── Header / Greeting ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
+        <div className="animate-slide-up">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Dashboard Overview</span>
@@ -146,46 +146,46 @@ export default function DashboardPage() {
             <span className="text-brand">{currentUser?.name?.split(" ")[0] || "there"}</span>
             {" "}✨
           </h1>
-          <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
+          <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed text-sm md:text-base">
             {activeProject
               ? <>You're currently viewing metrics for <span className="text-indigo-600 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
               : "Select a project from the sidebar to view detailed analytics and manage your team."}
           </p>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <button
             onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
+            className="group flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm">
             <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
-            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh Data</span>
+            <span className="text-xs md:text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh</span>
           </button>
           
-          <button className="btn-premium shadow-indigo-500/25">
+          <button className="btn-premium shadow-indigo-500/25 py-2.5 px-4 md:px-6">
             <Plus className="h-4 w-4" />
-            <span className="text-sm font-bold">Quick Action</span>
+            <span className="text-xs md:text-sm font-bold">New Task</span>
           </button>
         </div>
       </div>
 
       {/* ── Key Metrics ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((card, i) => (
           <div key={i}
-            className="premium-card group relative overflow-hidden"
-            style={{ animationDelay: `${i * 100}ms` }}>
+            className="premium-card group relative overflow-hidden animate-slide-up"
+            style={{ animationDelay: `${200 + i * 100}ms` }}>
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-125 transition-transform duration-700">
               <card.icon className="h-24 w-24" />
             </div>
             
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
-                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner", card.iconClass)}>
-                  <card.icon className="h-6 w-6" />
+              <div className="flex items-center justify-between mb-4 md:mb-6">
+                <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shadow-inner", card.iconClass)}>
+                  <card.icon className="h-5 w-5 md:h-6 md:w-6" />
                 </div>
                 {card.trend && (
                   <div className={cn(
-                    "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
+                    "flex items-center gap-1 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[9px] md:text-[10px] font-black tracking-wider uppercase",
                     card.up ? "bg-emerald-100 text-emerald-600" : "bg-rose-100 text-rose-600"
                   )}>
                     {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
@@ -195,11 +195,11 @@ export default function DashboardPage() {
               </div>
               
               <div className="space-y-1">
-                <p className="text-3xl font-black text-slate-900 tracking-tight">{card.value}</p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{card.label}</p>
+                <p className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{card.value}</p>
+                <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">{card.label}</p>
               </div>
               
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="mt-4 md:mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-[10px] font-bold text-slate-400">{card.sub}</span>
                 <ArrowUpRight className="h-3 w-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
               </div>
