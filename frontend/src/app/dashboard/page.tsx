@@ -19,11 +19,11 @@ import {
   BarChart3, Calendar, Activity, AlertTriangle, TrendingUp, Clock,
   RefreshCw, Target, Award, Plus, X,
 } from "lucide-react";
-import type { Priority, TaskStatus } from "@/lib/types";
+import { invalidateCache } from "@/lib/api";
 
 export default function DashboardPage() {
   const { tasks, bugs, activities, activeProjectId, projects, getUserById, currentUser,
-    fetchTasks, fetchBugs, fetchActivities } = useStore();
+    fetchTasks, fetchBugs, fetchActivities, createTask } = useStore();
   const [refreshing, setRefreshing] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
 
@@ -43,7 +43,7 @@ export default function DashboardPage() {
     if (!taskTitle.trim() || !currentUser || !activeProjectId) return;
     setTaskCreating(true);
     try {
-      await useStore.getState().createTask({
+      await createTask({
         projectId: activeProjectId,
         title: taskTitle.trim(),
         description: taskDesc.trim(),
@@ -206,7 +206,6 @@ export default function DashboardPage() {
               if (!activeProjectId) return;
               setRefreshing(true);
               try {
-                const { invalidateCache } = await import("@/lib/api");
                 invalidateCache(`/projects/${activeProjectId}/tasks`);
                 invalidateCache(`/projects/${activeProjectId}/bugs`);
                 invalidateCache(`/projects/${activeProjectId}/activities`);
@@ -620,3 +619,5 @@ export default function DashboardPage() {
   );
 }
 
+
+import type { Priority, TaskStatus } from "@/lib/types";
