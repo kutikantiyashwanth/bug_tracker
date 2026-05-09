@@ -306,31 +306,6 @@ export default function RegisterPage() {
                     </div>
                   )}
                 </div>
-
-                {/* Role selection in step 1 */}
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>Your Role</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {ROLE_OPTIONS.map((r) => {
-                      const isSelected = role === r.value;
-                      return (
-                        <button key={r.value} type="button" onClick={() => setRole(r.value as Role)}
-                          className="flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all duration-200"
-                          style={{
-                            background: isSelected ? r.bg : "rgba(255,255,255,0.03)",
-                            border: `1px solid ${isSelected ? r.border : "rgba(255,255,255,0.08)"}`,
-                          }}>
-                          <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br", r.gradient)}>
-                            <r.icon className="h-4 w-4 text-white" />
-                          </div>
-                          <span className="text-[11px] font-bold" style={{ color: isSelected ? r.text : "rgba(255,255,255,0.5)" }}>
-                            {r.label}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
 
               {error && (
