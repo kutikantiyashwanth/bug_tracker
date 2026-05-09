@@ -211,9 +211,9 @@ export default function ProjectsPage() {
                       className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
                     >
                       {copiedId === project.id ? (
-                        <><Check className="h-3 w-3 text-emerald-500" /> Copied</>
+                        <><Check className="h-3 w-3 text-emerald-500" /> Copied!</>
                       ) : (
-                        <><Copy className="h-3 w-3" /> Copy Key</>
+                        <><Copy className="h-3 w-3" /> Invite Code</>
                       )}
                     </button>
                   )}

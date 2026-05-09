@@ -198,6 +198,26 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-white truncate">{activeProject?.name || "Select Project"}</p>
                 <p className="text-[10px] text-white/40 font-medium tracking-tight">{activeProject?.members?.length || 0} collaborators</p>
+                {activeProject?.inviteCode && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(activeProject.inviteCode);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="flex items-center gap-1 mt-1 group/inv"
+                    title="Copy invite code"
+                  >
+                    <span className="text-[9px] font-mono text-white/30 group-hover/inv:text-indigo-300 transition-colors truncate max-w-[120px]">
+                      {activeProject.inviteCode.slice(0, 8)}…
+                    </span>
+                    {copied
+                      ? <Check className="h-2.5 w-2.5 text-emerald-400 shrink-0" />
+                      : <Copy className="h-2.5 w-2.5 text-white/20 group-hover/inv:text-indigo-300 shrink-0 transition-colors" />
+                    }
+                  </button>
+                )}
               </div>
               <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/30", projectMenuOpen && "rotate-180")} />
             </button>
