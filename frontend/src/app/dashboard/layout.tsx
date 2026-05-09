@@ -347,7 +347,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
+          <header className="sticky top-0 z-20 h-20 bg-white border-b border-slate-200 shadow-sm flex items-center px-6 lg:px-8 gap-6">
             <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
