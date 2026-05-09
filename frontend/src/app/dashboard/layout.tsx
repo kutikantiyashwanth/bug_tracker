@@ -167,7 +167,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
         <div>
           <p className="text-lg font-black tracking-tighter text-white">Bug<span className="text-purple-400">Tracker</span></p>
-          <div className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest bg-white/5 text-white/50",
+          <div className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest bg-white/5 text-white/65",
             userRole === "admin"     ? "text-violet-400" :
             userRole === "developer" ? "text-cyan-400" :
                                        "text-amber-400"
@@ -199,7 +199,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <p className="text-sm font-bold text-white truncate">{activeProject?.name || "Select Project"}</p>
                 <p className="text-[10px] text-white/60 font-medium tracking-tight">{activeProject?.members?.length || 0} collaborators</p>
               </div>
-              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/55", projectMenuOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/70", projectMenuOpen && "rotate-180")} />
             </button>
 
             {projectMenuOpen && (
@@ -237,7 +237,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         <div className="space-y-8 py-4">
           {navGroups.map((group) => (
             <div key={group.label} className="space-y-1">
-              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{group.label}</p>
+              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/65">{group.label}</p>
               {group.items.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = iconMap[item.iconKey];
@@ -267,7 +267,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           {/* ── Team Section ── */}
           {activeProject?.members && activeProject.members.length > 0 && (
             <div className="space-y-1 pt-4">
-              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Collaborators</p>
+              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Collaborators</p>
               <div className="space-y-1 px-2">
                 {activeProject.members.slice(0, 5).map((member) => {
                   const user = getUserById(member.userId);
@@ -284,7 +284,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold text-white/85 group-hover:text-white truncate">{user.name}</p>
-                        <p className="text-[9px] font-medium text-white/50 uppercase tracking-tighter">{(member.role as string).toLowerCase()}</p>
+                        <p className="text-[9px] font-medium text-white/65 uppercase tracking-tighter">{(member.role as string).toLowerCase()}</p>
                       </div>
                     </div>
                   );
@@ -309,7 +309,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
             <p className="text-[10px] font-medium text-white/60 uppercase tracking-widest">{(currentUser?.role || "USER").toLowerCase()}</p>
           </div>
           <button onClick={() => { logout(); router.push("/login"); }}
-            className="p-2 rounded-xl text-white/50 hover:text-rose-400 hover:bg-rose-500/10 transition-all z-10"
+            className="p-2 rounded-xl text-white/65 hover:text-rose-400 hover:bg-rose-500/10 transition-all z-10"
             title="Sign out">
             <LogOut className="h-4 w-4" />
           </button>
@@ -337,7 +337,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
-          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all"
+          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5" />
           </button>
@@ -348,14 +348,14 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
           <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-white/10/60 flex items-center px-6 lg:px-8 gap-6">
-            <button className="lg:hidden p-2.5 rounded-xl text-white/50 hover:text-white hover:bg-white/8 transition-all"
+            <button className="lg:hidden p-2.5 rounded-xl text-white/65 hover:text-white hover:bg-white/8 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
             </button>
 
             <div className="flex-1 flex items-center">
               <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/50">
+                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/65">
                   <span>Workspace</span>
                   <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
                 </div>
@@ -368,16 +368,16 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/8 border border-transparent hover:border-white/10 hover:bg-white hover:shadow-sm transition-all text-white/60 w-64 group">
-                  <Search className="h-4 w-4 text-white/50 group-hover:text-violet-400 transition-colors" />
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/8 border border-transparent hover:border-white/10 hover:bg-white/5 hover:shadow-sm transition-all text-white/60 w-64 group">
+                  <Search className="h-4 w-4 text-white/65 group-hover:text-violet-400 transition-colors" />
                   <span className="text-sm font-medium">Search anything...</span>
-                  <kbd className="ml-auto text-[10px] font-bold text-white/40">⌘K</kbd>
+                  <kbd className="ml-auto text-[10px] font-bold text-white/60">⌘K</kbd>
                 </button>
               </div>
 
               <div className="flex items-center gap-2">
                 <Link href="/dashboard/notifications">
-                  <button className="relative p-3 rounded-2xl text-white/50 hover:text-violet-400 hover:bg-indigo-50 transition-all">
+                  <button className="relative p-3 rounded-2xl text-white/65 hover:text-violet-400 hover:bg-indigo-50 transition-all">
                     <Bell className="h-5 w-5" />
                     {unreadCount > 0 && (
                       <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
@@ -390,7 +390,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <Link href="/dashboard/settings" className="flex items-center gap-3 group">
                   <div className="text-right hidden xl:block">
                     <p className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
-                    <p className="text-[10px] font-medium text-white/50 uppercase tracking-widest mt-1">Profile</p>
+                    <p className="text-[10px] font-medium text-white/65 uppercase tracking-widest mt-1">Profile</p>
                   </div>
                   <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-white/10">
                     <AvatarFallback className="text-xs font-black bg-white/8 text-white/70">
@@ -430,7 +430,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   placeholder="Search tasks, bugs, projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-white/0"
+                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-white/5"
                 />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-700">

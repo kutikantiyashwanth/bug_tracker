@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -481,13 +481,14 @@ html, body {
 /* ── Cards: reduce padding on mobile ── */
 @media (max-width: 639px) {
   .card-base {
-    background: #131929;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #131929 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
     border-radius: var(--radius);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
     transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease, border-color 0.2s ease;
     will-change: transform, box-shadow;
     transform: translateZ(0);
+    color: #f1f5f9 !important;
   }
   /* Reduce inner padding of CardContent on mobile */
   [class*="CardContent"] {
@@ -659,3 +660,7 @@ html, body {
   .grid-cols-mobile-1 { grid-template-columns: 1fr !important; }
   .grid-cols-mobile-2 { grid-template-columns: repeat(2, 1fr) !important; }
 }
+
+
+/* Global text visibility */
+.card-base { color: #f1f5f9 !important; }

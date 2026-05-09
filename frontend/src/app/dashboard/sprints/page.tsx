@@ -133,7 +133,7 @@ export default function SprintsPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-violet-600 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Velocity Management</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Velocity Management</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight flex items-center gap-4">
             Sprint <span className="text-violet-600 underline decoration-violet-200 underline-offset-8">Orchestration</span>
@@ -160,7 +160,7 @@ export default function SprintsPage() {
               <s.icon className="h-5 w-5" />
             </div>
             <p className="text-2xl font-black text-white">{s.value}</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/50">{s.label}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/65">{s.label}</p>
           </div>
         ))}
       </div>
@@ -172,7 +172,7 @@ export default function SprintsPage() {
             <Zap className="h-10 w-10 text-white/30" />
           </div>
           <h3 className="text-xl font-black text-white uppercase tracking-tight">Static Pipeline</h3>
-          <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mt-2 max-w-xs mx-auto">
+          <p className="text-[10px] font-bold text-white/65 uppercase tracking-widest mt-2 max-w-xs mx-auto">
             No development cycles detected. Initialize a new sprint to begin velocity tracking.
           </p>
           <Button onClick={() => setShowCreate(true)} variant="glow" className="mt-8 !rounded-2xl">
@@ -198,7 +198,7 @@ export default function SprintsPage() {
                         <h3 className="text-xl font-black text-white tracking-tight group-hover:text-violet-600 transition-colors">{sprint.name}</h3>
                         <span className={cn("text-[9px] font-black px-3 py-1 rounded-lg flex items-center gap-2 uppercase tracking-widest border", 
                           sprint.status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                          sprint.status === 'completed' ? 'bg-indigo-50 text-violet-400 border-indigo-100' : 'bg-white/5 text-white/50 border-white/6')}>
+                          sprint.status === 'completed' ? 'bg-indigo-50 text-violet-400 border-indigo-100' : 'bg-white/5 text-white/65 border-white/6')}>
                           <StatusIcon className="h-3 w-3" />
                           {sprint.status}
                         </span>
@@ -213,14 +213,14 @@ export default function SprintsPage() {
                       
                       <div className="flex flex-wrap items-center gap-6">
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-white/50" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/50">
+                          <Calendar className="h-4 w-4 text-white/65" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/65">
                             {sprint.startDate ? formatDate(sprint.startDate) : 'TBD'} — {sprint.endDate ? formatDate(sprint.endDate) : 'TBD'}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Zap className="h-4 w-4 text-white/50" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{sprintTasks.length} OBJECTS</span>
+                          <Zap className="h-4 w-4 text-white/65" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/65">{sprintTasks.length} OBJECTS</span>
                         </div>
                       </div>
                     </div>
@@ -237,7 +237,7 @@ export default function SprintsPage() {
                         </Button>
                       )}
                       <button onClick={() => setExpandedId(isExpanded ? null : sprint.id)}
-                        className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/50 hover:text-white transition-all">
+                        className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/65 hover:text-white transition-all">
                         {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                       </button>
                       <button onClick={() => handleDelete(sprint.id)}
@@ -250,7 +250,7 @@ export default function SprintsPage() {
                   {sprintTasks.length > 0 && (
                     <div className="mt-8 space-y-3">
                       <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Throughput Velocity</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Throughput Velocity</span>
                         <span className="text-sm font-black text-white">{progress}%</span>
                       </div>
                       <div className="h-3 bg-white/8 rounded-full overflow-hidden p-0.5">
@@ -263,22 +263,22 @@ export default function SprintsPage() {
 
                 {isExpanded && (
                   <div className="border-t border-slate-50 p-8 bg-white/5/50 space-y-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-6">Assigned work items</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-white/65 mb-6">Assigned work items</h4>
                     {sprintTasks.length === 0 ? (
-                      <p className="text-xs font-bold text-white/50 uppercase tracking-widest text-center py-4">Backlog empty</p>
+                      <p className="text-xs font-bold text-white/65 uppercase tracking-widest text-center py-4">Backlog empty</p>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {sprintTasks.map((task) => (
-                          <div key={task.id} className="bg-white p-4 rounded-2xl border border-white/6 flex items-center gap-4 shadow-sm">
+                          <div key={task.id} className="bg-white/5 p-4 rounded-2xl border border-white/6 flex items-center gap-4 shadow-sm">
                             <div className={cn("w-2 h-2 rounded-full shrink-0",
                               task.status === "done" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
                               task.status === "in-progress" ? "bg-violet-500" :
                               task.status === "testing" ? "bg-amber-500" : "bg-white/10"
                             )} />
                             <span className={cn("text-xs font-bold flex-1 truncate",
-                              task.status === "done" ? "text-white/50 line-through" : "text-white"
+                              task.status === "done" ? "text-white/65 line-through" : "text-white"
                             )}>{task.title}</span>
-                            <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">{task.status}</span>
+                            <span className="text-[9px] font-black text-white/65 uppercase tracking-widest">{task.status}</span>
                           </div>
                         ))}
                       </div>
@@ -306,22 +306,22 @@ export default function SprintsPage() {
 
           <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Cycle Designation *</Label>
+              <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Cycle Designation *</Label>
               <Input value={formName} onChange={(e) => setFormName(e.target.value)}
                 placeholder="e.g. Iteration 04 — Core Infrastructure" className="h-14 !rounded-2xl bg-white/5 border-white/10 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Strategic Goal</Label>
+              <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Strategic Goal</Label>
               <Textarea value={formGoal} onChange={(e) => setFormGoal(e.target.value)}
                 placeholder="What is the primary objective of this cycle?" rows={3} className="!rounded-2xl bg-white/5 border-white/10 font-medium" />
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Commencement</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Commencement</Label>
                 <Input type="date" value={formStart} onChange={(e) => setFormStart(e.target.value)} className="h-12 !rounded-xl bg-white/5 border-white/10 font-bold" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Termination</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Termination</Label>
                 <Input type="date" value={formEnd} onChange={(e) => setFormEnd(e.target.value)} className="h-12 !rounded-xl bg-white/5 border-white/10 font-bold" />
               </div>
             </div>
@@ -329,19 +329,19 @@ export default function SprintsPage() {
             {projectTasks.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Object Allocation</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Object Allocation</Label>
                   <span className="text-[10px] font-black text-violet-600 uppercase bg-violet-50 px-2 py-1 rounded-lg">{formTaskIds.length} SELECTED</span>
                 </div>
                 <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto pr-2 no-scrollbar">
                   {projectTasks.map((task) => (
                     <label key={task.id}
-                      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/6 hover:bg-white hover:border-violet-200 hover:shadow-sm cursor-pointer transition-all group">
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/6 hover:bg-white/5 hover:border-violet-200 hover:shadow-sm cursor-pointer transition-all group">
                       <input type="checkbox"
                         checked={formTaskIds.includes(task.id)}
                         onChange={() => toggleTask(task.id)}
                         className="w-5 h-5 rounded-lg border-slate-300 text-violet-600 focus:ring-violet-500/20" />
                       <span className="text-xs font-bold text-white flex-1 truncate">{task.title}</span>
-                      <span className="text-[9px] font-black text-white/50 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{task.priority}</span>
+                      <span className="text-[9px] font-black text-white/65 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{task.priority}</span>
                     </label>
                   ))}
                 </div>
@@ -350,7 +350,7 @@ export default function SprintsPage() {
           </div>
 
           <div className="p-10 bg-white/5 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setShowCreate(false)} className="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white/70 transition-colors">Discard</button>
+            <button onClick={() => setShowCreate(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
             <Button onClick={handleCreate} disabled={!formName.trim()} variant="glow" className="!h-14 !px-10 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> INITIALIZE CYCLE
             </Button>

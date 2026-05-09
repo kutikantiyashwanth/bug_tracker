@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Mission Intelligence</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Mission Intelligence</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Performance <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Analytics</span></h1>
           <p className="text-white/60 font-medium max-w-xl">
@@ -89,8 +89,8 @@ export default function AnalyticsPage() {
         </div>
         <div className="flex items-center gap-3">
           <button onClick={fetchAnalytics} disabled={loading}
-            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-white/10 shadow-sm hover:border-indigo-500/30 hover:bg-white/5 transition-all">
-            <RefreshCw className={cn("h-4 w-4 text-white/50 group-hover:text-violet-400 transition-colors", loading && "animate-spin")} />
+            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 shadow-sm hover:border-indigo-500/30 hover:bg-white/5 transition-all">
+            <RefreshCw className={cn("h-4 w-4 text-white/65 group-hover:text-violet-400 transition-colors", loading && "animate-spin")} />
             <span className="text-xs font-black uppercase tracking-widest text-white/70 group-hover:text-violet-400">Sync Intelligence</span>
           </button>
         </div>
@@ -99,7 +99,7 @@ export default function AnalyticsPage() {
       {!data && !loading && (
         <div className="card-base rounded-2xl p-6">
           <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/6 flex items-center justify-center">
-            <BarChart3 className="h-10 w-10 text-white/40" />
+            <BarChart3 className="h-10 w-10 text-white/60" />
           </div>
           <div className="space-y-1">
             <h3 className="text-xl font-bold text-white">No Intelligence Data Available</h3>
@@ -168,9 +168,9 @@ export default function AnalyticsPage() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/50">{card.label}</p>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/65">{card.label}</p>
                   <p className="text-4xl font-black text-white tracking-tight group-hover:scale-105 transition-transform origin-left">{card.value}</p>
-                  <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest pt-2">{card.sub}</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase tracking-widest pt-2">{card.sub}</p>
                 </div>
               </div>
             ))}
@@ -185,7 +185,7 @@ export default function AnalyticsPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Velocity Diagnostics</h3>
-                  <p className="text-[10px] font-bold text-white/50 uppercase">Operational flow over last 7 sessions</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase">Operational flow over last 7 sessions</p>
                 </div>
               </div>
               {/* Legend */}
@@ -233,7 +233,7 @@ export default function AnalyticsPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Task Lifecycle</h3>
-                  <p className="text-[10px] font-bold text-white/50 uppercase">Velocity Distribution</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase">Velocity Distribution</p>
                 </div>
               </div>
               <div className="space-y-6">
@@ -269,7 +269,7 @@ export default function AnalyticsPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Threat Matrix</h3>
-                  <p className="text-[10px] font-bold text-white/50 uppercase">Defect Severity Analysis</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase">Defect Severity Analysis</p>
                 </div>
               </div>
 
@@ -279,7 +279,7 @@ export default function AnalyticsPage() {
                   { label: "MAJOR DEFECTS",    count: data.bugStats.major,    color: "#f97316" },
                   { label: "MINOR ISSUES",    count: data.bugStats.minor,    color: "#3b82f6" },
                 ].map((item) => (
-                  <div key={item.label} className="p-4 rounded-[1.5rem] bg-white/5/50 border border-white/6 flex items-center justify-between group hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all">
+                  <div key={item.label} className="p-4 rounded-[1.5rem] bg-white/5/50 border border-white/6 flex items-center justify-between group hover:bg-white/5 hover:shadow-lg hover:shadow-slate-200/50 transition-all">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
                       <span className="text-[10px] font-black tracking-widest text-white/60 uppercase">{item.label}</span>
@@ -317,7 +317,7 @@ export default function AnalyticsPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Timeline Alerts</h3>
-                  <p className="text-[10px] font-bold text-white/50 uppercase">Critical Proximity Deadlines</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase">Critical Proximity Deadlines</p>
                 </div>
               </div>
               {data.upcomingDeadlines.length === 0 ? (
@@ -330,14 +330,14 @@ export default function AnalyticsPage() {
               ) : (
                 <div className="space-y-4">
                   {data.upcomingDeadlines.map((task) => (
-                    <div key={task.id} className="group p-5 rounded-[2rem] bg-white border border-white/10 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all relative overflow-hidden">
+                    <div key={task.id} className="group p-5 rounded-[2rem] bg-white/5 border border-white/10 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all relative overflow-hidden">
                       <div className={cn("absolute left-0 top-0 bottom-0 w-1.5", 
                         task.daysLeft <= 1 ? "bg-rose-500" : task.daysLeft <= 3 ? "bg-amber-500" : "bg-emerald-500"
                       )} />
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1 min-w-0 space-y-1">
                           <p className="text-xs font-black text-white truncate uppercase tracking-tight">{task.title}</p>
-                          <p className="text-[10px] font-bold text-white/50 uppercase">
+                          <p className="text-[10px] font-bold text-white/65 uppercase">
                             {task.daysLeft <= 1 ? <span className="text-rose-500">DUE IMMINENTLY</span> : <span className="text-violet-400">{task.daysLeft} DAYS UNTIL EXPIRY</span>}
                           </p>
                         </div>
@@ -364,7 +364,7 @@ export default function AnalyticsPage() {
               </div>
               <div>
                 <h3 className="text-sm font-black uppercase tracking-widest text-white">Intelligence Success Matrix</h3>
-                <p className="text-[10px] font-bold text-white/50 uppercase">Key Performance Indicators vs Benchmarks</p>
+                <p className="text-[10px] font-bold text-white/65 uppercase">Key Performance Indicators vs Benchmarks</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -399,7 +399,7 @@ export default function AnalyticsPage() {
                 },
               ].map((metric, i) => (
                 <div key={i} className={cn("p-8 rounded-[2.5rem] text-center border transition-all hover:scale-105", 
-                  metric.met ? "bg-white/5/50 border-white/6" : "bg-white border-white/10"
+                  metric.met ? "bg-white/5/50 border-white/6" : "bg-white/5 border-white/10"
                 )}>
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm"
                     style={{ background: metric.color + "15", color: metric.color, border: `1px solid ${metric.color}20` }}>
@@ -413,7 +413,7 @@ export default function AnalyticsPage() {
                       {metric.met ? "MET" : "UNDER"}
                     </span>
                   </div>
-                  <p className="text-[9px] font-black mt-2 text-white/50 uppercase tracking-widest">{metric.target}</p>
+                  <p className="text-[9px] font-black mt-2 text-white/65 uppercase tracking-widest">{metric.target}</p>
                 </div>
               ))}
             </div>

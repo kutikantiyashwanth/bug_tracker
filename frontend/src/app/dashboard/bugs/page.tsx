@@ -256,7 +256,7 @@ export default function BugsPage() {
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Quality Assurance</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
-          <p className="text-white/55 mt-2 font-medium max-w-xl">
+          <p className="text-white/70 mt-2 font-medium max-w-xl">
             Monitor, prioritize, and resolve technical debt with AI-assisted severity analysis and team collaboration.
           </p>
         </div>
@@ -303,13 +303,13 @@ export default function BugsPage() {
               placeholder="Search reports by title, description or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 bg-white border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
+              className="pl-12 h-12 bg-white/5 border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
             />
           </div>
           
           <div className="flex items-center gap-3 px-2">
             <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white/5 shadow-sm font-bold text-xs">
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
               <SelectContent>
@@ -321,7 +321,7 @@ export default function BugsPage() {
             </Select>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white/5 shadow-sm font-bold text-xs">
                 <SelectValue placeholder="Lifecycle" />
               </SelectTrigger>
               <SelectContent>
@@ -336,16 +336,16 @@ export default function BugsPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-white/0 gap-8 p-0 h-auto mb-8">
+          <TabsList className="bg-white/5 gap-8 p-0 h-auto mb-8">
             {[
               { id: "all", label: "All Reports", count: projectBugs.length },
               { id: "open", label: "Active Issues", count: stats.open + stats.inProgress },
               { id: "resolved", label: "Resolved", count: stats.resolved },
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
-                className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
+                className="p-0 h-10 bg-white/5 border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-white/5 rounded-none flex items-center gap-2 group">
                 <span className="text-sm font-black uppercase tracking-widest text-white/65 group-hover:text-white/70 group-data-[state=active]:text-violet-400 transition-colors">{tab.label}</span>
-                <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-violet-400 transition-all">{tab.count}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/70 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-violet-400 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -357,7 +357,7 @@ export default function BugsPage() {
                   <Bug className="h-10 w-10 text-white/30" />
                 </div>
                 <h3 className="text-xl font-bold text-white">No bugs found</h3>
-                <p className="text-white/55 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
+                <p className="text-white/70 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
                 <Button variant="outline" className="mt-6 rounded-2xl" onClick={() => { resetForm(); setShowCreateDialog(true); }}>
                   Create Bug Report
                 </Button>
@@ -383,7 +383,7 @@ export default function BugsPage() {
                             <h3 className="text-lg font-bold text-white truncate tracking-tight group-hover:text-violet-400 transition-colors">{bug.title}</h3>
                           </div>
                           
-                          <p className="text-sm text-white/55 line-clamp-2 leading-relaxed mb-6">
+                          <p className="text-sm text-white/70 line-clamp-2 leading-relaxed mb-6">
                             {bug.description || "No detailed description provided for this report."}
                           </p>
                           
@@ -421,7 +421,7 @@ export default function BugsPage() {
                             </div>
                           </div>
                           <div className="w-10 h-10 rounded-2xl bg-white/4 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
-                            <Plus className="h-5 w-5 text-white/40 group-hover:text-violet-400 rotate-45" />
+                            <Plus className="h-5 w-5 text-white/60 group-hover:text-violet-400 rotate-45" />
                           </div>
                         </div>
                       </div>
@@ -468,7 +468,7 @@ export default function BugsPage() {
                     </div>
                   </div>
                   <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-indigo-200 text-violet-400 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-indigo-200 text-violet-400 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
                     {aiLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                     {aiLoading ? "ANALYZING..." : "ANALYZE NOW"}
                   </button>
@@ -485,7 +485,7 @@ export default function BugsPage() {
                         { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-violet-400" },
                         { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
                       ].map((item, idx) => (
-                        <div key={idx} className="bg-white p-3 rounded-xl border border-white/8 text-center">
+                        <div key={idx} className="bg-white/5 p-3 rounded-xl border border-white/8 text-center">
                           <p className="text-[8px] font-black uppercase text-white/65 mb-1">{item.label}</p>
                           <p className={cn("text-[10px] font-black", item.color)}>{item.value}</p>
                         </div>
@@ -597,7 +597,7 @@ export default function BugsPage() {
                       )}>
                         {bug.severity}
                       </Badge>
-                      <span className="text-white/50 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
+                      <span className="text-white/65 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
                     </div>
                     <DialogTitle className="text-3xl font-black text-white tracking-tight leading-tight">{bug.title}</DialogTitle>
                     <div className="flex items-center gap-6 mt-6">
@@ -606,7 +606,7 @@ export default function BugsPage() {
                           <AvatarFallback className="bg-indigo-600 text-white text-[10px] font-black">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/55">Reporter</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/70">Reporter</p>
                           <p className="text-xs font-bold text-white/80">{reporter?.name || "Anonymous"}</p>
                         </div>
                       </div>
@@ -616,13 +616,13 @@ export default function BugsPage() {
                           {statusIcon(bug.status)}
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/55">Status</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/70">Status</p>
                           <p className="text-xs font-bold text-white/80 capitalize">{bug.status.replace('-', ' ')}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/50 hover:text-white transition-colors">
+                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/65 hover:text-white transition-colors">
                     <Trash2 className="h-6 w-6 rotate-45" />
                   </button>
                 </div>
@@ -680,7 +680,7 @@ export default function BugsPage() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Collaboration Feed</h4>
-                      <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55">{comments.length} MESSAGES</span>
+                      <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/70">{comments.length} MESSAGES</span>
                     </div>
 
                     <div className="space-y-4">
@@ -704,10 +704,10 @@ export default function BugsPage() {
                                 <div className={cn("max-w-[80%] space-y-1", isMe && "text-right")}>
                                   <p className="text-[10px] font-black text-white/65 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
                                   <div className={cn("px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm", 
-                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-white/8 text-white/70 rounded-tl-none")}>
+                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white/5 border border-white/8 text-white/70 rounded-tl-none")}>
                                     {c.content}
                                   </div>
-                                  <p className="text-[8px] font-black text-white/40 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
+                                  <p className="text-[8px] font-black text-white/60 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
                                 </div>
                               </div>
                             );
@@ -750,7 +750,7 @@ export default function BugsPage() {
 
                     {permissions.changeBugStatus && (
                       <Select value={bug.status} onValueChange={(v) => { handleStatusChange(bug.id, v as BugStatus); setShowDetailDialog({ ...bug, status: v as BugStatus }); }}>
-                        <SelectTrigger className="w-40 h-12 rounded-xl border-white/10 bg-white font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
+                        <SelectTrigger className="w-40 h-12 rounded-xl border-white/10 bg-white/5 font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="open">Open</SelectItem>
                           <SelectItem value="in-progress">In Progress</SelectItem>

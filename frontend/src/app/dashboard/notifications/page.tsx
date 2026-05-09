@@ -94,7 +94,7 @@ export default function NotificationsPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Communication Hub</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Communication Hub</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
             System <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span>
@@ -109,9 +109,9 @@ export default function NotificationsPage() {
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="p-3 rounded-2xl bg-white border border-white/10 shadow-sm hover:border-indigo-500/30 hover:bg-white/5 transition-all"
+            className="p-3 rounded-2xl bg-white/5 border border-white/10 shadow-sm hover:border-indigo-500/30 hover:bg-white/5 transition-all"
           >
-            <RefreshCw className={cn("h-4 w-4 text-white/50", loading && "animate-spin")} />
+            <RefreshCw className={cn("h-4 w-4 text-white/65", loading && "animate-spin")} />
           </button>
           {unreadCount > 0 && (
             <Button variant="glow" size="lg" onClick={markAllNotificationsRead} className="!rounded-2xl">
@@ -145,7 +145,7 @@ export default function NotificationsPage() {
               <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 border shadow-sm transition-all group-hover:scale-110", item.bg, item.text, item.border)}>
                 <item.icon className="h-6 w-6" />
               </div>
-              <p className={cn("text-[10px] font-black uppercase tracking-widest", isActive ? item.text : "text-white/50")}>{item.label}</p>
+              <p className={cn("text-[10px] font-black uppercase tracking-widest", isActive ? item.text : "text-white/65")}>{item.label}</p>
               <div className="flex items-end justify-between mt-2">
                 <span className="text-2xl font-black text-white">{count}</span>
                 {unread > 0 && (
@@ -174,7 +174,7 @@ export default function NotificationsPage() {
                 "flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                 isActive
                   ? "bg-[#080b14] text-white shadow-lg shadow-slate-900/10"
-                  : "bg-white border border-white/10 text-white/60 hover:border-indigo-200 hover:text-violet-400"
+                  : "bg-white/5 border border-white/10 text-white/60 hover:border-indigo-200 hover:text-violet-400"
               )}
             >
               <f.icon className="h-4 w-4" />
@@ -195,11 +195,11 @@ export default function NotificationsPage() {
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
               <div className="w-20 h-20 rounded-[2.5rem] bg-white/5 border border-white/6 flex items-center justify-center">
-                <Inbox className="h-10 w-10 text-white/40" />
+                <Inbox className="h-10 w-10 text-white/60" />
               </div>
               <div className="space-y-1">
                 <h3 className="text-lg font-black text-white uppercase tracking-tight">Clear Spectrum</h3>
-                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest max-w-xs">
+                <p className="text-[10px] font-bold text-white/65 uppercase tracking-widest max-w-xs">
                   {filter === "all"
                     ? "No active intelligence alerts detected in the system."
                     : `No active ${filter.replace("_", " ")} alerts found.`}
@@ -233,7 +233,7 @@ export default function NotificationsPage() {
                           <div className="flex flex-col items-center pt-1 shrink-0">
                             <div className={cn(
                               "w-2.5 h-2.5 rounded-full transition-all",
-                              !notification.read ? "bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.5)]" : "bg-white/0"
+                              !notification.read ? "bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.5)]" : "bg-white/5"
                             )} />
                           </div>
 
@@ -253,7 +253,7 @@ export default function NotificationsPage() {
                                   <span className={cn("text-[9px] font-black px-2 py-1 rounded-lg border", cfg.bg, cfg.text, cfg.border)}>
                                     {cfg.label}
                                   </span>
-                                  <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                                  <span className="text-[10px] font-bold text-white/65 uppercase tracking-widest">
                                     {formatRelativeTime(notification.createdAt)}
                                   </span>
                                 </div>
@@ -267,7 +267,7 @@ export default function NotificationsPage() {
                               {notification.link && (
                                 <Link
                                   href={notification.link}
-                                  className="shrink-0 p-3 rounded-2xl bg-white border border-white/10 text-white/50 hover:text-violet-400 hover:border-indigo-600 hover:bg-indigo-50 transition-all shadow-sm"
+                                  className="shrink-0 p-3 rounded-2xl bg-white/5 border border-white/10 text-white/65 hover:text-violet-400 hover:border-indigo-600 hover:bg-indigo-50 transition-all shadow-sm"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <ArrowRight className="h-5 w-5" />
@@ -300,12 +300,12 @@ export default function NotificationsPage() {
           </div>
           <div className="space-y-1">
             <p className="text-sm font-black uppercase tracking-widest">External Relay Active</p>
-            <p className="text-[10px] font-bold text-white/50 uppercase">Redundant email alerts dispatched for high-priority events.</p>
+            <p className="text-[10px] font-bold text-white/65 uppercase">Redundant email alerts dispatched for high-priority events.</p>
           </div>
         </div>
         <Link
           href="/dashboard/settings"
-          className="px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-white transition-all"
+          className="px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/5 hover:text-white transition-all"
         >
           CONFIGURE RELAY
         </Link>

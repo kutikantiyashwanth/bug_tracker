@@ -72,7 +72,7 @@ export default function ProjectsPage() {
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Enterprise Workspaces</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Your <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
-          <p className="text-white/55 mt-2 font-medium max-w-xl">
+          <p className="text-white/70 mt-2 font-medium max-w-xl">
             Select a workspace to view detailed analytics, track team progress, and manage technical debt.
           </p>
         </div>
@@ -99,7 +99,7 @@ export default function ProjectsPage() {
           {isAdmin ? (
             <div className="text-center max-w-sm">
               <h3 className="text-2xl font-black text-white tracking-tight">No Active Workspaces</h3>
-              <p className="text-white/55 mt-2 font-medium mb-10">
+              <p className="text-white/70 mt-2 font-medium mb-10">
                 You haven't initialized any projects yet. Create a workspace to start tracking bugs with your team.
               </p>
               <Button variant="glow" onClick={() => setShowCreateDialog(true)} className="h-14 px-8">
@@ -109,7 +109,7 @@ export default function ProjectsPage() {
           ) : (
             <div className="text-center max-w-sm">
               <h3 className="text-2xl font-black text-white tracking-tight">Join a Workspace</h3>
-              <p className="text-white/55 mt-2 font-medium mb-10">
+              <p className="text-white/70 mt-2 font-medium mb-10">
                 You're not a member of any project. Use an invite code from your administrator to get started.
               </p>
               <Button variant="glow" onClick={() => setShowJoinDialog(true)} className="h-14 px-8">
@@ -154,11 +154,11 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                   <div className="p-2 rounded-xl bg-white/4 group-hover:bg-indigo-50 transition-colors">
-                    <ExternalLink className="h-4 w-4 text-white/40 group-hover:text-violet-400" />
+                    <ExternalLink className="h-4 w-4 text-white/60 group-hover:text-violet-400" />
                   </div>
                 </div>
 
-                <p className="text-sm text-white/55 font-medium line-clamp-2 leading-relaxed flex-1">
+                <p className="text-sm text-white/70 font-medium line-clamp-2 leading-relaxed flex-1">
                   {project.description || "No project description provided. This workspace is being used for active bug tracking and sprint management."}
                 </p>
 

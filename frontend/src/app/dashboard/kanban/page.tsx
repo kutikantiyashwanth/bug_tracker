@@ -154,7 +154,7 @@ export default function KanbanPage() {
         onDragStart={() => handleDragStart(task.id)}
         onDragEnd={() => { setDraggedTask(null); setDragOverColumn(null); }}
         className={cn(
-          "group relative rounded-[1.5rem] bg-white border border-white/10/60 p-5 cursor-grab active:cursor-grabbing transition-all duration-300",
+          "group relative rounded-[1.5rem] bg-white/5 border border-white/10/60 p-5 cursor-grab active:cursor-grabbing transition-all duration-300",
           "hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1",
           draggedTask === task.id && "opacity-50 rotate-2 scale-95 shadow-2xl"
         )}
@@ -166,10 +166,10 @@ export default function KanbanPage() {
               onClick={(e) => { e.stopPropagation(); setShowEditMenu(showEditMenu === task.id ? null : task.id); }}
               className="w-8 h-8 rounded-xl hover:bg-white/5 flex items-center justify-center transition-colors"
             >
-              <MoreHorizontal className="h-4 w-4 text-white/50" />
+              <MoreHorizontal className="h-4 w-4 text-white/65" />
             </button>
             {showEditMenu === task.id && (
-              <div className="absolute right-0 top-10 w-48 py-2 rounded-2xl border border-white/6 bg-white shadow-2xl z-20 animate-in fade-in zoom-in duration-200">
+              <div className="absolute right-0 top-10 w-48 py-2 rounded-2xl border border-white/6 bg-white/5 shadow-2xl z-20 animate-in fade-in zoom-in duration-200">
                 <button
                   onClick={() => openEditDialog(task)}
                   className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-white/70 hover:bg-indigo-50 hover:text-violet-400 transition-colors"
@@ -194,7 +194,7 @@ export default function KanbanPage() {
             {pc.label}
           </div>
           {task.tags.slice(0, 2).map((tag) => (
-            <span key={tag} className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-white/5 text-white/50 border border-white/6">
+            <span key={tag} className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-white/5 text-white/65 border border-white/6">
               {tag}
             </span>
           ))}
@@ -216,11 +216,11 @@ export default function KanbanPage() {
                     {getInitials(assignee.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">{assignee.name.split(" ")[0]}</span>
+                <span className="text-[9px] font-black text-white/65 uppercase tracking-widest">{assignee.name.split(" ")[0]}</span>
               </div>
             ) : (
               <div className="h-6 w-6 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center bg-white/5">
-                <User className="h-3 w-3 text-white/40" />
+                <User className="h-3 w-3 text-white/60" />
               </div>
             )}
           </div>
@@ -229,7 +229,7 @@ export default function KanbanPage() {
               "flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg",
               isOverdue
                 ? "bg-rose-50 text-rose-600"
-                : "bg-white/5 text-white/50"
+                : "bg-white/5 text-white/65"
             )}>
               {isOverdue ? <AlertCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
               {new Date(task.dueDate).toLocaleString("en-US", { month: "short", day: "numeric" })}
@@ -247,7 +247,7 @@ export default function KanbanPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-violet-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Flow Orchestration</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Flow Orchestration</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Project <span className="text-violet-600 underline decoration-violet-500/20 underline-offset-8">Kanban</span></h1>
           <p className="text-white/60 mt-2 font-medium max-w-xl">
@@ -286,12 +286,12 @@ export default function KanbanPage() {
                   <div className={cn("w-2 h-6 rounded-full", column.dotColor.replace('bg-', 'bg-'))} />
                   <div>
                     <h3 className="text-xs font-black uppercase tracking-widest text-white">{column.label}</h3>
-                    <p className="text-[10px] font-bold text-white/50">{colTasks.length} ITEMS</p>
+                    <p className="text-[10px] font-bold text-white/65">{colTasks.length} ITEMS</p>
                   </div>
                 </div>
                 <button
                   onClick={() => openCreateDialog(column.id)}
-                  className="w-8 h-8 rounded-xl bg-white border border-white/10 flex items-center justify-center text-white/50 hover:text-violet-400 hover:border-indigo-200 transition-all shadow-sm"
+                  className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/65 hover:text-violet-400 hover:border-indigo-200 transition-all shadow-sm"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -304,7 +304,7 @@ export default function KanbanPage() {
                 ))}
                 {colTasks.length === 0 && (
                   <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-white/10 rounded-[1.5rem] bg-white/40">
-                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Awaiting Flow</p>
+                    <p className="text-[10px] font-black text-white/60 uppercase tracking-widest">Awaiting Flow</p>
                   </div>
                 )}
               </div>
@@ -328,18 +328,18 @@ export default function KanbanPage() {
 
           <div className="p-10 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Task Headline</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Task Headline</Label>
               <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Implement OIDC authentication flow" 
                 className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Requirement Details</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Requirement Details</Label>
               <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Provide context and requirements..." rows={4}
                 className="rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium" />
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Business Priority</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Business Priority</Label>
                 <Select value={formPriority} onValueChange={(v) => setFormPriority(v as Priority)}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -351,7 +351,7 @@ export default function KanbanPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Owner Assignment</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Owner Assignment</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs"><SelectValue placeholder="Unassigned" /></SelectTrigger>
                   <SelectContent>
@@ -364,12 +364,12 @@ export default function KanbanPage() {
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Timeline Deadline</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Timeline Deadline</Label>
                 <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} 
                   className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Categorization Tags</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Categorization Tags</Label>
                 <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} placeholder="Separate with commas" 
                   className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs" />
               </div>
@@ -377,7 +377,7 @@ export default function KanbanPage() {
           </div>
 
           <div className="p-10 bg-white/5 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white/70 transition-colors">Discard</button>
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
             <Button variant="glow" onClick={handleCreateTask} disabled={!formTitle.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> INITIATE TASK
             </Button>
@@ -400,18 +400,18 @@ export default function KanbanPage() {
 
           <div className="p-10 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Task Headline</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Task Headline</Label>
               <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} 
                 className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Requirement Details</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Requirement Details</Label>
               <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} rows={4}
                 className="rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium" />
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Business Priority</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Business Priority</Label>
                 <Select value={formPriority} onValueChange={(v) => setFormPriority(v as Priority)}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -423,7 +423,7 @@ export default function KanbanPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Owner Assignment</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Owner Assignment</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs"><SelectValue placeholder="Unassigned" /></SelectTrigger>
                   <SelectContent>
@@ -436,12 +436,12 @@ export default function KanbanPage() {
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Timeline Deadline</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Timeline Deadline</Label>
                 <Input type="datetime-local" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} 
                   className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Categorization Tags</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Categorization Tags</Label>
                 <Input value={formTags} onChange={(e) => setFormTags(e.target.value)} 
                   className="h-12 rounded-2xl bg-white/5 border-white/10 font-bold text-xs" />
               </div>
@@ -449,7 +449,7 @@ export default function KanbanPage() {
           </div>
 
           <div className="p-10 bg-white/5 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setEditTask(null)} className="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white/70 transition-colors">Cancel</button>
+            <button onClick={() => setEditTask(null)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Cancel</button>
             <Button variant="glow" onClick={handleEditTask} disabled={!formTitle.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <CheckCircle2 className="h-5 w-5 mr-2" /> SAVE MODIFICATIONS
             </Button>

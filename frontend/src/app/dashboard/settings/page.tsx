@@ -97,7 +97,7 @@ export default function SettingsPage() {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Account Preferences</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Account Preferences</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">System <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
         <p className="text-white/60 mt-2 font-medium max-w-xl">
@@ -117,7 +117,7 @@ export default function SettingsPage() {
                 </div>
                 <div>
                   <h2 className="text-sm font-black uppercase tracking-widest text-white">Personal Identity</h2>
-                  <p className="text-[10px] font-bold text-white/50 uppercase">Public Professional Profile</p>
+                  <p className="text-[10px] font-bold text-white/65 uppercase">Public Professional Profile</p>
                 </div>
               </div>
             </div>
@@ -137,32 +137,32 @@ export default function SettingsPage() {
                     {currentUser.role?.toUpperCase()}
                   </Badge>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-black text-white/50 uppercase tracking-widest">Active System Status</span>
+                  <span className="text-[10px] font-black text-white/65 uppercase tracking-widest">Active System Status</span>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Full Legal Name</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Full Legal Name</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)}
                   className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">System Identifier (Email)</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">System Identifier (Email)</Label>
                 <Input value={email} readOnly
-                  className="h-14 rounded-2xl bg-white/8 border-white/10 text-white/50 cursor-not-allowed font-bold" />
+                  className="h-14 rounded-2xl bg-white/8 border-white/10 text-white/65 cursor-not-allowed font-bold" />
               </div>
             </div>
 
             {/* Skills */}
             <div className="space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Technical Competencies</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Technical Competencies</Label>
               <div className="flex flex-wrap gap-2">
                 {skills.map((s) => (
-                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-white/10 text-[11px] font-black uppercase tracking-widest text-white/70 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
+                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-widest text-white/70 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
                     {s}
-                    <button onClick={() => removeSkill(s)} className="text-white/40 hover:text-rose-500 transition-colors">
+                    <button onClick={() => removeSkill(s)} className="text-white/60 hover:text-rose-500 transition-colors">
                       <X className="h-3 w-3" />
                     </button>
                   </div>
@@ -209,33 +209,33 @@ export default function SettingsPage() {
               </div>
               <div>
                 <h2 className="text-sm font-black uppercase tracking-widest text-white">Cryptographic Security</h2>
-                <p className="text-[10px] font-bold text-white/50 uppercase">Manage Authentication Credentials</p>
+                <p className="text-[10px] font-bold text-white/65 uppercase">Manage Authentication Credentials</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Current Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Current Secret</Label>
                 <div className="relative">
                   <Input type={showPw ? "text" : "password"} value={currentPw}
                     onChange={(e) => setCurrentPw(e.target.value)}
                     placeholder="••••••••" 
                     className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
                   <button type="button" onClick={() => setShowPw(!showPw)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-violet-400 transition-colors">
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/65 hover:text-violet-400 transition-colors">
                     {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">New Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">New Protocol Secret</Label>
                 <Input type={showPw ? "text" : "password"} value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
                   placeholder="Minimum 8 characters" 
                   className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Confirm Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Confirm Protocol Secret</Label>
                 <Input type={showPw ? "text" : "password"} value={confirmPw}
                   onChange={(e) => setConfirmPw(e.target.value)}
                   placeholder="Verify new secret" 
@@ -272,7 +272,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <h2 className="text-sm font-black uppercase tracking-widest text-white">Event Protocol</h2>
-                <p className="text-[10px] font-bold text-white/50 uppercase">Notification Configuration</p>
+                <p className="text-[10px] font-bold text-white/65 uppercase">Notification Configuration</p>
               </div>
             </div>
 
@@ -287,14 +287,14 @@ export default function SettingsPage() {
                 <div key={pref.key} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/6">
                   <div>
                     <p className="text-[11px] font-black uppercase tracking-widest text-white">{pref.label}</p>
-                    <p className="text-[10px] font-bold text-white/50">{pref.desc}</p>
+                    <p className="text-[10px] font-bold text-white/65">{pref.desc}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox"
                       checked={notifPrefs[pref.key as keyof typeof notifPrefs]}
                       onChange={(e) => setNotifPrefs({ ...notifPrefs, [pref.key]: e.target.checked })}
                       className="sr-only peer" />
-                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/5 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
                   </label>
                 </div>
               ))}

@@ -199,7 +199,7 @@ export default function DashboardPage() {
               
               <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between">
                 <span className="text-[10px] font-bold text-white/65">{card.sub}</span>
-                <ArrowUpRight className="h-3 w-3 text-white/55 group-hover:text-violet-400 transition-colors" />
+                <ArrowUpRight className="h-3 w-3 text-white/70 group-hover:text-violet-400 transition-colors" />
               </div>
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                 {tasksByStatus.map((item) => (
                   <div key={item.label} className="group">
                     <div className="flex justify-between text-xs font-bold mb-2">
-                      <span className="text-white/55 group-hover:text-white transition-colors uppercase tracking-widest">{item.label}</span>
+                      <span className="text-white/70 group-hover:text-white transition-colors uppercase tracking-widest">{item.label}</span>
                       <span className="text-white">{item.count}</span>
                     </div>
                     <div className="h-2.5 bg-white/5/8 rounded-full overflow-hidden">

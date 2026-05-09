@@ -71,7 +71,7 @@ export default function ActivityPage() {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Project Operations</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Project Operations</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Activity <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
         <p className="text-white/60 mt-2 font-medium max-w-xl">
@@ -93,7 +93,7 @@ export default function ActivityPage() {
             </div>
             <div className="space-y-1">
               <p className="text-3xl font-black text-white">{stat.value}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/50">{stat.label}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/65">{stat.label}</p>
             </div>
           </div>
         ))}
@@ -104,11 +104,11 @@ export default function ActivityPage() {
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/6 flex items-center justify-center">
-              <Activity className="h-6 w-6 text-white/50" />
+              <Activity className="h-6 w-6 text-white/65" />
             </div>
             <div>
               <h2 className="text-sm font-black uppercase tracking-widest text-white">Operational Timeline</h2>
-              <p className="text-[10px] font-bold text-white/50 uppercase">Chronological System Events</p>
+              <p className="text-[10px] font-bold text-white/65 uppercase">Chronological System Events</p>
             </div>
           </div>
           <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/6">
@@ -124,7 +124,7 @@ export default function ActivityPage() {
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-black text-white uppercase tracking-widest">No Operational History</p>
-                <p className="text-[10px] text-white/50 font-bold uppercase">Actions will materialize as protocols are executed</p>
+                <p className="text-[10px] text-white/65 font-bold uppercase">Actions will materialize as protocols are executed</p>
               </div>
             </div>
           ) : (
@@ -160,14 +160,14 @@ export default function ActivityPage() {
 
                         {/* Content */}
                         <div className="flex-1 pb-8 group-last:pb-0">
-                          <div className="p-6 rounded-[2rem] bg-white/5/50 border border-transparent group-hover:border-white/6 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
+                          <div className="p-6 rounded-[2rem] bg-white/5/50 border border-transparent group-hover:border-white/6 group-hover:bg-white/5 group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
                             <div className="space-y-2">
                               <p className="text-sm font-medium text-white/70 leading-relaxed">
                                 <span className="font-black text-white uppercase tracking-tight mr-1">{user?.name || "System Actor"}</span>{" "}
                                 {activity.details}
                               </p>
                               <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-black text-white/50 uppercase tracking-widest">
+                                <span className="text-[10px] font-black text-white/65 uppercase tracking-widest">
                                   {formatRelativeTime(activity.createdAt)}
                                 </span>
                                 {entityKey && (

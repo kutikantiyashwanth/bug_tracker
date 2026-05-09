@@ -129,7 +129,7 @@ export default function GitHubPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-[#0f1729] rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">External Sync</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">External Sync</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight flex items-center gap-4">
             GitHub <span className="text-white/60 underline decoration-slate-200 underline-offset-8">Intelligence</span>
@@ -140,7 +140,7 @@ export default function GitHubPage() {
         </div>
         {repoUrl && (
           <a href={repoUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white border border-white/10 text-xs font-black uppercase tracking-widest hover:border-white/10 hover:bg-white/5 transition-all shadow-sm">
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest hover:border-white/10 hover:bg-white/5 transition-all shadow-sm">
             <ExternalLink className="h-4 w-4" /> REPOSITORY
           </a>
         )}
@@ -157,7 +157,7 @@ export default function GitHubPage() {
               <Github className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Connection Endpoint</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Connection Endpoint</p>
               <h2 className="text-lg font-black tracking-tight">{repoUrl ? "REPOSITORY SYNCHRONIZED" : "INITIALIZE CONNECTION"}</h2>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function GitHubPage() {
             <Input value={repoInput} onChange={(e) => setRepoInput(e.target.value)}
               placeholder="https://github.com/owner/repository" 
               className="h-14 bg-white/5 border-white/10 focus:border-indigo-500/50 text-white !rounded-2xl font-mono text-xs" />
-            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="h-14 px-8 !rounded-2xl !bg-white !text-slate-950 font-black text-xs uppercase tracking-widest hover:!bg-white/10">
+            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="h-14 px-8 !rounded-2xl !bg-white/5 !text-slate-950 font-black text-xs uppercase tracking-widest hover:!bg-white/10">
               {repoSaved ? "SAVED" : <><Save className="h-4 w-4 mr-2" /> COMMIT URL</>}
             </Button>
           </div>
@@ -176,7 +176,7 @@ export default function GitHubPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
-          { label: "TOTAL OBJECTS",   value: allItems.length,                          icon: Github,    bg: "bg-white/5 text-white/50" },
+          { label: "TOTAL OBJECTS",   value: allItems.length,                          icon: Github,    bg: "bg-white/5 text-white/65" },
           { label: "ACTIVE ISSUES", value: linkedIssues.length,                      icon: AlertCircle,    bg: "bg-indigo-50 text-violet-400" },
           { label: "PULL REQUESTS",    value: linkedPRs.length,                         icon: GitPullRequest,    bg: "bg-emerald-50 text-emerald-600" },
           { label: "PENDING SYNC",      value: allItems.filter((i) => !i.link).length,   icon: Link2Off,    bg: "bg-rose-50 text-rose-600" },
@@ -186,7 +186,7 @@ export default function GitHubPage() {
               <s.icon className="h-5 w-5" />
             </div>
             <p className="text-2xl font-black text-white">{s.value}</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/50">{s.label}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/65">{s.label}</p>
           </div>
         ))}
       </div>
@@ -194,15 +194,15 @@ export default function GitHubPage() {
       {/* Tabs + Item List */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
         <div className="flex items-center justify-between border-b border-white/6 pb-4">
-          <TabsList className="bg-white/0 gap-8 h-auto p-0">
+          <TabsList className="bg-white/5 gap-8 h-auto p-0">
             {[
               { id: "all", label: "ALL ENTITIES", count: allItems.length },
               { id: "issues", label: "TRACKED ISSUES", count: linkedIssues.length },
               { id: "prs", label: "PULL REQUESTS", count: linkedPRs.length },
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
-                className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-white/10 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/50 group-hover:text-white/70 group-data-[state=active]:text-white transition-colors">{tab.label}</span>
+                className="p-0 h-10 bg-white/5 border-b-2 border-transparent data-[state=active]:border-white/10 data-[state=active]:bg-white/5 rounded-none flex items-center gap-2 group">
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/65 group-hover:text-white/70 group-data-[state=active]:text-white transition-colors">{tab.label}</span>
                 <span className="px-2 py-0.5 rounded-lg bg-white/5 text-[10px] font-black text-white/60 group-data-[state=active]:bg-[#0f1729] group-data-[state=active]:text-white transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
@@ -216,7 +216,7 @@ export default function GitHubPage() {
                 <Link2Off className="h-10 w-10 text-white/30" />
               </div>
               <h3 className="text-xl font-black text-white uppercase tracking-tight">Isolated Environment</h3>
-              <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mt-2 max-w-xs mx-auto">
+              <p className="text-[10px] font-bold text-white/65 uppercase tracking-widest mt-2 max-w-xs mx-auto">
                 No external VCS mappings detected. Initialize synchronization on any project entity.
               </p>
             </div>
@@ -238,7 +238,7 @@ export default function GitHubPage() {
                             item.kind === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" : "bg-indigo-50 text-violet-400 border-indigo-100")}>
                             {item.kind}
                           </span>
-                          <span className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">{item.status.replace('-', ' ')}</span>
+                          <span className="text-[10px] font-bold text-white/65 uppercase tracking-tighter">{item.status.replace('-', ' ')}</span>
                         </div>
                       </div>
 
@@ -253,17 +253,17 @@ export default function GitHubPage() {
                               <ExternalLink className="h-3 w-3 ml-1" />
                             </a>
                             <button onClick={() => handleOpenLinkForm(item.id, item.link!.type)}
-                              className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/50 hover:text-violet-400 hover:border-indigo-200 transition-all">
+                              className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/65 hover:text-violet-400 hover:border-indigo-200 transition-all">
                               <Save className="h-4 w-4" />
                             </button>
                             <button onClick={() => handleRemoveLink(item.id)}
-                              className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/50 hover:text-rose-600 hover:border-rose-200 transition-all">
+                              className="w-10 h-10 rounded-xl bg-white/5 border border-white/6 flex items-center justify-center text-white/65 hover:text-rose-600 hover:border-rose-200 transition-all">
                               <X className="h-4 w-4" />
                             </button>
                           </div>
                         ) : (
                           <button onClick={() => handleOpenLinkForm(item.id, item.kind === "bug" ? "issue" : "pr")}
-                            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:border-indigo-600 hover:text-violet-400 transition-all shadow-sm">
+                            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:border-indigo-600 hover:text-violet-400 transition-all shadow-sm">
                             <Plus className="h-4 w-4" /> ESTABLISH SYNC
                           </button>
                         )}
@@ -278,7 +278,7 @@ export default function GitHubPage() {
                             <button key={t}
                               onClick={() => setLinkForm((f) => f ? { ...f, type: t } : f)}
                               className={cn("flex items-center gap-3 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex-1 justify-center",
-                                linkForm.type === t ? "bg-[#0f1729] text-white shadow-xl" : "bg-white border border-white/10 text-white/60 hover:border-indigo-300")}
+                                linkForm.type === t ? "bg-[#0f1729] text-white shadow-xl" : "bg-white/5 border border-white/10 text-white/60 hover:border-indigo-300")}
                             >
                               {t === "issue" ? <Link2 className="h-4 w-4" /> : <GitPullRequest className="h-4 w-4" />}
                               {t === "issue" ? "ISSUE OBJECT" : "PULL REQUEST"}
@@ -287,20 +287,20 @@ export default function GitHubPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Reference Number</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Reference Number</Label>
                             <Input value={linkForm.number}
                               onChange={(e) => setLinkForm((f) => f ? { ...f, number: e.target.value } : f)}
-                              placeholder="e.g. 1024" className="h-12 !rounded-xl bg-white border-white/10 font-bold" />
+                              placeholder="e.g. 1024" className="h-12 !rounded-xl bg-white/5 border-white/10 font-bold" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-white/50 ml-1">Override URL (Optional)</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-white/65 ml-1">Override URL (Optional)</Label>
                             <Input value={linkForm.url}
                               onChange={(e) => setLinkForm((f) => f ? { ...f, url: e.target.value } : f)}
-                              placeholder="Leave blank for auto-generation" className="h-12 !rounded-xl bg-white border-white/10 font-mono text-xs" />
+                              placeholder="Leave blank for auto-generation" className="h-12 !rounded-xl bg-white/5 border-white/10 font-mono text-xs" />
                           </div>
                         </div>
                         <div className="flex gap-3 justify-end pt-2">
-                          <button onClick={() => setLinkForm(null)} className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white/70">Discard</button>
+                          <button onClick={() => setLinkForm(null)} className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white/65 hover:text-white/70">Discard</button>
                           <Button onClick={handleSaveLink} className="px-8 h-12 !rounded-xl !bg-indigo-600 font-black text-[10px] uppercase tracking-widest shadow-lg shadow-indigo-500/20">
                             CONFIRM SYNC
                           </Button>
