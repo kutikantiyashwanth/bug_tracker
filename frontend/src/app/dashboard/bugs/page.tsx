@@ -294,49 +294,39 @@ export default function BugsPage() {
         ))}
       </div>
 
-      {/* Filters & Navigation */}
-      <div className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              placeholder="Search reports by title, description or ID..."
-              value={searchQuery}
-            <span className="text-xs font-black uppercase tracking-widest">Report Defect</span>
-          </button>
-        )}
-      </div>
 
-      {/* ── Search & Filters ── */}
-      <div className="p-6 rounded-3xl bg-[#080c1d] border border-white/5 flex flex-col lg:flex-row gap-6 items-center">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-          <input
-            type="text"
-            placeholder="Search defects by ID, title, or description..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500/50 transition-all"
-          />
+      {/* ── Search, Filters & Tabs ── */}
+      <div className="space-y-6">
+        {/* Search & Filters */}
+        <div className="p-6 rounded-3xl bg-[#080c1d] border border-white/5 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <input
+              type="text"
+              placeholder="Search defects by ID, title, or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500/50 transition-all"
+            />
+          </div>
+          <div className="flex items-center gap-4 w-full lg:w-auto">
+            <select value={filterSeverity} onChange={(e) => setFilterSeverity(e.target.value)}
+              className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
+              <option value="all">All Severities</option>
+              <option value="critical">Critical Only</option>
+              <option value="major">Major Issues</option>
+              <option value="minor">Minor Tweaks</option>
+            </select>
+            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
+              className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
+              <option value="all">All States</option>
+              <option value="open">Open</option>
+              <option value="in-progress">Active</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Finalized</option>
+            </select>
+          </div>
         </div>
-        <div className="flex items-center gap-4 w-full lg:w-auto">
-          <select value={filterSeverity} onChange={(e) => setFilterSeverity(e.target.value)}
-            className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
-            <option value="all">All Severities</option>
-            <option value="critical">Critical Only</option>
-            <option value="major">Major Issues</option>
-            <option value="minor">Minor Tweaks</option>
-          </select>
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-            className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
-            <option value="all">All States</option>
-            <option value="open">Open</option>
-            <option value="in-progress">Active</option>
-            <option value="resolved">Resolved</option>
-            <option value="closed">Finalized</option>
-          </select>
-        </div>
-      </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="bg-transparent gap-8 p-0 h-auto mb-8">

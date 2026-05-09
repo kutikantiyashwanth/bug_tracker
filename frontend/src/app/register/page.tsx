@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import {
   Bug, ArrowRight, User, Mail, Lock, Eye, EyeOff,
   AlertCircle, CheckCircle2, X, Plus,
-  Shield, Code2, TestTube2, Zap, Star,
+  Shield, Zap, Star,
 } from "lucide-react";
 import type { Role } from "@/lib/types";
 
@@ -54,11 +54,7 @@ export default function RegisterPage() {
     setError("");
     try {
       await register(name, email, password, role, skills);
-      if (role === "admin") {
-        router.push("/dashboard");
-      } else {
-        router.push("/dashboard/projects");
-      }
+      router.push("/dashboard/projects");
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
     }
