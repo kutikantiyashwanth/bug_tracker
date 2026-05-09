@@ -237,7 +237,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         <div className="space-y-8 py-4">
           {navGroups.map((group) => (
             <div key={group.label} className="space-y-1">
-              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">{group.label}</p>
+              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{group.label}</p>
               {group.items.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = iconMap[item.iconKey];
@@ -248,11 +248,11 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                       isActive ? "active" : "hover:bg-white/5 hover:text-white"
                     )}>
                     <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300",
-                      isActive ? "bg-white/20 text-white" : "bg-white/5 text-white/30 group-hover:bg-white/10 group-hover:text-white"
+                      isActive ? "bg-white/20 text-white" : "bg-white/8 text-white/70 group-hover:bg-white/12 group-hover:text-white"
                     )}>
                       <Icon className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold flex-1 tracking-tight">{item.label}</span>
+                    <span className={cn("font-semibold flex-1 tracking-tight", isActive ? "text-white" : "text-white/75 group-hover:text-white")}>{item.label}</span>
                     {item.label === "Notifications" && unreadCount > 0 && (
                       <span className="flex items-center justify-center h-5 min-w-5 px-1.5 rounded-lg text-[10px] text-white font-black bg-rose-500 shadow-lg shadow-rose-500/20">
                         {unreadCount}
@@ -267,7 +267,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           {/* ── Team Section ── */}
           {activeProject?.members && activeProject.members.length > 0 && (
             <div className="space-y-1 pt-4">
-              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Collaborators</p>
+              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Collaborators</p>
               <div className="space-y-1 px-2">
                 {activeProject.members.slice(0, 5).map((member) => {
                   const user = getUserById(member.userId);
@@ -283,8 +283,8 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-900" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-white/70 group-hover:text-white truncate">{user.name}</p>
-                        <p className="text-[9px] font-medium text-white/30 uppercase tracking-tighter">{(member.role as string).toLowerCase()}</p>
+                        <p className="text-xs font-bold text-white/85 group-hover:text-white truncate">{user.name}</p>
+                        <p className="text-[9px] font-medium text-white/50 uppercase tracking-tighter">{(member.role as string).toLowerCase()}</p>
                       </div>
                     </div>
                   );
