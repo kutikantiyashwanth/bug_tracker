@@ -139,7 +139,7 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/45">Dashboard Overview</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Dashboard Overview</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
             {greeting},{" "}
@@ -194,12 +194,12 @@ export default function DashboardPage() {
               
               <div className="space-y-1">
                 <p className="text-3xl font-black text-white tracking-tight">{card.value}</p>
-                <p className="text-xs font-bold text-white/45 uppercase tracking-widest">{card.label}</p>
+                <p className="text-xs font-bold text-white/65 uppercase tracking-widest">{card.label}</p>
               </div>
               
               <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-white/45">{card.sub}</span>
-                <ArrowUpRight className="h-3 w-3 text-white/35 group-hover:text-violet-400 transition-colors" />
+                <span className="text-[10px] font-bold text-white/65">{card.sub}</span>
+                <ArrowUpRight className="h-3 w-3 text-white/55 group-hover:text-violet-400 transition-colors" />
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">Performance Analytics</h3>
-                  <p className="text-xs font-medium text-white/45 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
+                  <p className="text-xs font-medium text-white/65 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
@@ -280,10 +280,10 @@ export default function DashboardPage() {
               </div>
               
               <div className="mt-8 pt-6 border-t border-white/8 flex items-center justify-between">
-                <span className="text-xs font-bold text-white/45 uppercase">Total Workforce</span>
+                <span className="text-xs font-bold text-white/65 uppercase">Total Workforce</span>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-black text-white">{stats.total}</span>
-                  <span className="text-[10px] font-bold text-white/45">TASKS</span>
+                  <span className="text-[10px] font-bold text-white/65">TASKS</span>
                 </div>
               </div>
             </div>
@@ -304,8 +304,8 @@ export default function DashboardPage() {
                 ].map((m, i) => (
                   <div key={i} className={cn("p-6 rounded-2xl flex flex-col items-center justify-center text-center", m.bg)}>
                     <p className={cn("text-3xl font-black mb-1", m.color)}>{m.value}</p>
-                    <p className="text-[10px] font-black text-white/45 uppercase tracking-widest">{m.label}</p>
-                    <p className="text-[9px] font-medium text-white/45 mt-1">{m.sub}</p>
+                    <p className="text-[10px] font-black text-white/65 uppercase tracking-widest">{m.label}</p>
+                    <p className="text-[9px] font-medium text-white/65 mt-1">{m.sub}</p>
                   </div>
                 ))}
               </div>
@@ -314,7 +314,7 @@ export default function DashboardPage() {
                 <div className="p-4 rounded-2xl bg-white/5/4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shadow-sm">
-                      <Target className="h-4 w-4 text-white/45" />
+                      <Target className="h-4 w-4 text-white/65" />
                     </div>
                     <span className="text-xs font-bold text-white/70">Active Sprint Progress</span>
                   </div>
@@ -362,7 +362,7 @@ export default function DashboardPage() {
                             <span className="font-bold text-white">{user?.name || "Member"}</span>{" "}
                             {a.details}
                           </p>
-                          <p className="text-[10px] font-bold text-white/45 mt-1 uppercase tracking-tighter">{formatRelativeTime(a.createdAt)}</p>
+                          <p className="text-[10px] font-bold text-white/65 mt-1 uppercase tracking-tighter">{formatRelativeTime(a.createdAt)}</p>
                         </div>
                       </div>
                     );
@@ -371,7 +371,7 @@ export default function DashboardPage() {
               )}
             </ScrollArea>
             
-            <button className="mt-6 w-full py-3 rounded-xl bg-white/5/4 text-[10px] font-black uppercase tracking-[0.2em] text-white/45 hover:bg-white/5/8 hover:text-white transition-all shrink-0">
+            <button className="mt-6 w-full py-3 rounded-xl bg-white/5/4 text-[10px] font-black uppercase tracking-[0.2em] text-white/65 hover:bg-white/5/8 hover:text-white transition-all shrink-0">
               View Full History
             </button>
           </div>
@@ -393,7 +393,7 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {stats.upcomingDeadlines.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-xs font-bold text-white/45 uppercase">Nothing scheduled</p>
+                  <p className="text-xs font-bold text-white/65 uppercase">Nothing scheduled</p>
                 </div>
               ) : (
                 stats.upcomingDeadlines.map((task) => {
@@ -405,8 +405,8 @@ export default function DashboardPage() {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-white truncate tracking-tight">{task.title}</p>
                         <div className="flex items-center gap-2 mt-1">
-                          <Clock className="h-3 w-3 text-white/45" />
-                          <span className="text-[10px] font-bold text-white/45 uppercase tracking-tighter">{formatDate(task.dueDate!)} · {daysLeft}d remaining</span>
+                          <Clock className="h-3 w-3 text-white/65" />
+                          <span className="text-[10px] font-bold text-white/65 uppercase tracking-tighter">{formatDate(task.dueDate!)} · {daysLeft}d remaining</span>
                         </div>
                       </div>
                     </div>

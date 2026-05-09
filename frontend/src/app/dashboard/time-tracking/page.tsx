@@ -302,7 +302,7 @@ export default function TimeTrackingPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Manual Log</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Inject temporal data into the system audit feed.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Inject temporal data into the system audit feed.</DialogDescription>
             </div>
           </div>
 

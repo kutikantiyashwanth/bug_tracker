@@ -69,7 +69,7 @@ export default function ProjectsPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/45">Enterprise Workspaces</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Enterprise Workspaces</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Your <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
           <p className="text-white/55 mt-2 font-medium max-w-xl">
@@ -140,7 +140,7 @@ export default function ProjectsPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
                     <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl transition-transform group-hover:scale-110 shadow-lg", 
-                      isActive ? "bg-indigo-600 text-white shadow-indigo-500/20" : "bg-white/8 text-white/45")}>
+                      isActive ? "bg-indigo-600 text-white shadow-indigo-500/20" : "bg-white/8 text-white/65")}>
                       {project.name.substring(0, 1).toUpperCase()}
                     </div>
                     <div>
@@ -150,7 +150,7 @@ export default function ProjectsPage() {
                           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         )}
                       </div>
-                      <p className="text-[10px] font-black text-white/45 uppercase tracking-widest mt-0.5">Project Workspace</p>
+                      <p className="text-[10px] font-black text-white/65 uppercase tracking-widest mt-0.5">Project Workspace</p>
                     </div>
                   </div>
                   <div className="p-2 rounded-xl bg-white/4 group-hover:bg-indigo-50 transition-colors">
@@ -170,14 +170,14 @@ export default function ProjectsPage() {
                   ].map((stat, idx) => (
                     <div key={idx} className="text-center">
                       <p className="text-sm font-black text-white tracking-tight">{stat.value}</p>
-                      <p className="text-[8px] font-black text-white/45 uppercase tracking-[0.1em] mt-0.5">{stat.label}</p>
+                      <p className="text-[8px] font-black text-white/65 uppercase tracking-[0.1em] mt-0.5">{stat.label}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-white/45 uppercase tracking-widest">Sprint Velocity</span>
+                    <span className="text-[10px] font-black text-white/65 uppercase tracking-widest">Sprint Velocity</span>
                     <span className="text-xs font-black text-indigo-600">{completionRate}%</span>
                   </div>
                   <div className="h-2 rounded-full bg-white/8 overflow-hidden">
@@ -198,7 +198,7 @@ export default function ProjectsPage() {
                       );
                     })}
                     {project.members.length > 4 && (
-                      <div className="h-8 w-8 rounded-full bg-white/8 flex items-center justify-center text-[10px] font-black text-white/45 ring-2 ring-white">
+                      <div className="h-8 w-8 rounded-full bg-white/8 flex items-center justify-center text-[10px] font-black text-white/65 ring-2 ring-white">
                         +{project.members.length - 4}
                       </div>
                     )}
@@ -207,7 +207,7 @@ export default function ProjectsPage() {
                   {isAdmin && (
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
-                      className="flex items-center gap-2 text-[10px] font-black text-white/45 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
+                      className="flex items-center gap-2 text-[10px] font-black text-white/65 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
                     >
                       {copiedId === project.id ? (
                         <><Check className="h-3 w-3 text-emerald-500" /> Copied</>
@@ -233,25 +233,25 @@ export default function ProjectsPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">New Workspace</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Initialize a high-performance project tracker.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Initialize a high-performance project tracker.</DialogDescription>
             </div>
           </div>
 
           <div className="p-10 space-y-6">
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Project Name</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Project Name</Label>
               <Input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="e.g. NextGen Dashboard" 
                 className="h-14 rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Workspace Objective</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Workspace Objective</Label>
               <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Briefly describe the goals of this workspace..." rows={4}
                 className="rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium" />
             </div>
           </div>
 
           <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/45 hover:text-white/70 transition-colors">Discard</button>
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
             <Button variant="premium" onClick={handleCreate} disabled={!formName.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> CREATE WORKSPACE
             </Button>
@@ -268,13 +268,13 @@ export default function ProjectsPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Access Key</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Join an existing workspace using a secure code.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Join an existing workspace using a secure code.</DialogDescription>
             </div>
           </div>
 
           <div className="p-10 space-y-6">
             <div className="space-y-2 text-center">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45">Workspace Invitation Code</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Workspace Invitation Code</Label>
               <Input 
                 value={inviteCode} 
                 onChange={(e) => { setInviteCode(e.target.value); setJoinError(""); }} 
@@ -282,7 +282,7 @@ export default function ProjectsPage() {
                 className="h-20 text-center text-2xl font-mono tracking-widest rounded-3xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 uppercase"
                 maxLength={36}
               />
-              <p className="text-[10px] font-bold text-white/45 uppercase mt-4">CHECK WITH YOUR ADMINISTRATOR FOR THE KEY</p>
+              <p className="text-[10px] font-bold text-white/65 uppercase mt-4">CHECK WITH YOUR ADMINISTRATOR FOR THE KEY</p>
             </div>
             {joinError && (
               <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center">
@@ -292,7 +292,7 @@ export default function ProjectsPage() {
           </div>
 
           <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => { setShowJoinDialog(false); setInviteCode(""); setJoinError(""); }} className="text-xs font-black uppercase tracking-widest text-white/45 hover:text-white/70 transition-colors">Back</button>
+            <button onClick={() => { setShowJoinDialog(false); setInviteCode(""); setJoinError(""); }} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Back</button>
             <Button variant="premium" onClick={handleJoin} disabled={!inviteCode.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <ArrowRight className="h-5 w-5 mr-2" /> JOIN WORKSPACE
             </Button>

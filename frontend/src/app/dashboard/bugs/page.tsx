@@ -242,7 +242,7 @@ export default function BugsPage() {
       case "open": return <div className="w-2 h-2 rounded-full bg-red-500" />;
       case "in-progress": return <Clock className="h-3.5 w-3.5 text-amber-600" />;
       case "resolved": return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />;
-      case "closed": return <CheckCircle2 className="h-3.5 w-3.5 text-white/45" />;
+      case "closed": return <CheckCircle2 className="h-3.5 w-3.5 text-white/65" />;
     }
   };
 
@@ -253,7 +253,7 @@ export default function BugsPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-rose-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/45">Quality Assurance</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Quality Assurance</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
           <p className="text-white/55 mt-2 font-medium max-w-xl">
@@ -287,7 +287,7 @@ export default function BugsPage() {
               </div>
               <div>
                 <p className="text-2xl font-black text-white tracking-tight">{stat.value}</p>
-                <p className="text-[10px] font-black text-white/45 uppercase tracking-widest">{stat.label}</p>
+                <p className="text-[10px] font-black text-white/65 uppercase tracking-widest">{stat.label}</p>
               </div>
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function BugsPage() {
       <div className="space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-white/8/50 border border-white/10/60">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/45" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/65" />
             <Input
               placeholder="Search reports by title, description or ID..."
               value={searchQuery}
@@ -344,7 +344,7 @@ export default function BugsPage() {
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
                 className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
-                <span className="text-sm font-black uppercase tracking-widest text-white/45 group-hover:text-white/70 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
+                <span className="text-sm font-black uppercase tracking-widest text-white/65 group-hover:text-white/70 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
                 <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
@@ -387,7 +387,7 @@ export default function BugsPage() {
                             {bug.description || "No detailed description provided for this report."}
                           </p>
                           
-                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-white/45">
+                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-white/65">
                             <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-white/4 border border-white/8">
                               <Avatar className="h-5 w-5">
                                 <AvatarFallback className="text-[8px] bg-indigo-500 text-white">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
@@ -415,7 +415,7 @@ export default function BugsPage() {
                             )}>
                               {bug.severity}
                             </Badge>
-                            <div className="flex items-center gap-2 text-xs font-bold text-white/45">
+                            <div className="flex items-center gap-2 text-xs font-bold text-white/65">
                               {statusIcon(bug.status)}
                               <span className="capitalize">{bug.status.replace('-', ' ')}</span>
                             </div>
@@ -443,14 +443,14 @@ export default function BugsPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Report Bug</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">AI-powered defect analysis and reporting tool.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">AI-powered defect analysis and reporting tool.</DialogDescription>
             </div>
           </div>
           
           <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Report Headline</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Report Headline</Label>
                 <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Memory leak on dashboard chart interaction" 
                   className="h-14 rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
@@ -486,7 +486,7 @@ export default function BugsPage() {
                         { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
                       ].map((item, idx) => (
                         <div key={idx} className="bg-white p-3 rounded-xl border border-white/8 text-center">
-                          <p className="text-[8px] font-black uppercase text-white/45 mb-1">{item.label}</p>
+                          <p className="text-[8px] font-black uppercase text-white/65 mb-1">{item.label}</p>
                           <p className={cn("text-[10px] font-black", item.color)}>{item.value}</p>
                         </div>
                       ))}
@@ -494,7 +494,7 @@ export default function BugsPage() {
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-[10px] font-bold text-white/45">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
+                    <p className="text-[10px] font-bold text-white/65">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
                   </div>
                 )}
               </div>
@@ -502,12 +502,12 @@ export default function BugsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Impact Description</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Impact Description</Label>
                 <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Explain the business impact..." rows={4} 
                   className="rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium text-sm" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Reproduction Path</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Reproduction Path</Label>
                 <Textarea value={formSteps} onChange={(e) => setFormSteps(e.target.value)} placeholder="1. Open app&#10;2. Click btn..." rows={4} 
                   className="rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-mono text-xs" />
               </div>
@@ -515,7 +515,7 @@ export default function BugsPage() {
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Severity Level</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Severity Level</Label>
                 <Select value={formSeverity} onValueChange={(v) => setFormSeverity(v as Severity)}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/4 border-white/10 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -526,7 +526,7 @@ export default function BugsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Assign Resolver</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Assign Resolver</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
                   <SelectTrigger className="h-12 rounded-2xl bg-white/4 border-white/10 font-bold text-xs"><SelectValue placeholder="Automatic Allocation" /></SelectTrigger>
                   <SelectContent>
@@ -539,7 +539,7 @@ export default function BugsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Visual Evidence</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Visual Evidence</Label>
               <label className="group block border-2 border-dashed border-white/10 rounded-[2rem] p-8 text-center hover:border-indigo-500/40 hover:bg-indigo-50/30 transition-all cursor-pointer">
                 <input type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
                 {screenshotPreview ? (
@@ -552,11 +552,11 @@ export default function BugsPage() {
                 ) : (
                   <div className="space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-white/8 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Plus className="h-6 w-6 text-white/45" />
+                      <Plus className="h-6 w-6 text-white/65" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Upload Screenshot</p>
-                      <p className="text-xs text-white/45 font-medium">Attach visual context for faster resolution</p>
+                      <p className="text-xs text-white/65 font-medium">Attach visual context for faster resolution</p>
                     </div>
                   </div>
                 )}
@@ -565,7 +565,7 @@ export default function BugsPage() {
           </div>
 
           <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/45 hover:text-white/70 transition-colors">Discard</button>
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
             <div className="flex items-center gap-4">
               {createError && <p className="text-xs font-bold text-rose-500">{createError}</p>}
               <Button variant="premium" onClick={handleCreateBug} disabled={!formTitle.trim() || creating} className="!h-14 !px-8 shadow-indigo-500/20">
@@ -597,7 +597,7 @@ export default function BugsPage() {
                       )}>
                         {bug.severity}
                       </Badge>
-                      <span className="text-white/20 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
+                      <span className="text-white/50 font-black text-xs tracking-widest">#{bug.id.substring(0, 8)}</span>
                     </div>
                     <DialogTitle className="text-3xl font-black text-white tracking-tight leading-tight">{bug.title}</DialogTitle>
                     <div className="flex items-center gap-6 mt-6">
@@ -606,7 +606,7 @@ export default function BugsPage() {
                           <AvatarFallback className="bg-indigo-600 text-white text-[10px] font-black">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Reporter</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/55">Reporter</p>
                           <p className="text-xs font-bold text-white/80">{reporter?.name || "Anonymous"}</p>
                         </div>
                       </div>
@@ -616,13 +616,13 @@ export default function BugsPage() {
                           {statusIcon(bug.status)}
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Status</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/55">Status</p>
                           <p className="text-xs font-bold text-white/80 capitalize">{bug.status.replace('-', ' ')}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/20 hover:text-white transition-colors">
+                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/50 hover:text-white transition-colors">
                     <Trash2 className="h-6 w-6 rotate-45" />
                   </button>
                 </div>
@@ -631,13 +631,13 @@ export default function BugsPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                       <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Functional Impact</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 mb-4">Functional Impact</h4>
                         <p className="text-sm text-white/70 font-medium leading-relaxed">{bug.description || "No context provided."}</p>
                       </div>
 
                       {bug.stepsToReproduce && (
                         <div>
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Reproduction Steps</h4>
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 mb-4">Reproduction Steps</h4>
                           <div className="bg-white/4 rounded-[1.5rem] p-6 border border-white/8 font-mono text-xs text-white/70 leading-relaxed">
                             {bug.stepsToReproduce}
                           </div>
@@ -648,7 +648,7 @@ export default function BugsPage() {
                     <div className="space-y-8">
                       {bug.screenshotUrl && (
                         <div>
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Evidence</h4>
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 mb-4">Evidence</h4>
                           <div className="group relative overflow-hidden rounded-[2rem] border border-white/8 shadow-xl">
                             <img src={bug.screenshotUrl} alt="BugEvidence" className="w-full object-cover" />
                             <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -657,7 +657,7 @@ export default function BugsPage() {
                       )}
 
                       <div className="card-base rounded-2xl p-6">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Resolution Ownership</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 mb-4">Resolution Ownership</h4>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
@@ -665,7 +665,7 @@ export default function BugsPage() {
                             </Avatar>
                             <div>
                               <p className="text-sm font-bold text-white">{assignee?.name || "Unassigned"}</p>
-                              <p className="text-[10px] font-bold text-white/45">LEAD RESOLVER</p>
+                              <p className="text-[10px] font-bold text-white/65">LEAD RESOLVER</p>
                             </div>
                           </div>
                           {!assignee && permissions.changeBugStatus && (
@@ -679,7 +679,7 @@ export default function BugsPage() {
                   {/* ── Chat/Comments ── */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45">Collaboration Feed</h4>
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">Collaboration Feed</h4>
                       <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55">{comments.length} MESSAGES</span>
                     </div>
 
@@ -689,7 +689,7 @@ export default function BugsPage() {
                       ) : comments.length === 0 ? (
                         <div className="text-center py-12 border-2 border-dashed border-white/8 rounded-[2rem]">
                           <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-3" />
-                          <p className="text-xs font-bold text-white/45 uppercase tracking-widest">No activity yet</p>
+                          <p className="text-xs font-bold text-white/65 uppercase tracking-widest">No activity yet</p>
                         </div>
                       ) : (
                         <div className="space-y-4">
@@ -702,7 +702,7 @@ export default function BugsPage() {
                                   <AvatarFallback className="text-[10px] font-black bg-indigo-500 text-white">{author ? getInitials(author.name) : "?"}</AvatarFallback>
                                 </Avatar>
                                 <div className={cn("max-w-[80%] space-y-1", isMe && "text-right")}>
-                                  <p className="text-[10px] font-black text-white/45 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
+                                  <p className="text-[10px] font-black text-white/65 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
                                   <div className={cn("px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm", 
                                     isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-white/8 text-white/70 rounded-tl-none")}>
                                     {c.content}

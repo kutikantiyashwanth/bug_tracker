@@ -197,9 +197,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-white truncate">{activeProject?.name || "Select Project"}</p>
-                <p className="text-[10px] text-white/40 font-medium tracking-tight">{activeProject?.members?.length || 0} collaborators</p>
+                <p className="text-[10px] text-white/60 font-medium tracking-tight">{activeProject?.members?.length || 0} collaborators</p>
               </div>
-              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/30", projectMenuOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 text-white/55", projectMenuOpen && "rotate-180")} />
             </button>
 
             {projectMenuOpen && (
@@ -221,7 +221,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 </div>
                 <div className="mt-2 pt-2 border-t border-white/5">
                   <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all">
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all">
                     <Plus className="h-4 w-4" />
                     <span className="font-semibold">New Project</span>
                   </Link>
@@ -306,10 +306,10 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           </Avatar>
           <div className="flex-1 min-w-0 z-10">
             <p className="text-sm font-bold text-white truncate">{currentUser?.name || "Anonymous"}</p>
-            <p className="text-[10px] font-medium text-white/40 uppercase tracking-widest">{(currentUser?.role || "USER").toLowerCase()}</p>
+            <p className="text-[10px] font-medium text-white/60 uppercase tracking-widest">{(currentUser?.role || "USER").toLowerCase()}</p>
           </div>
           <button onClick={() => { logout(); router.push("/login"); }}
-            className="p-2 rounded-xl text-white/20 hover:text-rose-400 hover:bg-rose-500/10 transition-all z-10"
+            className="p-2 rounded-xl text-white/50 hover:text-rose-400 hover:bg-rose-500/10 transition-all z-10"
             title="Sign out">
             <LogOut className="h-4 w-4" />
           </button>
@@ -337,7 +337,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
-          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/20 hover:text-white hover:bg-white/5 transition-all"
+          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5" />
           </button>

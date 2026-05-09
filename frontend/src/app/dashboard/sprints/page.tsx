@@ -300,7 +300,7 @@ export default function SprintsPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Cycle Setup</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Define parameters for the next development iteration.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Define parameters for the next development iteration.</DialogDescription>
             </div>
           </div>
 

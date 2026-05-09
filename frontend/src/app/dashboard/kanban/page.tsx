@@ -322,7 +322,7 @@ export default function KanbanPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">New Task</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Define a new work item in the {columns.find((c) => c.id === createInColumn)?.label} column.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Define a new work item in the {columns.find((c) => c.id === createInColumn)?.label} column.</DialogDescription>
             </div>
           </div>
 
@@ -394,7 +394,7 @@ export default function KanbanPage() {
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Modify Task</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">Update the parameters of this existing work item.</DialogDescription>
+              <DialogDescription className="text-white/60 font-medium">Update the parameters of this existing work item.</DialogDescription>
             </div>
           </div>
 
