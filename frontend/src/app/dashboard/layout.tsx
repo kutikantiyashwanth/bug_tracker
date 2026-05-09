@@ -156,7 +156,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" style={{ background: "linear-gradient(180deg, #0c1220 0%, #0a0f1e 100%)", borderRight: "1px solid rgba(124,58,237,0.15)" }}>
       {/* ── Logo ── */}
       <div className="flex items-center gap-3 px-6 h-20 shrink-0">
         <div className="relative group cursor-pointer">
@@ -320,9 +320,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="flex min-h-screen bg-[#f8fafc]">
+      <div className="flex min-h-screen" style={{ background: "#080b14" }}>
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
+        <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30" style={{ background: "linear-gradient(180deg, #0c1220 0%, #0a0f1e 100%)", borderRight: "1px solid rgba(124,58,237,0.15)", boxShadow: "4px 0 24px rgba(0,0,0,0.4)" }}>
           <SidebarContent />
         </aside>
 
@@ -334,9 +334,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
+          "fixed inset-y-0 left-0 z-50 w-[280px] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}>
+        )} style={{ background: "linear-gradient(180deg, #0c1220 0%, #0a0f1e 100%)", borderRight: "1px solid rgba(124,58,237,0.15)" }}>
           <button className="absolute right-4 top-4 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5" />
@@ -347,8 +347,8 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white/0/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
-            <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
+          <header className="sticky top-0 z-20 h-16 backdrop-blur-xl flex items-center px-6 lg:px-8 gap-6" style={{ background: "rgba(8,11,20,0.9)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <button className="lg:hidden p-2.5 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
             </button>
