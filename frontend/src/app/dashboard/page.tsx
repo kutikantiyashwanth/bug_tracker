@@ -203,32 +203,36 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2 md:gap-3 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <button
             onClick={async () => {
-              if (!activeProjectId || refreshing) return;
+              if (!activeProjectId) return;
               setRefreshing(true);
-              // Force clear cache so we always get fresh data
-              const { invalidateCache } = await import("@/lib/api");
-              invalidateCache(`/projects/${activeProjectId}/tasks`);
-              invalidateCache(`/projects/${activeProjectId}/bugs`);
-              invalidateCache(`/projects/${activeProjectId}/activities`);
-              await Promise.all([
-                fetchTasks(activeProjectId),
-                fetchBugs(activeProjectId),
-                fetchActivities(activeProjectId),
-              ]);
-              setRefreshing(false);
+              try {
+                const { invalidateCache } = await import("@/lib/api");
+                invalidateCache(`/projects/${activeProjectId}/tasks`);
+                invalidateCache(`/projects/${activeProjectId}/bugs`);
+                invalidateCache(`/projects/${activeProjectId}/activities`);
+                await Promise.all([
+                  fetchTasks(activeProjectId),
+                  fetchBugs(activeProjectId),
+                  fetchActivities(activeProjectId),
+                ]);
+              } finally {
+                setRefreshing(false);
+              }
             }}
-            disabled={!activeProjectId || refreshing}
-            className="group flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm disabled:opacity-50">
-            <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-600 transition-all duration-500", refreshing && "animate-spin text-indigo-600")} />
+            className="group flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-colors shadow-sm"
+            style={{ transform: "none" }}
+          >
+            <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-600 transition-colors", refreshing && "animate-spin text-indigo-600")} />
             <span className="text-xs md:text-sm font-bold text-slate-600 group-hover:text-indigo-600">
               {refreshing ? "Refreshing..." : "Refresh"}
             </span>
           </button>
           
           <button
-            onClick={() => setShowCreateTask(true)}
-            disabled={!activeProjectId}
-            className="btn-premium shadow-indigo-500/25 py-2.5 px-4 md:px-6 disabled:opacity-50">
+            onClick={() => { if (activeProjectId) setShowCreateTask(true); }}
+            className="flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 transition-colors"
+            style={{ transform: "none" }}
+          >
             <Plus className="h-4 w-4" />
             <span className="text-xs md:text-sm font-bold">New Task</span>
           </button>
