@@ -350,6 +350,11 @@ app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
       orderBy: { updatedAt: "desc" },
     });
 
+    console.log(`📋 Fetched ${projects.length} projects for user ${req.user.userId}`);
+    if (projects.length > 0) {
+      console.log(`🔑 First project invite code: ${projects[0].inviteCode}`);
+    }
+
     mc.set(cacheKey, projects, 30_000); // 30s cache
     res.json({ success: true, data: projects });
   } catch (error: any) {
@@ -385,8 +390,13 @@ app.post("/api/v1/projects", authMiddleware, async (req: any, res) => {
             user: { select: { id: true, name: true, email: true, role: true } },
           },
         },
+        _count: {
+          select: { tasks: true, bugs: true },
+        },
       },
     });
+
+    console.log("✅ Project created with invite code:", project.inviteCode);
 
     mc.del(`projects:${req.user.userId}`);
     res.status(201).json({
