@@ -489,7 +489,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </div>
 
       {/* ── New Task Dialog ── */}
       <Dialog open={showCreateTask} onOpenChange={setShowCreateTask}>
