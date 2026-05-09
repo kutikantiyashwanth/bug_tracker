@@ -336,14 +336,14 @@ export default function BugsPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-transparent gap-8 p-0 h-auto mb-8">
+          <TabsList className="bg-white/0 gap-8 p-0 h-auto mb-8">
             {[
               { id: "all", label: "All Reports", count: projectBugs.length },
               { id: "open", label: "Active Issues", count: stats.open + stats.inProgress },
               { id: "resolved", label: "Resolved", count: stats.resolved },
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
-                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
+                className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
                 <span className="text-sm font-black uppercase tracking-widest text-white/45 group-hover:text-white/70 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
                 <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
               </TabsTrigger>

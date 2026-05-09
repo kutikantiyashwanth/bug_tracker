@@ -13,9 +13,9 @@
   :root {
     --background: 220 33% 98%;
     --foreground: 224 71.4% 4.1%;
-    --card: 0 0% 100%;
+    --card: 222 47% 8%;
     --card-foreground: 224 71.4% 4.1%;
-    --popover: 0 0% 100%;
+    --popover: 222 47% 8%;
     --popover-foreground: 224 71.4% 4.1%;
     --primary: 262 83% 58%;
     --primary-foreground: 210 20% 98%;
@@ -27,8 +27,8 @@
     --accent-foreground: 262 83% 40%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 222 47% 13%;
+    --input: 222 47% 11%;
     --ring: 262 83% 58%;
     --radius: 1rem;
 
@@ -481,7 +481,13 @@ html, body {
 /* ── Cards: reduce padding on mobile ── */
 @media (max-width: 639px) {
   .card-base {
-    border-radius: 1rem !important;
+    background: #131929;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
   }
   /* Reduce inner padding of CardContent on mobile */
   [class*="CardContent"] {

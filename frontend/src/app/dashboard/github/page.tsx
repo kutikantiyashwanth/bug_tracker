@@ -194,14 +194,14 @@ export default function GitHubPage() {
       {/* Tabs + Item List */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <TabsList className="bg-transparent gap-8 h-auto p-0">
+          <TabsList className="bg-white/0 gap-8 h-auto p-0">
             {[
               { id: "all", label: "ALL ENTITIES", count: allItems.length },
               { id: "issues", label: "TRACKED ISSUES", count: linkedIssues.length },
               { id: "prs", label: "PULL REQUESTS", count: linkedPRs.length },
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
-                className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-slate-900 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
+                className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-slate-900 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-slate-900 transition-colors">{tab.label}</span>
                 <span className="px-2 py-0.5 rounded-lg bg-slate-50 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-slate-900 group-data-[state=active]:text-white transition-all">{tab.count}</span>
               </TabsTrigger>

@@ -233,7 +233,7 @@ export default function NotificationsPage() {
                           <div className="flex flex-col items-center pt-1 shrink-0">
                             <div className={cn(
                               "w-2.5 h-2.5 rounded-full transition-all",
-                              !notification.read ? "bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.5)]" : "bg-transparent"
+                              !notification.read ? "bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.5)]" : "bg-white/0"
                             )} />
                           </div>
 

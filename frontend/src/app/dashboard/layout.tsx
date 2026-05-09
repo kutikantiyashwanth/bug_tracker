@@ -420,7 +420,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           <div className="relative w-full max-w-lg animate-scale-in"
             onClick={(e) => e.stopPropagation()}>
             <div className="rounded-2xl overflow-hidden shadow-xl"
-              style={{ background: "#ffffff", border: "1px solid #e8ecf4", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
+              style={{ background: "#131929", border: "1px solid #e8ecf4", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
               {/* Input */}
               <div className="flex items-center gap-3 px-4 py-3.5" style={{ borderBottom: "1px solid rgba(109,40,217,0.15)" }}>
                 <Search className="h-[18px] w-[18px] text-purple-600 shrink-0" />
@@ -430,7 +430,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   placeholder="Search tasks, bugs, projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-transparent"
+                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 outline-none bg-white/0"
                 />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-700">
