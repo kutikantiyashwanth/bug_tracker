@@ -139,16 +139,16 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Dashboard Overview</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Dashboard Overview</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
             {greeting},{" "}
-            <span className="text-gradient">{currentUser?.name?.split(" ")[0] || "there"}</span>
+            <span className="text-brand">{currentUser?.name?.split(" ")[0] || "there"}</span>
             {" "}✨
           </h1>
-          <p className="text-white/60 mt-2 font-medium max-w-xl leading-relaxed">
+          <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
             {activeProject
-              ? <>You're viewing metrics for <span className="text-violet-400 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
+              ? <>You're currently viewing metrics for <span className="text-indigo-600 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
               : "Select a project from the sidebar to view detailed analytics and manage your team."}
           </p>
         </div>
@@ -156,12 +156,14 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-            className="group flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all"
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.borderColor = "rgba(124,58,237,0.4)"; e.currentTarget.style.color = "#c4b5fd"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.7)"; }}>
-            <RefreshCw className="h-4 w-4 group-hover:rotate-180 transition-all duration-500" />
-            <span className="text-sm font-bold">Refresh Data</span>
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
+            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
+            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh Data</span>
+          </button>
+          
+          <button className="btn-premium shadow-indigo-500/25">
+            <Plus className="h-4 w-4" />
+            <span className="text-sm font-bold">Quick Action</span>
           </button>
         </div>
       </div>
@@ -170,7 +172,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, i) => (
           <div key={i}
-            className="card-base rounded-2xl p-6 group relative overflow-hidden"
+            className="premium-card group relative overflow-hidden"
             style={{ animationDelay: `${i * 100}ms` }}>
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-125 transition-transform duration-700">
               <card.icon className="h-24 w-24" />
@@ -184,9 +186,7 @@ export default function DashboardPage() {
                 {card.trend && (
                   <div className={cn(
                     "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
-                    card.up
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-rose-500/15 text-rose-400"
+                    card.up ? "bg-emerald-100 text-emerald-600" : "bg-rose-100 text-rose-600"
                   )}>
                     {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                     {card.trend}
@@ -195,13 +195,13 @@ export default function DashboardPage() {
               </div>
               
               <div className="space-y-1">
-                <p className="text-3xl font-black text-white tracking-tight">{card.value}</p>
-                <p className="text-xs font-bold text-white/65 uppercase tracking-widest">{card.label}</p>
+                <p className="text-3xl font-black text-slate-900 tracking-tight">{card.value}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{card.label}</p>
               </div>
               
-              <div className="mt-6 pt-4 border-t border-white/8 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-white/65">{card.sub}</span>
-                <ArrowUpRight className="h-3 w-3 text-white/70 group-hover:text-violet-400 transition-colors" />
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400">{card.sub}</span>
+                <ArrowUpRight className="h-3 w-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
               </div>
             </div>
           </div>
@@ -213,15 +213,15 @@ export default function DashboardPage() {
         
         {/* Productivity Analytics */}
         <div className="xl:col-span-2 space-y-8">
-          <div className="card-base rounded-2xl overflow-hidden">
-            <div className="p-6 border-b border-white/8 flex items-center justify-between bg-white/5/4/50">
+          <div className="premium-card !p-0 overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Performance Analytics</h3>
-                  <p className="text-xs font-medium text-white/65 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
+                  <h3 className="text-lg font-bold text-slate-900">Performance Analytics</h3>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
@@ -258,22 +258,22 @@ export default function DashboardPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Task Distribution */}
-            <div className="card-base rounded-2xl p-6">
+            <div className="premium-card">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
                   <BarChart3 className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-white">Task Flow</h3>
+                <h3 className="text-lg font-bold text-slate-900">Task Flow</h3>
               </div>
               
               <div className="space-y-6">
                 {tasksByStatus.map((item) => (
                   <div key={item.label} className="group">
                     <div className="flex justify-between text-xs font-bold mb-2">
-                      <span className="text-white/70 group-hover:text-white transition-colors uppercase tracking-widest">{item.label}</span>
-                      <span className="text-white">{item.count}</span>
+                      <span className="text-slate-500 group-hover:text-slate-900 transition-colors uppercase tracking-widest">{item.label}</span>
+                      <span className="text-slate-900">{item.count}</span>
                     </div>
-                    <div className="h-2.5 bg-white/5/8 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-1000 ease-out shadow-sm"
                         style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%`, backgroundColor: item.color }} />
                     </div>
@@ -281,46 +281,46 @@ export default function DashboardPage() {
                 ))}
               </div>
               
-              <div className="mt-8 pt-6 border-t border-white/8 flex items-center justify-between">
-                <span className="text-xs font-bold text-white/65 uppercase">Total Workforce</span>
+              <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-400 uppercase">Total Workforce</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-black text-white">{stats.total}</span>
-                  <span className="text-[10px] font-bold text-white/65">TASKS</span>
+                  <span className="text-2xl font-black text-slate-900">{stats.total}</span>
+                  <span className="text-[10px] font-bold text-slate-400">TASKS</span>
                 </div>
               </div>
             </div>
 
             {/* Success Metrics */}
-            <div className="card-base rounded-2xl p-6">
+            <div className="premium-card">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
                   <Award className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-white">Success Rate</h3>
+                <h3 className="text-lg font-bold text-slate-900">Success Rate</h3>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Efficiency", value: `${stats.completionRate}%`, sub: "Task Completion", color: "text-violet-400", bg: "bg-violet-500/15" },
-                  { label: "Stability", value: `${stats.bugFixRate}%`, sub: "Bug Resolution", color: "text-emerald-400", bg: "bg-emerald-500/15" },
+                  { label: "Efficiency", value: `${stats.completionRate}%`, sub: "Task Completion", color: "text-indigo-600", bg: "bg-indigo-50" },
+                  { label: "Stability", value: `${stats.bugFixRate}%`, sub: "Bug Resolution", color: "text-emerald-600", bg: "bg-emerald-50" },
                 ].map((m, i) => (
                   <div key={i} className={cn("p-6 rounded-2xl flex flex-col items-center justify-center text-center", m.bg)}>
                     <p className={cn("text-3xl font-black mb-1", m.color)}>{m.value}</p>
-                    <p className="text-[10px] font-black text-white/65 uppercase tracking-widest">{m.label}</p>
-                    <p className="text-[9px] font-medium text-white/65 mt-1">{m.sub}</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{m.label}</p>
+                    <p className="text-[9px] font-medium text-slate-400 mt-1">{m.sub}</p>
                   </div>
                 ))}
               </div>
               
               <div className="mt-6 space-y-4">
-                <div className="p-4 rounded-2xl bg-white/5/4 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-slate-50 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shadow-sm">
-                      <Target className="h-4 w-4 text-white/65" />
+                    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
+                      <Target className="h-4 w-4 text-slate-400" />
                     </div>
-                    <span className="text-xs font-bold text-white/70">Active Sprint Progress</span>
+                    <span className="text-xs font-bold text-slate-600">Active Sprint Progress</span>
                   </div>
-                  <span className="text-sm font-black text-white">74%</span>
+                  <span className="text-sm font-black text-slate-900">74%</span>
                 </div>
               </div>
             </div>
@@ -331,12 +331,12 @@ export default function DashboardPage() {
         <div className="space-y-8">
           
           {/* Recent Activity Feed */}
-          <div className="card-base rounded-2xl p-6 flex flex-col h-[500px]">
+          <div className="premium-card flex flex-col h-[500px]">
             <div className="flex items-center gap-4 mb-8 shrink-0">
               <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
                 <Activity className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-white">Team Pulse</h3>
+              <h3 className="text-lg font-bold text-slate-900">Team Pulse</h3>
             </div>
             
             <ScrollArea className="flex-1 -mx-2 px-2">
@@ -352,7 +352,7 @@ export default function DashboardPage() {
                     return (
                       <div key={a.id} className="flex gap-4 group relative">
                         {i !== projectActivities.length - 1 && (
-                          <div className="absolute left-4 top-10 bottom-0 w-[2px] bg-white/5/8" />
+                          <div className="absolute left-4 top-10 bottom-0 w-[2px] bg-slate-100" />
                         )}
                         <Avatar className="h-9 w-9 shrink-0 ring-4 ring-white shadow-sm z-10">
                           <AvatarFallback className="text-[10px] font-black bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
@@ -360,11 +360,11 @@ export default function DashboardPage() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 pt-1">
-                          <p className="text-xs leading-relaxed text-white/70">
-                            <span className="font-bold text-white">{user?.name || "Member"}</span>{" "}
+                          <p className="text-xs leading-relaxed text-slate-600">
+                            <span className="font-bold text-slate-900">{user?.name || "Member"}</span>{" "}
                             {a.details}
                           </p>
-                          <p className="text-[10px] font-bold text-white/65 mt-1 uppercase tracking-tighter">{formatRelativeTime(a.createdAt)}</p>
+                          <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">{formatRelativeTime(a.createdAt)}</p>
                         </div>
                       </div>
                     );
@@ -373,21 +373,21 @@ export default function DashboardPage() {
               )}
             </ScrollArea>
             
-            <button className="mt-6 w-full py-3 rounded-xl bg-white/5/4 text-[10px] font-black uppercase tracking-[0.2em] text-white/65 hover:bg-white/5/8 hover:text-white transition-all shrink-0">
+            <button className="mt-6 w-full py-3 rounded-xl bg-slate-50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-all shrink-0">
               View Full History
             </button>
           </div>
 
           {/* Upcoming Deadlines */}
-          <div className="card-base rounded-2xl p-6">
+          <div className="premium-card">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
                   <Calendar className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-white">Timeline</h3>
+                <h3 className="text-lg font-bold text-slate-900">Timeline</h3>
               </div>
-              <div className="w-8 h-8 rounded-full bg-white/5/8 flex items-center justify-center text-[10px] font-black text-white/70">
+              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-600">
                 {stats.upcomingDeadlines.length}
               </div>
             </div>
@@ -395,20 +395,20 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {stats.upcomingDeadlines.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-xs font-bold text-white/65 uppercase">Nothing scheduled</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Nothing scheduled</p>
                 </div>
               ) : (
                 stats.upcomingDeadlines.map((task) => {
                   const daysLeft = Math.ceil((new Date(task.dueDate!).getTime() - Date.now()) / 86400000);
                   const isUrgent = daysLeft <= 2;
                   return (
-                    <div key={task.id} className="group p-4 rounded-2xl bg-white/5/4 hover:bg-white/5 border border-transparent hover:border-white/8 hover:shadow-sm transition-all flex items-center gap-4">
+                    <div key={task.id} className="group p-4 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-sm transition-all flex items-center gap-4">
                       <div className={cn("w-1.5 h-10 rounded-full", isUrgent ? "bg-rose-500 shadow-lg shadow-rose-500/20" : "bg-indigo-400")} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-white truncate tracking-tight">{task.title}</p>
+                        <p className="text-sm font-bold text-slate-900 truncate tracking-tight">{task.title}</p>
                         <div className="flex items-center gap-2 mt-1">
-                          <Clock className="h-3 w-3 text-white/65" />
-                          <span className="text-[10px] font-bold text-white/65 uppercase tracking-tighter">{formatDate(task.dueDate!)} · {daysLeft}d remaining</span>
+                          <Clock className="h-3 w-3 text-slate-400" />
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{formatDate(task.dueDate!)} · {daysLeft}d remaining</span>
                         </div>
                       </div>
                     </div>

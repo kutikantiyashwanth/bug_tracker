@@ -136,10 +136,10 @@ export default function TimeTrackingPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Resource Utilization</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Resource Utilization</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Time <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
-          <p className="text-white/60 mt-2 font-medium max-w-xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Time <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
+          <p className="text-slate-500 mt-2 font-medium max-w-xl">
             Precision chronometry for project execution. Monitor velocity and resource allocation with granular temporal audit logs.
           </p>
         </div>
@@ -160,7 +160,7 @@ export default function TimeTrackingPage() {
               </>
             )}
           </Button>
-          <Button variant="outline" size="lg" onClick={() => setShowLogDialog(true)} className="!rounded-2xl border-white/10">
+          <Button variant="outline" size="lg" onClick={() => setShowLogDialog(true)} className="!rounded-2xl border-slate-200">
             <Plus className="h-5 w-5 mr-2" /> LOG SESSION
           </Button>
         </div>
@@ -168,17 +168,17 @@ export default function TimeTrackingPage() {
 
       {/* Active Timer */}
       {activeTimer && (
-        <div className="card-base rounded-2xl p-8 relative overflow-hidden group" style={{ background: "#0f1729", border: "1px solid rgba(99,102,241,0.3)" }}>
+        <div className="premium-card p-10 bg-slate-900 border-slate-800 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 transition-transform">
             <Clock className="h-32 w-32 text-white" />
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
             <div className="flex items-center gap-6">
               <div className="w-20 h-20 rounded-[2rem] bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center animate-pulse">
-                <Timer className="h-10 w-10 text-violet-400" />
+                <Timer className="h-10 w-10 text-indigo-400" />
               </div>
               <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400">Operational Cycle Active</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400">Operational Cycle Active</p>
                 <p className="text-6xl font-black font-mono text-white tracking-tighter tabular-nums">{formatTime(timerSeconds)}</p>
               </div>
             </div>
@@ -192,56 +192,56 @@ export default function TimeTrackingPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
-          { label: "PROJECT TOTAL",  value: formatMinutes(stats.total),    icon: Clock,       bg: "bg-[#0f1729] text-white", border: "border-white/10" },
-          { label: "INDIVIDUAL FOCUS",   value: formatMinutes(stats.user),     icon: Users,       bg: "bg-violet-500/15 text-violet-400", border: "border-violet-500/20" },
-          { label: "BILLABLE OUTPUT",    value: formatMinutes(stats.billable), icon: DollarSign,  bg: "bg-emerald-500/15 text-emerald-400", border: "border-emerald-500/20" },
-          { label: "AUDIT ENTRIES",     value: stats.entries,                 icon: Calendar,    bg: "bg-amber-500/15 text-amber-600", border: "border-amber-500/20" },
+          { label: "PROJECT TOTAL",  value: formatMinutes(stats.total),    icon: Clock,       bg: "bg-slate-900 text-white", border: "border-slate-800" },
+          { label: "INDIVIDUAL FOCUS",   value: formatMinutes(stats.user),     icon: Users,       bg: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
+          { label: "BILLABLE OUTPUT",    value: formatMinutes(stats.billable), icon: DollarSign,  bg: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
+          { label: "AUDIT ENTRIES",     value: stats.entries,                 icon: Calendar,    bg: "bg-amber-50 text-amber-600", border: "border-amber-100" },
         ].map((stat) => (
-          <div key={stat.label} className="card-base rounded-2xl p-6 flex flex-col items-center text-center group hover:scale-105 transition-all">
+          <div key={stat.label} className="premium-card p-8 flex flex-col items-center text-center group hover:scale-105 transition-all">
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border shadow-sm transition-all group-hover:rotate-12", stat.bg, stat.border)}>
               <stat.icon className="h-7 w-7" />
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-black text-white tracking-tight">{stat.value}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/65">{stat.label}</p>
+              <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Time Entries */}
-      <div className="card-base rounded-2xl p-8">
+      <div className="premium-card p-10">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/5/5 border border-white/6 flex items-center justify-center">
-              <Clock className="h-6 w-6 text-white/65" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+              <Clock className="h-6 w-6 text-slate-400" />
             </div>
             <div>
-              <h2 className="text-sm font-black uppercase tracking-widest text-white">Temporal Audit Feed</h2>
-              <p className="text-[10px] font-bold text-white/65 uppercase">Verifiable Resource Consumption Logs</p>
+              <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Temporal Audit Feed</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Verifiable Resource Consumption Logs</p>
             </div>
           </div>
-          <div className="px-4 py-2 rounded-xl bg-violet-500/15 border border-violet-500/20">
-            <span className="text-[10px] font-black text-violet-400 uppercase tracking-widest">Global Sync Active</span>
+          <div className="px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-100">
+            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Global Sync Active</span>
           </div>
         </div>
 
         <div className="space-y-4">
           {projectTimeEntries.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
-              <div className="w-20 h-20 rounded-[2.5rem] bg-white/5/5 border border-white/6 flex items-center justify-center">
-                <Clock className="h-10 w-10 text-white/30" />
+              <div className="w-20 h-20 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center">
+                <Clock className="h-10 w-10 text-slate-200" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-black text-white uppercase tracking-widest">No Temporal Records</p>
-                <p className="text-[10px] text-white/65 font-bold uppercase">Initialize a session or log time to generate audit entries</p>
+                <p className="text-sm font-black text-slate-900 uppercase tracking-widest">No Temporal Records</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase">Initialize a session or log time to generate audit entries</p>
               </div>
-              <Button variant="glow" onClick={() => setShowLogDialog(true)} className="!rounded-2xl h-12">
+              <Button variant="premium" onClick={() => setShowLogDialog(true)} className="!rounded-2xl h-12">
                 LOG FIRST ENTRY
               </Button>
             </div>
           ) : (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-slate-50">
               {projectTimeEntries
                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                 .slice(0, 20)
@@ -252,28 +252,28 @@ export default function TimeTrackingPage() {
                   const totalMinutes = entry.hours * 60 + entry.minutes;
                   
                   return (
-                    <div key={entry.id} className="group py-6 flex items-center gap-6 hover:bg-white/8/5/5/50 transition-all px-4 rounded-[1.5rem]">
+                    <div key={entry.id} className="group py-6 flex items-center gap-6 hover:bg-slate-50/50 transition-all px-4 rounded-[1.5rem]">
                       <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
-                        <AvatarFallback className="text-xs font-black bg-[#0f1729] text-white">
+                        <AvatarFallback className="text-xs font-black bg-slate-900 text-white">
                           {user ? getInitials(user.name) : "?"}
                         </AvatarFallback>
                       </Avatar>
 
                       <div className="flex-1 min-w-0 space-y-1">
                         <div className="flex items-center gap-3">
-                          <p className="text-sm font-black text-white uppercase tracking-tight">{user?.name || "System Actor"}</p>
+                          <p className="text-sm font-black text-slate-900 uppercase tracking-tight">{user?.name || "System Actor"}</p>
                           {entry.billable && (
-                            <span className="text-[8px] px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 font-black uppercase tracking-widest">
+                            <span className="text-[8px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100 font-black uppercase tracking-widest">
                               BILLABLE
                             </span>
                           )}
                         </div>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                          <p className="text-xs font-medium text-white/60">{entry.description || "Routine maintenance and project development operations."}</p>
+                          <p className="text-xs font-medium text-slate-500">{entry.description || "Routine maintenance and project development operations."}</p>
                           {(task || bug) && (
                             <div className="flex items-center gap-2">
                               <div className="w-1 h-1 rounded-full bg-slate-300" />
-                              <span className={cn("text-[10px] font-black uppercase tracking-widest", task ? "text-violet-400" : "text-rose-400")}>
+                              <span className={cn("text-[10px] font-black uppercase tracking-widest", task ? "text-indigo-500" : "text-rose-500")}>
                                 {task ? `TASK: ${task.title}` : `BUG: ${bug?.title}`}
                               </span>
                             </div>
@@ -282,8 +282,8 @@ export default function TimeTrackingPage() {
                       </div>
 
                       <div className="text-right shrink-0 space-y-1">
-                        <p className="text-2xl font-black font-mono text-white tracking-tight">{formatMinutes(totalMinutes)}</p>
-                        <p className="text-[10px] font-bold text-white/65 uppercase tracking-widest">{formatRelativeTime(entry.createdAt)}</p>
+                        <p className="text-2xl font-black font-mono text-slate-900 tracking-tight">{formatMinutes(totalMinutes)}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{formatRelativeTime(entry.createdAt)}</p>
                       </div>
                     </div>
                   );
@@ -296,41 +296,41 @@ export default function TimeTrackingPage() {
       {/* Log Time Dialog */}
       <Dialog open={showLogDialog} onOpenChange={setShowLogDialog}>
         <DialogContent className="sm:max-w-[550px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
-          <div className="bg-[#080b14] p-10 flex items-center gap-6">
+          <div className="bg-slate-950 p-10 flex items-center gap-6">
             <div className="w-16 h-16 rounded-[2rem] bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Clock className="h-8 w-8 text-violet-400" />
+              <Clock className="h-8 w-8 text-indigo-500" />
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Manual Log</DialogTitle>
-              <DialogDescription className="text-white/60 font-medium">Inject temporal data into the system audit feed.</DialogDescription>
+              <DialogDescription className="text-white/40 font-medium">Inject temporal data into the system audit feed.</DialogDescription>
             </div>
           </div>
 
           <div className="p-10 space-y-8">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Hours</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Hours</Label>
                 <Input type="number" min="0" value={formHours} onChange={(e) => setFormHours(e.target.value)} 
-                  className="h-14 rounded-2xl bg-white/5/5 border-white/10 focus:border-indigo-500/30 font-black text-lg" />
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-black text-lg" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Minutes</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Minutes</Label>
                 <Input type="number" min="0" max="59" value={formMinutes} onChange={(e) => setFormMinutes(e.target.value)} 
-                  className="h-14 rounded-2xl bg-white/5/5 border-white/10 focus:border-indigo-500/30 font-black text-lg" />
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-black text-lg" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Engagement Details</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Engagement Details</Label>
               <Textarea value={formDescription} onChange={(e) => setFormDescription(e.target.value)} placeholder="Describe the operational activity..." rows={3}
-                className="rounded-2xl bg-white/5/5 border-white/10 focus:border-indigo-500/30 font-medium" />
+                className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-medium" />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Entity Categorization</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Entity Categorization</Label>
                 <Select value={formType} onValueChange={(v) => setFormType(v as "task" | "bug")}>
-                  <SelectTrigger className="h-12 rounded-2xl bg-white/5/5 border-white/10 font-bold text-xs"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="task">Requirement Fix</SelectItem>
                     <SelectItem value="bug">Defect Resolution</SelectItem>
@@ -338,9 +338,9 @@ export default function TimeTrackingPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Target Object</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Target Object</Label>
                 <Select value={formEntityId} onValueChange={setFormEntityId}>
-                  <SelectTrigger className="h-12 rounded-2xl bg-white/5/5 border-white/10 font-bold text-xs"><SelectValue placeholder="System Default" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="System Default" /></SelectTrigger>
                   <SelectContent>
                     {formType === "task"
                       ? projectTasks.map((task) => (
@@ -354,18 +354,18 @@ export default function TimeTrackingPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-4 p-4 rounded-2xl bg-white/5/5 border border-white/10 cursor-pointer hover:bg-white/8/5 hover:border-violet-500/30 transition-all group">
-              <input type="checkbox" checked={formBillable} onChange={(e) => setFormBillable(e.target.checked)} className="w-5 h-5 rounded-lg border-slate-300 text-violet-400 focus:ring-indigo-500/20" />
+            <label className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-white hover:border-indigo-200 transition-all group">
+              <input type="checkbox" checked={formBillable} onChange={(e) => setFormBillable(e.target.checked)} className="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500/20" />
               <div className="space-y-1">
-                <p className="text-xs font-black uppercase tracking-widest text-white">Billable Output</p>
-                <p className="text-[10px] font-bold text-white/65 uppercase">Associate this temporal session with project budget cycles.</p>
+                <p className="text-xs font-black uppercase tracking-widest text-slate-900">Billable Output</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Associate this temporal session with project budget cycles.</p>
               </div>
             </label>
           </div>
 
-          <div className="p-10 bg-white/5/5 flex items-center justify-between border-t border-white/10">
-            <button onClick={() => setShowLogDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
-            <Button variant="glow" onClick={handleLogTime} disabled={parseInt(formHours) === 0 && parseInt(formMinutes) === 0} className="!h-14 !px-10 shadow-indigo-500/20">
+          <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
+            <button onClick={() => setShowLogDialog(false)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Discard</button>
+            <Button variant="premium" onClick={handleLogTime} disabled={parseInt(formHours) === 0 && parseInt(formMinutes) === 0} className="!h-14 !px-10 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> INJECT RECORD
             </Button>
           </div>

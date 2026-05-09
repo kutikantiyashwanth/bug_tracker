@@ -97,10 +97,10 @@ export default function SettingsPage() {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Account Preferences</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Account Preferences</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">System <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
-        <p className="text-white/60 mt-2 font-medium max-w-xl">
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
+        <p className="text-slate-500 mt-2 font-medium max-w-xl">
           Customize your professional profile, manage security protocols, and configure your notification ecosystem.
         </p>
       </div>
@@ -109,60 +109,60 @@ export default function SettingsPage() {
         {/* Left Column: Profile & Security */}
         <div className="lg:col-span-2 space-y-8">
           {/* ── Profile ── */}
-          <div className="card-base rounded-2xl p-6">
+          <div className="premium-card space-y-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
-                  <User className="h-5 w-5 text-violet-400" />
+                  <User className="h-5 w-5 text-indigo-500" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-black uppercase tracking-widest text-white">Personal Identity</h2>
-                  <p className="text-[10px] font-bold text-white/65 uppercase">Public Professional Profile</p>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Personal Identity</h2>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Public Professional Profile</p>
                 </div>
               </div>
             </div>
 
             {/* Avatar row */}
-            <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-white/5/50 border border-white/6">
+            <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100">
               <Avatar className="h-20 w-20 ring-4 ring-white shadow-xl shadow-indigo-500/10">
                 <AvatarFallback className="text-2xl font-black bg-indigo-600 text-white">
                   {getInitials(currentUser.name)}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
-                <p className="text-xl font-black text-white tracking-tight">{currentUser.name}</p>
-                <p className="text-sm font-medium text-white/60">{currentUser.email}</p>
+                <p className="text-xl font-black text-slate-900 tracking-tight">{currentUser.name}</p>
+                <p className="text-sm font-medium text-slate-500">{currentUser.email}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-indigo-50 text-violet-400 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
+                  <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
                     {currentUser.role?.toUpperCase()}
                   </Badge>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-black text-white/65 uppercase tracking-widest">Active System Status</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active System Status</span>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Full Legal Name</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Legal Name</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)}
-                  className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">System Identifier (Email)</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">System Identifier (Email)</Label>
                 <Input value={email} readOnly
-                  className="h-14 rounded-2xl bg-white/8 border-white/10 text-white/65 cursor-not-allowed font-bold" />
+                  className="h-14 rounded-2xl bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed font-bold" />
               </div>
             </div>
 
             {/* Skills */}
             <div className="space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Technical Competencies</Label>
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Technical Competencies</Label>
               <div className="flex flex-wrap gap-2">
                 {skills.map((s) => (
-                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-widest text-white/70 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
+                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
                     {s}
-                    <button onClick={() => removeSkill(s)} className="text-white/60 hover:text-rose-500 transition-colors">
+                    <button onClick={() => removeSkill(s)} className="text-slate-300 hover:text-rose-500 transition-colors">
                       <X className="h-3 w-3" />
                     </button>
                   </div>
@@ -174,10 +174,10 @@ export default function SettingsPage() {
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
-                  className="h-14 rounded-2xl bg-white/5 border-white/10 flex-1 font-medium"
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 flex-1 font-medium"
                 />
                 <Button onClick={addSkill} variant="outline"
-                  className="h-14 px-8 rounded-2xl border-white/10 text-white/70 font-bold hover:bg-white/5">
+                  className="h-14 px-8 rounded-2xl border-slate-200 text-slate-600 font-bold hover:bg-slate-50">
                   <Plus className="h-4 w-4 mr-2" /> ADD
                 </Button>
               </div>
@@ -190,7 +190,7 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <Button onClick={handleSaveProfile} disabled={profileSaving} variant="glow" className="w-full h-14 !rounded-2xl shadow-indigo-500/20">
+            <Button onClick={handleSaveProfile} disabled={profileSaving} variant="premium" className="w-full h-14 !rounded-2xl shadow-indigo-500/20">
               {profileSaving ? (
                 <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
               ) : profileSaved ? (
@@ -202,44 +202,44 @@ export default function SettingsPage() {
           </div>
 
           {/* ── Security ── */}
-          <div className="card-base rounded-2xl p-6">
+          <div className="premium-card space-y-8">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0f1729] flex items-center justify-center border border-white/10">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800">
                 <Shield className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-sm font-black uppercase tracking-widest text-white">Cryptographic Security</h2>
-                <p className="text-[10px] font-bold text-white/65 uppercase">Manage Authentication Credentials</p>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Cryptographic Security</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Manage Authentication Credentials</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Current Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Current Secret</Label>
                 <div className="relative">
                   <Input type={showPw ? "text" : "password"} value={currentPw}
                     onChange={(e) => setCurrentPw(e.target.value)}
                     placeholder="••••••••" 
-                    className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
+                    className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
                   <button type="button" onClick={() => setShowPw(!showPw)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/65 hover:text-violet-400 transition-colors">
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors">
                     {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">New Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">New Protocol Secret</Label>
                 <Input type={showPw ? "text" : "password"} value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
                   placeholder="Minimum 8 characters" 
-                  className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65 ml-1">Confirm Protocol Secret</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirm Protocol Secret</Label>
                 <Input type={showPw ? "text" : "password"} value={confirmPw}
                   onChange={(e) => setConfirmPw(e.target.value)}
                   placeholder="Verify new secret" 
-                  className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
             </div>
 
@@ -250,7 +250,7 @@ export default function SettingsPage() {
             )}
 
             <Button onClick={handleChangePassword} disabled={pwSaving} 
-              className="w-full h-14 !rounded-2xl bg-[#0f1729] text-white font-black uppercase tracking-widest text-[10px] hover:bg-white/5 transition-all shadow-xl shadow-slate-900/10">
+              className="w-full h-14 !rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10">
               {pwSaving ? (
                 <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
               ) : pwSaved ? (
@@ -265,14 +265,14 @@ export default function SettingsPage() {
         {/* Right Column: Notifications & Danger Zone */}
         <div className="space-y-8">
           {/* ── Notifications ── */}
-          <div className="card-base rounded-2xl p-6">
+          <div className="premium-card space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100">
                 <Bell className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <h2 className="text-sm font-black uppercase tracking-widest text-white">Event Protocol</h2>
-                <p className="text-[10px] font-bold text-white/65 uppercase">Notification Configuration</p>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Event Protocol</h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Notification Configuration</p>
               </div>
             </div>
 
@@ -284,17 +284,17 @@ export default function SettingsPage() {
                 { key: "project_invite",     label: "Workspace Access",     desc: "Collaborative invitations" },
                 { key: "email_notifications",label: "Remote Sync", desc: "External SMTP relay" },
               ].map((pref) => (
-                <div key={pref.key} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/6">
+                <div key={pref.key} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                   <div>
-                    <p className="text-[11px] font-black uppercase tracking-widest text-white">{pref.label}</p>
-                    <p className="text-[10px] font-bold text-white/65">{pref.desc}</p>
+                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-900">{pref.label}</p>
+                    <p className="text-[10px] font-bold text-slate-400">{pref.desc}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox"
                       checked={notifPrefs[pref.key as keyof typeof notifPrefs]}
                       onChange={(e) => setNotifPrefs({ ...notifPrefs, [pref.key]: e.target.checked })}
                       className="sr-only peer" />
-                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/5 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+                    <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
                   </label>
                 </div>
               ))}
@@ -302,12 +302,12 @@ export default function SettingsPage() {
           </div>
 
           {/* ── Danger Zone ── */}
-          <div className="card-base rounded-2xl p-6">
+          <div className="premium-card border-rose-100 bg-rose-50/30 space-y-6">
             <div>
               <h2 className="text-sm font-black uppercase tracking-widest text-rose-600">Danger Zone</h2>
               <p className="text-[10px] font-bold text-rose-500/60 uppercase mt-1">Terminal Session Management</p>
             </div>
-            <p className="text-[11px] text-white/60 font-medium leading-relaxed">
+            <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
               Terminating your current active session will flush all local cached authentication tokens.
             </p>
             <Button onClick={() => logout()} variant="outline"
