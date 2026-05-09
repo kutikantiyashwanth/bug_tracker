@@ -237,7 +237,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         <div className="space-y-8 py-4">
           {navGroups.map((group) => (
             <div key={group.label} className="space-y-1">
-              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">{group.label}</p>
+              <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">{group.label}</p>
               {group.items.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = iconMap[item.iconKey];
@@ -252,7 +252,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                     )}>
                       <Icon className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold flex-1 tracking-tight">{item.label}</span>
+                    <span className={cn("font-semibold flex-1 tracking-tight transition-colors", 
+                      isActive ? "text-white" : "text-white/60 group-hover:text-white"
+                    )}>{item.label}</span>
                     {item.label === "Notifications" && unreadCount > 0 && (
                       <span className="flex items-center justify-center h-5 min-w-5 px-1.5 rounded-lg text-[10px] text-white font-black bg-rose-500 shadow-lg shadow-rose-500/20">
                         {unreadCount}
@@ -267,7 +269,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           {/* ── Team Section ── */}
           {activeProject?.members && activeProject.members.length > 0 && (
             <div className="space-y-1 pt-4">
-              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Collaborators</p>
+              <p className="px-4 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Collaborators</p>
               <div className="space-y-1 px-2">
                 {activeProject.members.slice(0, 5).map((member) => {
                   const user = getUserById(member.userId);
@@ -347,7 +349,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
+          <header className="sticky top-0 z-20 h-20 bg-white border-b border-slate-200 shadow-sm flex items-center px-6 lg:px-8 gap-6">
             <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
@@ -369,8 +371,8 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <button
                   onClick={() => setSearchOpen(true)}
                   className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
-                  <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
-                  <span className="text-sm font-medium">Search anything...</span>
+                  <Search className="h-4 w-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
+                  <span className="text-sm font-semibold">Search anything...</span>
                   <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
                 </button>
               </div>
