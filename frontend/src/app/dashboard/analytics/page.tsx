@@ -125,7 +125,7 @@ export default function AnalyticsPage() {
                 icon: CheckCircle2, label: "Mission Velocity",
                 value: `${data.taskStats.completionRate}%`,
                 sub: `${data.taskStats.completed}/${data.taskStats.total} TASKS FINALIZED`,
-                iconCls: "bg-emerald-50 text-emerald-600 border-emerald-100", 
+                iconCls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20", 
                 accent: "border-emerald-500/10 hover:border-emerald-500/30",
                 trend: data.taskStats.completionRate >= 50 ? "PEAK PERFORMANCE" : "ACCELERATION NEEDED",
                 up: data.taskStats.completionRate >= 50,
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
                 icon: Bug, label: "Defect Density",
                 value: `${data.bugStats.fixRate}%`,
                 sub: `${data.bugStats.resolved + data.bugStats.closed}/${data.bugStats.total} THREATS NEUTRALIZED`,
-                iconCls: "bg-rose-50 text-rose-600 border-rose-100", 
+                iconCls: "bg-rose-500/15 text-rose-400 border-rose-500/20", 
                 accent: "border-rose-500/10 hover:border-rose-500/30",
                 trend: data.bugStats.critical > 0 ? `${data.bugStats.critical} CRITICAL DEFECTS` : "CLEAN STATUS",
                 up: data.bugStats.critical === 0,
@@ -143,7 +143,7 @@ export default function AnalyticsPage() {
                 icon: Zap, label: "Weekly Momentum",
                 value: data.successMetrics.tasksCompletedThisWeek,
                 sub: `${data.successMetrics.bugsResolvedThisWeek} BUGS RESOLVED`,
-                iconCls: "bg-indigo-50 text-violet-400 border-indigo-100", 
+                iconCls: "bg-violet-500/15 text-violet-400 border-violet-500/20", 
                 accent: "border-indigo-500/10 hover:border-indigo-500/30",
               },
               {
@@ -161,7 +161,7 @@ export default function AnalyticsPage() {
                   </div>
                   {card.trend && (
                     <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg",
-                      card.up ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"
+                    card.up ? "bg-emerald-500/15 text-emerald-400" : "bg-rose-500/15 text-rose-400"
                     )}>
                       {card.trend}
                     </span>
@@ -228,8 +228,8 @@ export default function AnalyticsPage() {
             {/* Task breakdown */}
             <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-400" />
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Task Lifecycle</h3>
@@ -264,8 +264,8 @@ export default function AnalyticsPage() {
             {/* Bug breakdown */}
             <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
-                  <Bug className="h-6 w-6 text-rose-600" />
+                <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/20 flex items-center justify-center">
+                  <Bug className="h-6 w-6 text-rose-400" />
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Threat Matrix</h3>
@@ -296,9 +296,9 @@ export default function AnalyticsPage() {
 
               <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/6">
                 {[
-                  { label: "OPEN",     count: data.bugStats.open,       cls: "bg-rose-50 text-rose-600 border-rose-100" },
-                  { label: "PROGRESS", count: data.bugStats.inProgress, cls: "bg-amber-50 text-amber-600 border-amber-100" },
-                  { label: "RESOLVED", count: data.bugStats.resolved,   cls: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+                  { label: "OPEN",     count: data.bugStats.open,       cls: "bg-rose-500/15 text-rose-400 border-rose-500/20" },
+                  { label: "PROGRESS", count: data.bugStats.inProgress, cls: "bg-amber-500/15 text-amber-400 border-amber-500/20" },
+                  { label: "RESOLVED", count: data.bugStats.resolved,   cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" },
                   { label: "CLOSED",   count: data.bugStats.closed,     cls: "bg-white/8 text-white/70 border-white/10" },
                 ].map((item) => (
                   <div key={item.label} className={cn("flex flex-col p-4 rounded-2xl border transition-all", item.cls)}>
@@ -312,8 +312,8 @@ export default function AnalyticsPage() {
             {/* Upcoming deadlines */}
             <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
-                  <Calendar className="h-6 w-6 text-amber-600" />
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/20 flex items-center justify-center">
+                  <Calendar className="h-6 w-6 text-amber-400" />
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest text-white">Timeline Alerts</h3>
@@ -342,9 +342,9 @@ export default function AnalyticsPage() {
                           </p>
                         </div>
                         <Badge className={cn("font-black text-[9px] uppercase tracking-widest px-2",
-                          task.priority === "CRITICAL" ? "bg-rose-50 text-rose-600 border-rose-100" : 
-                          task.priority === "HIGH" ? "bg-amber-50 text-amber-600 border-amber-100" : 
-                          "bg-indigo-50 text-violet-400 border-indigo-100"
+                          task.priority === "CRITICAL" ? "bg-rose-500/15 text-rose-400 border-rose-500/20" : 
+                          task.priority === "HIGH" ? "bg-amber-500/15 text-amber-400 border-amber-500/20" : 
+                          "bg-indigo-500/15 text-violet-400 border-indigo-500/20"
                         )}>
                           {task.priority}
                         </Badge>
@@ -359,8 +359,8 @@ export default function AnalyticsPage() {
           {/* ── Success Metrics ── */}
           <div className="card-base rounded-2xl p-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-                <Target className="h-6 w-6 text-violet-400" />
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center">
+                  <Target className="h-6 w-6 text-violet-400" />
               </div>
               <div>
                 <h3 className="text-sm font-black uppercase tracking-widest text-white">Intelligence Success Matrix</h3>

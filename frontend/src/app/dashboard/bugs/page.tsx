@@ -272,10 +272,10 @@ export default function BugsPage() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-600", bg: "bg-rose-50", icon: Bug },
-          { label: "In Development", value: stats.inProgress, color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
-          { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle2 },
-          { label: "Critical Priority", value: stats.critical, color: "text-rose-600", bg: "bg-rose-100/50", icon: AlertTriangle },
+          { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-400", bg: "bg-rose-500/15 border border-rose-500/20", icon: Bug },
+          { label: "In Development", value: stats.inProgress, color: "text-amber-400", bg: "bg-amber-500/15 border border-amber-500/20", icon: Clock },
+          { label: "Resolved", value: stats.resolved, color: "text-emerald-400", bg: "bg-emerald-500/15 border border-emerald-500/20", icon: CheckCircle2 },
+          { label: "Critical Priority", value: stats.critical, color: "text-rose-400", bg: "bg-rose-500/15 border border-rose-500/20", icon: AlertTriangle },
         ].map((stat, i) => (
           <div key={i} className="card-base rounded-2xl p-6">
             <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-500">
@@ -410,8 +410,8 @@ export default function BugsPage() {
                         <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-white/8 shrink-0">
                           <div className="flex flex-col items-end gap-2">
                             <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
-                              bug.severity === 'critical' ? 'bg-rose-100 text-rose-600' : 
-                              bug.severity === 'major' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                              bug.severity === 'critical' ? 'bg-rose-500/20 text-rose-400' : 
+                              bug.severity === 'major' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'
                             )}>
                               {bug.severity}
                             </Badge>

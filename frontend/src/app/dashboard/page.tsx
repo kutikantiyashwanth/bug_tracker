@@ -184,7 +184,9 @@ export default function DashboardPage() {
                 {card.trend && (
                   <div className={cn(
                     "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
-                    card.up ? "bg-emerald-100 text-emerald-400" : "bg-rose-100 text-rose-600"
+                    card.up
+                      ? "bg-emerald-500/15 text-emerald-400"
+                      : "bg-rose-500/15 text-rose-400"
                   )}>
                     {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                     {card.trend}

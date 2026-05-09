@@ -320,7 +320,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="flex min-h-screen bg-[#f8fafc]">
+      <div className="flex min-h-screen bg-[#0b1120]">
         {/* Desktop Sidebar */}
         <aside className="hidden lg:flex w-[280px] flex-col fixed inset-y-0 left-0 z-30 bg-[#0f172a] shadow-2xl">
           <SidebarContent />
@@ -347,15 +347,15 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-white/10/60 flex items-center px-6 lg:px-8 gap-6">
-            <button className="lg:hidden p-2.5 rounded-xl text-white/65 hover:text-white hover:bg-white/8 transition-all"
+          <header className="topbar-header sticky top-0 z-20 h-20 flex items-center px-6 lg:px-8 gap-6">
+            <button className="lg:hidden p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
             </button>
 
             <div className="flex-1 flex items-center">
               <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/65">
+                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
                   <span>Workspace</span>
                   <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
                 </div>
@@ -368,16 +368,16 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/8 border border-transparent hover:border-white/10 hover:bg-white/5 hover:shadow-sm transition-all text-white/60 w-64 group">
-                  <Search className="h-4 w-4 text-white/65 group-hover:text-violet-400 transition-colors" />
-                  <span className="text-sm font-medium">Search anything...</span>
-                  <kbd className="ml-auto text-[10px] font-bold text-white/60">⌘K</kbd>
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/8 border border-white/10 hover:border-violet-500/40 hover:bg-violet-500/10 transition-all text-slate-400 w-64 group">
+                  <Search className="h-4 w-4 text-slate-400 group-hover:text-violet-400 transition-colors" />
+                  <span className="text-sm font-medium text-slate-400">Search anything...</span>
+                  <kbd className="ml-auto text-[10px] font-bold text-slate-500">⌘K</kbd>
                 </button>
               </div>
 
               <div className="flex items-center gap-2">
                 <Link href="/dashboard/notifications">
-                  <button className="relative p-3 rounded-2xl text-white/65 hover:text-violet-400 hover:bg-indigo-50 transition-all">
+                  <button className="relative p-3 rounded-2xl text-slate-400 hover:text-violet-400 hover:bg-violet-500/10 transition-all">
                     <Bell className="h-5 w-5" />
                     {unreadCount > 0 && (
                       <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
@@ -390,10 +390,10 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <Link href="/dashboard/settings" className="flex items-center gap-3 group">
                   <div className="text-right hidden xl:block">
                     <p className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
-                    <p className="text-[10px] font-medium text-white/65 uppercase tracking-widest mt-1">Profile</p>
+                    <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Profile</p>
                   </div>
-                  <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-white/10">
-                    <AvatarFallback className="text-xs font-black bg-white/8 text-white/70">
+                  <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-violet-500/30 transition-all border border-white/10">
+                    <AvatarFallback className="text-xs font-black bg-violet-600/30 text-violet-200">
                       {getInitials(currentUser?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -403,7 +403,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           </header>
 
           {/* Scrollable Page Content */}
-          <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up">
+          <div className="flex-1 p-6 lg:p-10 max-w-[1600px] w-full mx-auto animate-slide-up dashboard-content-bg">
             {children}
           </div>
         </main>
