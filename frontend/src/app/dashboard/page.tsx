@@ -1,23 +1,68 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useStore } from "@/lib/store-api";
 import { cn, formatDate, formatRelativeTime, getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer,
 } from "recharts";
 import {
   CheckCircle2, Bug, Users, Zap, ArrowUpRight, ArrowDownRight,
   BarChart3, Calendar, Activity, AlertTriangle, TrendingUp, Clock,
-  RefreshCw, Target, Award, Flame, Plus,
+  RefreshCw, Target, Award, Plus, X,
 } from "lucide-react";
+import type { Priority, TaskStatus } from "@/lib/types";
 
 export default function DashboardPage() {
   const { tasks, bugs, activities, activeProjectId, projects, getUserById, currentUser,
     fetchTasks, fetchBugs, fetchActivities } = useStore();
+  const [refreshing, setRefreshing] = useState(false);
+  const [showCreateTask, setShowCreateTask] = useState(false);
+
+  // New Task form state
+  const [taskTitle, setTaskTitle]       = useState("");
+  const [taskDesc, setTaskDesc]         = useState("");
+  const [taskPriority, setTaskPriority] = useState<Priority>("medium");
+  const [taskStatus, setTaskStatus]     = useState<TaskStatus>("todo");
+  const [taskAssignee, setTaskAssignee] = useState("");
+  const [taskDueDate, setTaskDueDate]   = useState("");
+  const [taskCreating, setTaskCreating] = useState(false);
+
+  const activeProject = Array.isArray(projects) ? projects.find((p) => p.id === activeProjectId) : undefined;
+  const projectMembers = activeProject?.members?.map((m: any) => getUserById(m.userId)).filter(Boolean) || [];
+
+  const handleCreateTask = async () => {
+    if (!taskTitle.trim() || !currentUser || !activeProjectId) return;
+    setTaskCreating(true);
+    try {
+      await useStore.getState().createTask({
+        projectId: activeProjectId,
+        title: taskTitle.trim(),
+        description: taskDesc.trim(),
+        status: taskStatus,
+        priority: taskPriority,
+        assigneeId: taskAssignee || undefined,
+        createdBy: currentUser.id,
+        dueDate: taskDueDate || undefined,
+        tags: [],
+      });
+      setShowCreateTask(false);
+      setTaskTitle(""); setTaskDesc(""); setTaskPriority("medium");
+      setTaskStatus("todo"); setTaskAssignee(""); setTaskDueDate("");
+    } catch (e) {
+      console.error("Failed to create task", e);
+    } finally {
+      setTaskCreating(false);
+    }
+  };
 
   // Only fetch if we don't already have data for this project
   useEffect(() => {
@@ -38,7 +83,6 @@ export default function DashboardPage() {
       .slice(0, 8),
     [activities, activeProjectId]
   );
-  const activeProject = Array.isArray(projects) ? projects.find((p) => p.id === activeProjectId) : undefined;
 
   const stats = useMemo(() => {
     const completed    = projectTasks.filter((t) => t.status === "done").length;
@@ -158,13 +202,33 @@ export default function DashboardPage() {
         
         <div className="flex items-center gap-2 md:gap-3 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <button
-            onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-            className="group flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm">
-            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
-            <span className="text-xs md:text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh</span>
+            onClick={async () => {
+              if (!activeProjectId || refreshing) return;
+              setRefreshing(true);
+              // Force clear cache so we always get fresh data
+              const { invalidateCache } = await import("@/lib/api");
+              invalidateCache(`/projects/${activeProjectId}/tasks`);
+              invalidateCache(`/projects/${activeProjectId}/bugs`);
+              invalidateCache(`/projects/${activeProjectId}/activities`);
+              await Promise.all([
+                fetchTasks(activeProjectId),
+                fetchBugs(activeProjectId),
+                fetchActivities(activeProjectId),
+              ]);
+              setRefreshing(false);
+            }}
+            disabled={!activeProjectId || refreshing}
+            className="group flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm disabled:opacity-50">
+            <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-600 transition-all duration-500", refreshing && "animate-spin text-indigo-600")} />
+            <span className="text-xs md:text-sm font-bold text-slate-600 group-hover:text-indigo-600">
+              {refreshing ? "Refreshing..." : "Refresh"}
+            </span>
           </button>
           
-          <button className="btn-premium shadow-indigo-500/25 py-2.5 px-4 md:px-6">
+          <button
+            onClick={() => setShowCreateTask(true)}
+            disabled={!activeProjectId}
+            className="btn-premium shadow-indigo-500/25 py-2.5 px-4 md:px-6 disabled:opacity-50">
             <Plus className="h-4 w-4" />
             <span className="text-xs md:text-sm font-bold">New Task</span>
           </button>
@@ -422,6 +486,132 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+    </div>
+
+      {/* ── New Task Dialog ── */}
+      <Dialog open={showCreateTask} onOpenChange={setShowCreateTask}>
+        <DialogContent className="sm:max-w-[500px] !rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
+          <div className="bg-indigo-600 px-8 py-7 flex items-center gap-5">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+              <Plus className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <DialogTitle className="text-2xl font-black text-white tracking-tight">New Task</DialogTitle>
+              <DialogDescription className="text-white/70 text-sm mt-0.5">
+                Add a task to <span className="text-white font-bold">{activeProject?.name}</span>
+              </DialogDescription>
+            </div>
+          </div>
+
+          <div className="px-8 py-6 space-y-5">
+            <div className="space-y-1.5">
+              <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                Task Title <span className="text-rose-400">*</span>
+              </Label>
+              <Input
+                value={taskTitle}
+                onChange={(e) => setTaskTitle(e.target.value)}
+                placeholder="e.g. Fix login button on mobile"
+                className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-semibold"
+                autoFocus
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                Description <span className="text-slate-300 normal-case font-normal">(optional)</span>
+              </Label>
+              <Textarea
+                value={taskDesc}
+                onChange={(e) => setTaskDesc(e.target.value)}
+                placeholder="What needs to be done?"
+                rows={2}
+                className="rounded-2xl bg-slate-50 border-slate-200 font-medium text-sm resize-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Priority</Label>
+                <Select value={taskPriority} onValueChange={(v) => setTaskPriority(v as Priority)}>
+                  <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-semibold text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="critical">Critical</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Status</Label>
+                <Select value={taskStatus} onValueChange={(v) => setTaskStatus(v as TaskStatus)}>
+                  <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-semibold text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="backlog">Backlog</SelectItem>
+                    <SelectItem value="todo">To Do</SelectItem>
+                    <SelectItem value="in-progress">In Progress</SelectItem>
+                    <SelectItem value="testing">Testing</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  Assign To <span className="text-slate-300 normal-case font-normal">(optional)</span>
+                </Label>
+                <Select value={taskAssignee} onValueChange={setTaskAssignee}>
+                  <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-slate-200 font-semibold text-sm">
+                    <SelectValue placeholder="Unassigned" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projectMembers.map((user: any) => user && (
+                      <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  Due Date <span className="text-slate-300 normal-case font-normal">(optional)</span>
+                </Label>
+                <Input
+                  type="date"
+                  value={taskDueDate}
+                  onChange={(e) => setTaskDueDate(e.target.value)}
+                  className="h-11 rounded-xl bg-slate-50 border-slate-200 font-semibold"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="px-8 py-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <button
+              onClick={() => setShowCreateTask(false)}
+              className="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleCreateTask}
+              disabled={!taskTitle.trim() || taskCreating}
+              className="h-11 px-8 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 disabled:opacity-40 flex items-center gap-2 transition-colors"
+            >
+              {taskCreating
+                ? <><div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" /> Creating...</>
+                : <><Plus className="h-4 w-4" /> Create Task</>
+              }
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
