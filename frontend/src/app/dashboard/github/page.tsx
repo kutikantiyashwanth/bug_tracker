@@ -1,5 +1,44 @@
+"use client";
 
+import { useMemo, useState, useEffect } from "react";
+import { useStore } from "@/lib/store-api";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Github, ExternalLink, Check, Save, AlertCircle,
+  GitPullRequest, Link2Off, Link2, Plus, X, Bug, CheckSquare,
+} from "lucide-react";
 
+// ── Types ──────────────────────────────────────────────────────────────────
+type GitHubLink = { type: "issue" | "pr"; number: string; url: string };
+type GitHubLinks = Record<string, GitHubLink>;
+type LinkFormState = { itemId: string; type: "issue" | "pr"; number: string; url: string };
+
+// ── localStorage helpers ───────────────────────────────────────────────────
+const repoKey  = (pid: string) => `gh_repo_${pid}`;
+const linksKey = (pid: string) => `gh_links_${pid}`;
+
+function loadRepoUrl(pid: string): string {
+  try { return localStorage.getItem(repoKey(pid)) ?? ""; } catch { return ""; }
+}
+function saveRepoUrl(pid: string, url: string) {
+  try { localStorage.setItem(repoKey(pid), url); } catch { /* noop */ }
+}
+function loadLinks(pid: string): GitHubLinks {
+  try { return JSON.parse(localStorage.getItem(linksKey(pid)) ?? "{}"); } catch { return {}; }
+}
+function saveLinks(pid: string, links: GitHubLinks) {
+  try { localStorage.setItem(linksKey(pid), JSON.stringify(links)); } catch { /* noop */ }
+}
+function buildUrl(repo: string, type: "issue" | "pr", num: string): string {
+  const base = repo.replace(/\/$/, "");
+  return type === "issue" ? `${base}/issues/${num}` : `${base}/pull/${num}`;
+}
+
+// ── Component ──────────────────────────────────────────────────────────────
 export default function GitHubPage() {
   const { activeProjectId, projects, tasks, bugs } = useStore();
 
