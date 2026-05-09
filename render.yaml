@@ -29,7 +29,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: "7d"
       - key: FRONTEND_URL
-        value: https://bug-tracker-ui.onrender.com
+        value: https://bug-tracker-ui-evqv.onrender.com
       - key: RENDER_EXTERNAL_URL
         value: https://bug-tracker-api-d117.onrender.com
       - key: SMTP_HOST
