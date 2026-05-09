@@ -247,11 +247,11 @@ export default function KanbanPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-violet-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Flow Orchestration</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Task Board</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Project <span className="text-violet-600 underline decoration-violet-500/20 underline-offset-8">Kanban</span></h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
-            Visualize your team's workflow and manage task velocity through interactive column orchestration.
+            Drag and drop tasks between columns to update their status.
           </p>
         </div>
         
@@ -259,14 +259,14 @@ export default function KanbanPage() {
           {permissions.createTask && (
             <Button variant="premium" onClick={() => openCreateDialog("todo")} className="shadow-violet-500/20">
               <Plus className="h-4 w-4 mr-2" />
-              <span className="text-sm font-bold">Initiate Task</span>
+              <span className="text-sm font-bold">New Task</span>
             </Button>
           )}
         </div>
       </div>
 
       {/* Board */}
-      <div className="flex gap-4 md:gap-6 overflow-x-auto pb-10 no-scrollbar snap-x cursor-grab active:cursor-grabbing">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pb-6 overflow-x-auto no-scrollbar">
         {columns.map((column, colIdx) => {
           const colTasks = getColumnTasks(column.id);
           return (
@@ -276,7 +276,7 @@ export default function KanbanPage() {
               onDragLeave={handleDragLeave}
               onDrop={() => handleDrop(column.id)}
               className={cn(
-                "flex-shrink-0 w-[280px] md:w-80 flex flex-col rounded-[2rem] bg-slate-100/40 border border-slate-200/60 p-3 md:p-4 transition-all duration-300 snap-center animate-slide-up",
+                "min-w-[240px] flex flex-col rounded-[2rem] bg-slate-100/40 border border-slate-200/60 p-3 md:p-4 transition-all duration-300 animate-slide-up",
                 dragOverColumn === column.id && "bg-violet-50/50 border-violet-300/50 ring-4 ring-violet-500/5"
               )}
               style={{ animationDelay: `${colIdx * 100}ms` }}
