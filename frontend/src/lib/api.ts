@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1
 // ── In-memory request cache (stale-while-revalidate pattern) ──────────────
 interface CacheEntry { data: any; ts: number }
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL = 30_000; // 30 seconds — data is "fresh" for 30s
+const CACHE_TTL = 60_000; // 60 seconds — data is "fresh" for 60s
 
 // Pending requests deduplication — prevents double-fetching same endpoint
 const pending = new Map<string, Promise<any>>();
@@ -15,7 +15,7 @@ export const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
   // Aggressive timeout — fail fast rather than hang
-  timeout: 8000,
+  timeout: 15000,
 });
 
 // Attach JWT on every request

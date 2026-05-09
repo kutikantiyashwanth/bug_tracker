@@ -141,11 +141,11 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     return results;
   })();
 
+  // Only fetch if we don't already have data — avoids redundant network calls on every navigation
   useEffect(() => {
-    if (isAuthenticated && currentUser?.id) {
-      fetchProjects();
-      fetchNotifications();
-    }
+    if (!isAuthenticated || !currentUser?.id) return;
+    if (projects.length === 0) fetchProjects();
+    if (notifications.length === 0) fetchNotifications();
   }, [isAuthenticated, currentUser?.id]);
 
   const handleCopyInvite = () => {

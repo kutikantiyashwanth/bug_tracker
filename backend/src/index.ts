@@ -355,7 +355,7 @@ app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
       console.log(`🔑 First project invite code: ${projects[0].inviteCode}`);
     }
 
-    mc.set(cacheKey, projects, 30_000); // 30s cache
+    mc.set(cacheKey, projects, 120_000); // 2 min cache
     res.json({ success: true, data: projects });
   } catch (error: any) {
     console.error("Get projects error:", error);
@@ -489,7 +489,7 @@ app.get("/api/v1/projects/:projectId/tasks", authMiddleware, async (req, res) =>
       orderBy: [{ status: "asc" }, { priority: "desc" }, { createdAt: "desc" }],
     });
 
-    mc.set(cacheKey, tasks, 20_000);
+    mc.set(cacheKey, tasks, 60_000); // 60s cache
     res.json({ success: true, data: tasks });
   } catch (error: any) {
     console.error("Get tasks error:", error);
@@ -675,7 +675,7 @@ app.get("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, res
       orderBy: [{ severity: "desc" }, { createdAt: "desc" }],
     });
 
-    mc.set(cacheKey, bugs, 15_000);
+    mc.set(cacheKey, bugs, 60_000); // 60s cache
     res.json({ success: true, data: bugs });
   } catch (error: any) {
     console.error("Get bugs error:", error);
@@ -1195,7 +1195,7 @@ app.get("/api/v1/notifications", authMiddleware, async (req: any, res) => {
       take: 50,
     });
 
-    mc.set(cacheKey, notifications, 10_000); // 10s — notifications need to feel fresh
+    mc.set(cacheKey, notifications, 30_000); // 30s — notifications
     res.json({ success: true, data: notifications });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

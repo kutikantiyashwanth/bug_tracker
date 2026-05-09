@@ -240,21 +240,19 @@ export const useStore = create<AppState>()(
       activeProjectId: null,
       setActiveProject: (id) => {
         set({ activeProjectId: id });
-        // Fetch tasks and bugs for this project
         if (id) {
-          get().fetchTasks(id);
-          get().fetchBugs(id);
-          get().fetchActivities(id);
+          // Only fetch if we don't already have data for this project
+          const state = get();
+          const hasTasks = state.tasks.some((t) => t.projectId === id);
+          const hasBugs  = state.bugs.some((b)  => b.projectId === id);
+          const hasActs  = state.activities.some((a) => a.projectId === id);
+          if (!hasTasks) get().fetchTasks(id);
+          if (!hasBugs)  get().fetchBugs(id);
+          if (!hasActs)  get().fetchActivities(id);
           // Switch socket room
-          const token = localStorage.getItem('token');
-          if (token) {
-            const { getExistingSocket } = require('./socket');
-            const sock = getExistingSocket();
-            if (sock?.connected) {
-              // Leave all project rooms then join new one
-              sock.emit('join-project', id);
-            }
-          }
+          const { getExistingSocket } = require('./socket');
+          const sock = getExistingSocket();
+          if (sock?.connected) sock.emit('join-project', id);
         }
       },
 
@@ -263,15 +261,18 @@ export const useStore = create<AppState>()(
           const response = await projectsApi.getAll();
           const projects = (response.data.data || response.data || []).map(normalizeProject);
           set({ projects });
-          // Always set active project and reload its data
+          // Set active project — but only fetch data if we don't already have it
           const currentActiveId = get().activeProjectId;
           const targetId = projects.find(p => p.id === currentActiveId)?.id || projects[0]?.id;
           if (targetId) {
             set({ activeProjectId: targetId });
-            // Always reload bugs, tasks, activities for the active project
-            get().fetchTasks(targetId).catch(() => {});
-            get().fetchBugs(targetId).catch(() => {});
-            get().fetchActivities(targetId).catch(() => {});
+            const state = get();
+            const hasTasks = state.tasks.some((t) => t.projectId === targetId);
+            const hasBugs  = state.bugs.some((b)  => b.projectId === targetId);
+            const hasActs  = state.activities.some((a) => a.projectId === targetId);
+            if (!hasTasks) get().fetchTasks(targetId).catch(() => {});
+            if (!hasBugs)  get().fetchBugs(targetId).catch(() => {});
+            if (!hasActs)  get().fetchActivities(targetId).catch(() => {});
           }
         } catch (error: any) {
           console.error('Failed to fetch projects:', error);

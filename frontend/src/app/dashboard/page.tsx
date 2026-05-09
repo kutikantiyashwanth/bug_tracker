@@ -19,12 +19,15 @@ export default function DashboardPage() {
   const { tasks, bugs, activities, activeProjectId, projects, getUserById, currentUser,
     fetchTasks, fetchBugs, fetchActivities } = useStore();
 
+  // Only fetch if we don't already have data for this project
   useEffect(() => {
-    if (activeProjectId) {
-      fetchTasks(activeProjectId);
-      fetchBugs(activeProjectId);
-      fetchActivities(activeProjectId);
-    }
+    if (!activeProjectId) return;
+    const hasTasks = tasks.some((t) => t.projectId === activeProjectId);
+    const hasBugs  = bugs.some((b)  => b.projectId === activeProjectId);
+    const hasActs  = activities.some((a) => a.projectId === activeProjectId);
+    if (!hasTasks) fetchTasks(activeProjectId);
+    if (!hasBugs)  fetchBugs(activeProjectId);
+    if (!hasActs)  fetchActivities(activeProjectId);
   }, [activeProjectId]);
 
   const projectTasks = useMemo(() => (Array.isArray(tasks) ? tasks.filter((t) => t.projectId === activeProjectId) : []), [tasks, activeProjectId]);

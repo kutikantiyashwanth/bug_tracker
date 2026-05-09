@@ -35,8 +35,11 @@ const entityBadge: Record<string, string> = {
 export default function ActivityPage() {
   const { activities, activeProjectId, getUserById, fetchActivities } = useStore();
 
+  // Only fetch if we don't already have data for this project
   useEffect(() => {
-    if (activeProjectId) fetchActivities(activeProjectId);
+    if (!activeProjectId) return;
+    const hasActs = activities.some((a) => a.projectId === activeProjectId);
+    if (!hasActs) fetchActivities(activeProjectId);
   }, [activeProjectId]);
 
   const projectActivities = useMemo(

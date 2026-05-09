@@ -61,8 +61,8 @@ export default function NotificationsPage() {
   };
 
   useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
+    // Only poll — don't fetch on mount since layout already fetched
+    const interval = setInterval(fetchNotifications, 60000); // poll every 60s
     return () => clearInterval(interval);
   }, []);
 
