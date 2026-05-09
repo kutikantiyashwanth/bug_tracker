@@ -306,6 +306,31 @@ export default function RegisterPage() {
                     </div>
                   )}
                 </div>
+
+                {/* Role selection in step 1 */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>Your Role</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {ROLE_OPTIONS.map((r) => {
+                      const isSelected = role === r.value;
+                      return (
+                        <button key={r.value} type="button" onClick={() => setRole(r.value as Role)}
+                          className="flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all duration-200"
+                          style={{
+                            background: isSelected ? r.bg : "rgba(255,255,255,0.03)",
+                            border: `1px solid ${isSelected ? r.border : "rgba(255,255,255,0.08)"}`,
+                          }}>
+                          <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br", r.gradient)}>
+                            <r.icon className="h-4 w-4 text-white" />
+                          </div>
+                          <span className="text-[11px] font-bold" style={{ color: isSelected ? r.text : "rgba(255,255,255,0.5)" }}>
+                            {r.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {error && (
@@ -328,40 +353,12 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* ── STEP 2 ── */}
+          {/* ── STEP 2 — Skills only ── */}
           {step === 2 && (
             <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in">
               <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Your role & skills</h2>
+                <h2 className="text-2xl font-black text-white tracking-tight">Your skills</h2>
                 <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>Help your team know what you do</p>
-              </div>
-
-              {/* Role selection */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>Select Role</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {ROLE_OPTIONS.map((r) => {
-                    const isSelected = role === r.value;
-                    return (
-                      <button key={r.value} type="button" onClick={() => setRole(r.value as Role)}
-                        className="flex flex-col items-center gap-2 p-3 rounded-2xl transition-all duration-200"
-                        style={{
-                          background: isSelected ? r.bg : "rgba(255,255,255,0.03)",
-                          border: `1px solid ${isSelected ? r.border : "rgba(255,255,255,0.08)"}`,
-                        }}>
-                        <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br", r.gradient)}>
-                          <r.icon className="h-[18px] w-[18px] text-white" />
-                        </div>
-                        <span className="text-[11px] font-bold" style={{ color: isSelected ? r.text : "rgba(255,255,255,0.5)" }}>
-                          {r.label}
-                        </span>
-                        <span className="text-[9px] text-center leading-tight" style={{ color: "rgba(255,255,255,0.3)" }}>
-                          {r.desc}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
 
               {/* Skills */}
