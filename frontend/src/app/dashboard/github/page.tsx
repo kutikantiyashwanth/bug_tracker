@@ -142,19 +142,33 @@ export default function GitHubPage() {
           </div>
 
           <div className="flex gap-3">
-            <Input
+            <input
               value={repoInput}
               onChange={(e) => setRepoInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSaveRepo()}
               placeholder="https://github.com/your-username/your-repo"
-              className="h-12 rounded-2xl font-mono text-sm"
+              className="github-url-input"
               style={{
-                background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.25)",
+                flex: 1,
+                height: "48px",
+                padding: "0 16px",
+                borderRadius: "16px",
+                background: "rgba(255,255,255,0.15)",
+                border: "1.5px solid rgba(255,255,255,0.35)",
                 color: "#ffffff",
+                fontSize: "13px",
+                fontFamily: "monospace",
+                outline: "none",
+                width: "100%",
               }}
-              onFocus={(e) => { e.currentTarget.style.border = "1px solid rgba(99,102,241,0.7)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.2)"; }}
-              onBlur={(e)  => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.25)"; e.currentTarget.style.boxShadow = "none"; }}
+              onFocus={(e) => {
+                e.currentTarget.style.border = "1.5px solid #6366f1";
+                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.25)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.border = "1.5px solid rgba(255,255,255,0.35)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             />
             <Button
               onClick={handleSaveRepo}

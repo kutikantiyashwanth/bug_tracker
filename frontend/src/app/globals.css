@@ -453,6 +453,11 @@ input:focus-visible, textarea:focus-visible {
 .gpu { transform: translateZ(0); will-change: transform; }
 .gpu-opacity { will-change: opacity; }
 
+/* GitHub page — URL input inside dark panel */
+.github-url-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
 /* Progress shrink for deadline alert */
 @keyframes progress-shrink {
   from { width: 100%; }
