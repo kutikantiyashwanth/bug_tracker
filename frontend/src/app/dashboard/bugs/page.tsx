@@ -242,7 +242,7 @@ export default function BugsPage() {
       case "open": return <div className="w-2 h-2 rounded-full bg-red-500" />;
       case "in-progress": return <Clock className="h-3.5 w-3.5 text-amber-600" />;
       case "resolved": return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />;
-      case "closed": return <CheckCircle2 className="h-3.5 w-3.5 text-slate-400" />;
+      case "closed": return <CheckCircle2 className="h-3.5 w-3.5 text-white/45" />;
     }
   };
 
@@ -253,10 +253,10 @@ export default function BugsPage() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-rose-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Quality Assurance</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/45">Quality Assurance</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
-          <p className="text-slate-500 mt-2 font-medium max-w-xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Bug <span className="text-rose-500 underline decoration-rose-500/20 underline-offset-8">Intelligence</span></h1>
+          <p className="text-white/55 mt-2 font-medium max-w-xl">
             Monitor, prioritize, and resolve technical debt with AI-assisted severity analysis and team collaboration.
           </p>
         </div>
@@ -277,7 +277,7 @@ export default function BugsPage() {
           { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle2 },
           { label: "Critical Priority", value: stats.critical, color: "text-rose-600", bg: "bg-rose-100/50", icon: AlertTriangle },
         ].map((stat, i) => (
-          <div key={i} className="premium-card group relative overflow-hidden">
+          <div key={i} className="card-base rounded-2xl p-6">
             <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-500">
               <stat.icon className="h-16 w-16" />
             </div>
@@ -286,8 +286,8 @@ export default function BugsPage() {
                 <stat.icon className={cn("h-6 w-6", stat.color)} />
               </div>
               <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
+                <p className="text-2xl font-black text-white tracking-tight">{stat.value}</p>
+                <p className="text-[10px] font-black text-white/45 uppercase tracking-widest">{stat.label}</p>
               </div>
             </div>
           </div>
@@ -296,9 +296,9 @@ export default function BugsPage() {
 
       {/* Filters & Navigation */}
       <div className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-white/8/50 border border-white/10/60">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/45" />
             <Input
               placeholder="Search reports by title, description or ID..."
               value={searchQuery}
@@ -344,20 +344,20 @@ export default function BugsPage() {
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
                 className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
-                <span className="text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
-                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
+                <span className="text-sm font-black uppercase tracking-widest text-white/45 group-hover:text-white/70 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-0 outline-none">
             {filteredBugs.length === 0 ? (
-              <div className="premium-card flex flex-col items-center justify-center py-24 border-dashed">
-                <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-6">
+              <div className="card-base rounded-2xl p-6">
+                <div className="w-20 h-20 rounded-3xl bg-white/4 flex items-center justify-center mb-6">
                   <Bug className="h-10 w-10 text-slate-200" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">No bugs found</h3>
-                <p className="text-slate-500 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
+                <h3 className="text-xl font-bold text-white">No bugs found</h3>
+                <p className="text-white/55 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
                 <Button variant="outline" className="mt-6 rounded-2xl" onClick={() => { resetForm(); setShowCreateDialog(true); }}>
                   Create Bug Report
                 </Button>
@@ -370,7 +370,7 @@ export default function BugsPage() {
                   return (
                     <div
                       key={bug.id}
-                      className="premium-card !p-0 group cursor-pointer border-slate-200/60 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
+                      className="card-base rounded-2xl p-6"
                       onClick={() => setShowDetailDialog(bug)}
                     >
                       <div className="flex flex-col lg:flex-row lg:items-center p-6 gap-6">
@@ -380,19 +380,19 @@ export default function BugsPage() {
                               bug.severity === 'critical' ? 'bg-rose-500 animate-pulse' : 
                               bug.severity === 'major' ? 'bg-amber-500' : 'bg-blue-500'
                             )} />
-                            <h3 className="text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
+                            <h3 className="text-lg font-bold text-white truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
                           </div>
                           
-                          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-6">
+                          <p className="text-sm text-white/55 line-clamp-2 leading-relaxed mb-6">
                             {bug.description || "No detailed description provided for this report."}
                           </p>
                           
-                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-slate-50 border border-slate-100">
+                          <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-white/45">
+                            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-white/4 border border-white/8">
                               <Avatar className="h-5 w-5">
                                 <AvatarFallback className="text-[8px] bg-indigo-500 text-white">{reporter ? getInitials(reporter.name) : "?"}</AvatarFallback>
                               </Avatar>
-                              <span className="text-slate-600">{reporter?.name || "Anonymous"}</span>
+                              <span className="text-white/70">{reporter?.name || "Anonymous"}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Clock className="h-3.5 w-3.5" />
@@ -407,7 +407,7 @@ export default function BugsPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-slate-100 shrink-0">
+                        <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-white/8 shrink-0">
                           <div className="flex flex-col items-end gap-2">
                             <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
                               bug.severity === 'critical' ? 'bg-rose-100 text-rose-600' : 
@@ -415,12 +415,12 @@ export default function BugsPage() {
                             )}>
                               {bug.severity}
                             </Badge>
-                            <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            <div className="flex items-center gap-2 text-xs font-bold text-white/45">
                               {statusIcon(bug.status)}
                               <span className="capitalize">{bug.status.replace('-', ' ')}</span>
                             </div>
                           </div>
-                          <div className="w-10 h-10 rounded-2xl bg-slate-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
+                          <div className="w-10 h-10 rounded-2xl bg-white/4 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
                             <Plus className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 rotate-45" />
                           </div>
                         </div>
@@ -450,20 +450,20 @@ export default function BugsPage() {
           <div className="p-10 space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Report Headline</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Report Headline</Label>
                 <Input value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="e.g. Memory leak on dashboard chart interaction" 
-                  className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
+                  className="h-14 rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold" />
               </div>
 
               {/* AI Section */}
-              <div className="premium-card !p-6 bg-gradient-to-br from-indigo-50 via-slate-50 to-white border-indigo-100">
+              <div className="card-base rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                       <Cpu className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-slate-900">Bug Intelligence</p>
+                      <p className="text-sm font-black text-white">Bug Intelligence</p>
                       <p className="text-[10px] font-bold text-indigo-500 uppercase">Automated Prioritization</p>
                     </div>
                   </div>
@@ -476,7 +476,7 @@ export default function BugsPage() {
 
                 {aiSuggestion ? (
                   <div className="space-y-4 animate-slide-up">
-                    <p className="text-xs font-medium text-slate-600 leading-relaxed bg-white/50 p-4 rounded-2xl border border-white/80">
+                    <p className="text-xs font-medium text-white/70 leading-relaxed bg-white/50 p-4 rounded-2xl border border-white/80">
                       {aiSuggestion.reason}
                     </p>
                     <div className="grid grid-cols-3 gap-3">
@@ -485,8 +485,8 @@ export default function BugsPage() {
                         { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-indigo-600" },
                         { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
                       ].map((item, idx) => (
-                        <div key={idx} className="bg-white p-3 rounded-xl border border-slate-100 text-center">
-                          <p className="text-[8px] font-black uppercase text-slate-400 mb-1">{item.label}</p>
+                        <div key={idx} className="bg-white p-3 rounded-xl border border-white/8 text-center">
+                          <p className="text-[8px] font-black uppercase text-white/45 mb-1">{item.label}</p>
                           <p className={cn("text-[10px] font-black", item.color)}>{item.value}</p>
                         </div>
                       ))}
@@ -494,7 +494,7 @@ export default function BugsPage() {
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-[10px] font-bold text-slate-400">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
+                    <p className="text-[10px] font-bold text-white/45">ENTER A TITLE TO UNLOCK AI INSIGHTS</p>
                   </div>
                 )}
               </div>
@@ -502,22 +502,22 @@ export default function BugsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Impact Description</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Impact Description</Label>
                 <Textarea value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Explain the business impact..." rows={4} 
-                  className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium text-sm" />
+                  className="rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-medium text-sm" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Reproduction Path</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Reproduction Path</Label>
                 <Textarea value={formSteps} onChange={(e) => setFormSteps(e.target.value)} placeholder="1. Open app&#10;2. Click btn..." rows={4} 
-                  className="rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-mono text-xs" />
+                  className="rounded-2xl bg-white/4 border-white/10 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-mono text-xs" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Severity Level</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Severity Level</Label>
                 <Select value={formSeverity} onValueChange={(v) => setFormSeverity(v as Severity)}>
-                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-white/4 border-white/10 font-bold text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="minor">Minor - Cosmetic</SelectItem>
                     <SelectItem value="major">Major - Functional</SelectItem>
@@ -526,9 +526,9 @@ export default function BugsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Assign Resolver</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Assign Resolver</Label>
                 <Select value={formAssignee} onValueChange={setFormAssignee}>
-                  <SelectTrigger className="h-12 rounded-2xl bg-slate-50 border-slate-200 font-bold text-xs"><SelectValue placeholder="Automatic Allocation" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-2xl bg-white/4 border-white/10 font-bold text-xs"><SelectValue placeholder="Automatic Allocation" /></SelectTrigger>
                   <SelectContent>
                     {projectMembers.map((user) => user && (
                       <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
@@ -539,8 +539,8 @@ export default function BugsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Visual Evidence</Label>
-              <label className="group block border-2 border-dashed border-slate-200 rounded-[2rem] p-8 text-center hover:border-indigo-500/40 hover:bg-indigo-50/30 transition-all cursor-pointer">
+              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 ml-1">Visual Evidence</Label>
+              <label className="group block border-2 border-dashed border-white/10 rounded-[2rem] p-8 text-center hover:border-indigo-500/40 hover:bg-indigo-50/30 transition-all cursor-pointer">
                 <input type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
                 {screenshotPreview ? (
                   <div className="relative inline-block">
@@ -551,12 +551,12 @@ export default function BugsPage() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-100 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Plus className="h-6 w-6 text-slate-400" />
+                    <div className="w-12 h-12 rounded-2xl bg-white/8 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Plus className="h-6 w-6 text-white/45" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900">Upload Screenshot</p>
-                      <p className="text-xs text-slate-400 font-medium">Attach visual context for faster resolution</p>
+                      <p className="text-sm font-bold text-white">Upload Screenshot</p>
+                      <p className="text-xs text-white/45 font-medium">Attach visual context for faster resolution</p>
                     </div>
                   </div>
                 )}
@@ -564,8 +564,8 @@ export default function BugsPage() {
             </div>
           </div>
 
-          <div className="p-10 bg-slate-50 flex items-center justify-between border-t border-slate-200">
-            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Discard</button>
+          <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
+            <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/45 hover:text-white/70 transition-colors">Discard</button>
             <div className="flex items-center gap-4">
               {createError && <p className="text-xs font-bold text-rose-500">{createError}</p>}
               <Button variant="premium" onClick={handleCreateBug} disabled={!formTitle.trim() || creating} className="!h-14 !px-8 shadow-indigo-500/20">
@@ -631,14 +631,14 @@ export default function BugsPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                       <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Functional Impact</h4>
-                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{bug.description || "No context provided."}</p>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Functional Impact</h4>
+                        <p className="text-sm text-white/70 font-medium leading-relaxed">{bug.description || "No context provided."}</p>
                       </div>
 
                       {bug.stepsToReproduce && (
                         <div>
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Reproduction Steps</h4>
-                          <div className="bg-slate-50 rounded-[1.5rem] p-6 border border-slate-100 font-mono text-xs text-slate-600 leading-relaxed">
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Reproduction Steps</h4>
+                          <div className="bg-white/4 rounded-[1.5rem] p-6 border border-white/8 font-mono text-xs text-white/70 leading-relaxed">
                             {bug.stepsToReproduce}
                           </div>
                         </div>
@@ -648,24 +648,24 @@ export default function BugsPage() {
                     <div className="space-y-8">
                       {bug.screenshotUrl && (
                         <div>
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Evidence</h4>
-                          <div className="group relative overflow-hidden rounded-[2rem] border border-slate-100 shadow-xl">
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Evidence</h4>
+                          <div className="group relative overflow-hidden rounded-[2rem] border border-white/8 shadow-xl">
                             <img src={bug.screenshotUrl} alt="BugEvidence" className="w-full object-cover" />
                             <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                         </div>
                       )}
 
-                      <div className="premium-card !p-6 bg-slate-50 border-slate-200">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Resolution Ownership</h4>
+                      <div className="card-base rounded-2xl p-6">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">Resolution Ownership</h4>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
-                              <AvatarFallback className="bg-slate-200 text-slate-600 font-black text-xs">{assignee ? getInitials(assignee.name) : "?"}</AvatarFallback>
+                              <AvatarFallback className="bg-slate-200 text-white/70 font-black text-xs">{assignee ? getInitials(assignee.name) : "?"}</AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="text-sm font-bold text-slate-900">{assignee?.name || "Unassigned"}</p>
-                              <p className="text-[10px] font-bold text-slate-400">LEAD RESOLVER</p>
+                              <p className="text-sm font-bold text-white">{assignee?.name || "Unassigned"}</p>
+                              <p className="text-[10px] font-bold text-white/45">LEAD RESOLVER</p>
                             </div>
                           </div>
                           {!assignee && permissions.changeBugStatus && (
@@ -679,17 +679,17 @@ export default function BugsPage() {
                   {/* ── Chat/Comments ── */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Collaboration Feed</h4>
-                      <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500">{comments.length} MESSAGES</span>
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45">Collaboration Feed</h4>
+                      <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55">{comments.length} MESSAGES</span>
                     </div>
 
                     <div className="space-y-4">
                       {loadingComments ? (
                         <div className="flex justify-center py-10"><RefreshCw className="h-6 w-6 animate-spin text-slate-200" /></div>
                       ) : comments.length === 0 ? (
-                        <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[2rem]">
+                        <div className="text-center py-12 border-2 border-dashed border-white/8 rounded-[2rem]">
                           <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-3" />
-                          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No activity yet</p>
+                          <p className="text-xs font-bold text-white/45 uppercase tracking-widest">No activity yet</p>
                         </div>
                       ) : (
                         <div className="space-y-4">
@@ -702,9 +702,9 @@ export default function BugsPage() {
                                   <AvatarFallback className="text-[10px] font-black bg-indigo-500 text-white">{author ? getInitials(author.name) : "?"}</AvatarFallback>
                                 </Avatar>
                                 <div className={cn("max-w-[80%] space-y-1", isMe && "text-right")}>
-                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
+                                  <p className="text-[10px] font-black text-white/45 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
                                   <div className={cn("px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm", 
-                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-slate-100 text-slate-600 rounded-tl-none")}>
+                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-white/8 text-white/70 rounded-tl-none")}>
                                     {c.content}
                                   </div>
                                   <p className="text-[8px] font-black text-slate-300 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
@@ -725,12 +725,12 @@ export default function BugsPage() {
                       </div>
                       <Input placeholder="Sync with your team..." value={commentText} onChange={(e) => setCommentText(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendComment(bug.id)}
-                        className="h-16 pl-6 pr-16 rounded-[1.5rem] bg-slate-50 border-slate-200 focus:border-indigo-500/30 font-medium" />
+                        className="h-16 pl-6 pr-16 rounded-[1.5rem] bg-white/4 border-white/10 focus:border-indigo-500/30 font-medium" />
                     </div>
                   </div>
                 </div>
 
-                <div className="p-8 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+                <div className="p-8 bg-white/4 border-t border-white/10 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-3">
                     {permissions.deleteBug && (
                       <button onClick={() => { deleteBug(bug.id); setShowDetailDialog(null); }}
@@ -750,7 +750,7 @@ export default function BugsPage() {
 
                     {permissions.changeBugStatus && (
                       <Select value={bug.status} onValueChange={(v) => { handleStatusChange(bug.id, v as BugStatus); setShowDetailDialog({ ...bug, status: v as BugStatus }); }}>
-                        <SelectTrigger className="w-40 h-12 rounded-xl border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
+                        <SelectTrigger className="w-40 h-12 rounded-xl border-white/10 bg-white font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="open">Open</SelectItem>
                           <SelectItem value="in-progress">In Progress</SelectItem>
