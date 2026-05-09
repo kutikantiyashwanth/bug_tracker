@@ -148,7 +148,7 @@ export default function DashboardPage() {
           </h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
             {activeProject
-              ? <>You're currently viewing metrics for <span className="text-indigo-300 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
+              ? <>You're currently viewing metrics for <span className="text-indigo-600 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
               : "Select a project from the sidebar to view detailed analytics and manage your team."}
           </p>
         </div>
@@ -156,9 +156,9 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-transparent/0 border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
-            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-300 group-hover:rotate-180 transition-all duration-500" />
-            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-300">Refresh Data</span>
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
+            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
+            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh Data</span>
           </button>
           
           <button className="btn-premium shadow-indigo-500/25">
@@ -186,7 +186,7 @@ export default function DashboardPage() {
                 {card.trend && (
                   <div className={cn(
                     "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
-                    card.up ? "bg-emerald-500/15 text-emerald-300" : "bg-rose-500/15 text-rose-300"
+                    card.up ? "bg-emerald-100 text-emerald-600" : "bg-rose-100 text-rose-600"
                   )}>
                     {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                     {card.trend}
@@ -301,8 +301,8 @@ export default function DashboardPage() {
               
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Efficiency", value: `${stats.completionRate}%`, sub: "Task Completion", color: "text-indigo-300", bg: "bg-indigo-50" },
-                  { label: "Stability", value: `${stats.bugFixRate}%`, sub: "Bug Resolution", color: "text-emerald-300", bg: "bg-emerald-50" },
+                  { label: "Efficiency", value: `${stats.completionRate}%`, sub: "Task Completion", color: "text-indigo-600", bg: "bg-indigo-50" },
+                  { label: "Stability", value: `${stats.bugFixRate}%`, sub: "Bug Resolution", color: "text-emerald-600", bg: "bg-emerald-50" },
                 ].map((m, i) => (
                   <div key={i} className={cn("p-6 rounded-2xl flex flex-col items-center justify-center text-center", m.bg)}>
                     <p className={cn("text-3xl font-black mb-1", m.color)}>{m.value}</p>
@@ -315,7 +315,7 @@ export default function DashboardPage() {
               <div className="mt-6 space-y-4">
                 <div className="p-4 rounded-2xl bg-slate-50 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-transparent/0 flex items-center justify-center shadow-sm">
+                    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
                       <Target className="h-4 w-4 text-slate-400" />
                     </div>
                     <span className="text-xs font-bold text-slate-600">Active Sprint Progress</span>
@@ -402,7 +402,7 @@ export default function DashboardPage() {
                   const daysLeft = Math.ceil((new Date(task.dueDate!).getTime() - Date.now()) / 86400000);
                   const isUrgent = daysLeft <= 2;
                   return (
-                    <div key={task.id} className="group p-4 rounded-2xl bg-slate-50 hover:bg-transparent/0 border border-transparent hover:border-slate-100 hover:shadow-sm transition-all flex items-center gap-4">
+                    <div key={task.id} className="group p-4 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-sm transition-all flex items-center gap-4">
                       <div className={cn("w-1.5 h-10 rounded-full", isUrgent ? "bg-rose-500 shadow-lg shadow-rose-500/20" : "bg-indigo-400")} />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-slate-900 truncate tracking-tight">{task.title}</p>

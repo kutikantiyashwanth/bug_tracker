@@ -120,8 +120,8 @@ export default function SprintsPage() {
         <div className="w-16 h-16 rounded-2xl icon-violet flex items-center justify-center">
           <Zap className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold text-white">No Project Selected</h2>
-        <p className="text-sm text-white/55">Select a project from the sidebar to manage sprints.</p>
+        <h2 className="text-xl font-bold text-gray-900">No Project Selected</h2>
+        <p className="text-sm text-gray-500">Select a project from the sidebar to manage sprints.</p>
       </div>
     );
   }
@@ -136,7 +136,7 @@ export default function SprintsPage() {
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Velocity Management</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight flex items-center gap-4">
-            Sprint <span className="text-violet-300 underline decoration-violet-200 underline-offset-8">Orchestration</span>
+            Sprint <span className="text-violet-600 underline decoration-violet-200 underline-offset-8">Orchestration</span>
           </h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             Coordinate high-velocity development cycles. Define goals, allocate resources, and monitor operational throughput.
@@ -151,9 +151,9 @@ export default function SprintsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "TOTAL CYCLES",     value: stats.total,     icon: Zap,    bg: "bg-slate-900 text-white", border: "border-slate-800" },
-          { label: "ACTIVE RUNS",    value: stats.active,    icon: Play,    bg: "bg-emerald-50 text-emerald-300", border: "border-emerald-100" },
-          { label: "PLANNING PHASE",   value: stats.planned,   icon: Clock,    bg: "bg-amber-50 text-amber-300", border: "border-amber-100" },
-          { label: "ARCHIVED", value: stats.completed, icon: CheckCircle2, bg: "bg-indigo-50 text-indigo-300", border: "border-indigo-100" },
+          { label: "ACTIVE RUNS",    value: stats.active,    icon: Play,    bg: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
+          { label: "PLANNING PHASE",   value: stats.planned,   icon: Clock,    bg: "bg-amber-50 text-amber-600", border: "border-amber-100" },
+          { label: "ARCHIVED", value: stats.completed, icon: CheckCircle2, bg: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
         ].map((s) => (
           <div key={s.label} className="premium-card p-6 flex flex-col items-center text-center group">
             <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110", s.bg)}>
@@ -195,10 +195,10 @@ export default function SprintsPage() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="flex-1 min-w-0 space-y-4">
                       <div className="flex items-center gap-4">
-                        <h3 className="text-xl font-black text-slate-900 tracking-tight group-hover:text-violet-300 transition-colors">{sprint.name}</h3>
+                        <h3 className="text-xl font-black text-slate-900 tracking-tight group-hover:text-violet-600 transition-colors">{sprint.name}</h3>
                         <span className={cn("text-[9px] font-black px-3 py-1 rounded-lg flex items-center gap-2 uppercase tracking-widest border", 
-                          sprint.status === 'active' ? 'bg-emerald-50 text-emerald-300 border-emerald-100' :
-                          sprint.status === 'completed' ? 'bg-indigo-50 text-indigo-300 border-indigo-100' : 'bg-slate-50 text-slate-400 border-slate-100')}>
+                          sprint.status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                          sprint.status === 'completed' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-slate-50 text-slate-400 border-slate-100')}>
                           <StatusIcon className="h-3 w-3" />
                           {sprint.status}
                         </span>
@@ -241,7 +241,7 @@ export default function SprintsPage() {
                         {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                       </button>
                       <button onClick={() => handleDelete(sprint.id)}
-                        className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-400 hover:text-rose-300 transition-all">
+                        className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-400 hover:text-rose-600 transition-all">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -269,7 +269,7 @@ export default function SprintsPage() {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {sprintTasks.map((task) => (
-                          <div key={task.id} className="bg-transparent/0 p-4 rounded-2xl border border-slate-100 flex items-center gap-4 shadow-sm">
+                          <div key={task.id} className="bg-white p-4 rounded-2xl border border-slate-100 flex items-center gap-4 shadow-sm">
                             <div className={cn("w-2 h-2 rounded-full shrink-0",
                               task.status === "done" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
                               task.status === "in-progress" ? "bg-violet-500" :
@@ -330,16 +330,16 @@ export default function SprintsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Object Allocation</Label>
-                  <span className="text-[10px] font-black text-violet-300 uppercase bg-violet-50 px-2 py-1 rounded-lg">{formTaskIds.length} SELECTED</span>
+                  <span className="text-[10px] font-black text-violet-600 uppercase bg-violet-50 px-2 py-1 rounded-lg">{formTaskIds.length} SELECTED</span>
                 </div>
                 <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto pr-2 no-scrollbar">
                   {projectTasks.map((task) => (
                     <label key={task.id}
-                      className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-transparent/0 hover:border-violet-500/25 hover:shadow-sm cursor-pointer transition-all group">
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-violet-200 hover:shadow-sm cursor-pointer transition-all group">
                       <input type="checkbox"
                         checked={formTaskIds.includes(task.id)}
                         onChange={() => toggleTask(task.id)}
-                        className="w-5 h-5 rounded-lg border-slate-300 text-violet-300 focus:ring-violet-500/20" />
+                        className="w-5 h-5 rounded-lg border-slate-300 text-violet-600 focus:ring-violet-500/20" />
                       <span className="text-xs font-bold text-slate-900 flex-1 truncate">{task.title}</span>
                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{task.priority}</span>
                     </label>
