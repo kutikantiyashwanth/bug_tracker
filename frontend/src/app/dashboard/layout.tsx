@@ -25,7 +25,7 @@ const iconMap: Record<string, any> = {
 };
 
 const roleMeta: Record<string, { label: string; icon: any; gradient: string; text: string }> = {
-  admin:     { label: "Project Lead", icon: Shield,    gradient: "from-indigo-500 to-indigo-600", text: "text-indigo-600" },
+  admin:     { label: "Project Lead", icon: Shield,    gradient: "from-indigo-500 to-indigo-600", text: "text-violet-400" },
   developer: { label: "Team Member",  icon: Code2,     gradient: "from-emerald-500 to-teal-600",   text: "text-emerald-600" },
   tester:    { label: "QA Analyst",   icon: TestTube2, gradient: "from-amber-500 to-orange-600",  text: "text-amber-600" },
 };
@@ -163,7 +163,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
             <Bug className="h-5 w-5 text-white" />
           </div>
-          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-pulse" />
+          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white/10 animate-pulse" />
         </div>
         <div>
           <p className="text-lg font-black tracking-tighter text-white">Bug<span className="text-purple-400">Tracker</span></p>
@@ -280,7 +280,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                             {getInitials(user.name)}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-900" />
+                        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white/10" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold text-white/85 group-hover:text-white truncate">{user.name}</p>
@@ -328,7 +328,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
         {/* Mobile overlay */}
         {sidebarOpen && (
-          <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-md lg:hidden"
+          <div className="fixed inset-0 z-40 bg-[#0f1729]/60 backdrop-blur-md lg:hidden"
             onClick={() => setSidebarOpen(false)} />
         )}
 
@@ -347,19 +347,19 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Main Content Area */}
         <main className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
           {/* Top bar / Header */}
-          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center px-6 lg:px-8 gap-6">
-            <button className="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
+          <header className="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-white/10/60 flex items-center px-6 lg:px-8 gap-6">
+            <button className="lg:hidden p-2.5 rounded-xl text-white/50 hover:text-white hover:bg-white/8 transition-all"
               onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
             </button>
 
             <div className="flex-1 flex items-center">
               <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
+                <div className="hidden sm:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/50">
                   <span>Workspace</span>
                   <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" />
                 </div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{currentLabel}</h1>
+                <h1 className="text-xl font-bold text-white tracking-tight">{currentLabel}</h1>
               </div>
             </div>
 
@@ -368,16 +368,16 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
-                  <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/8 border border-transparent hover:border-white/10 hover:bg-white hover:shadow-sm transition-all text-white/60 w-64 group">
+                  <Search className="h-4 w-4 text-white/50 group-hover:text-violet-400 transition-colors" />
                   <span className="text-sm font-medium">Search anything...</span>
-                  <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
+                  <kbd className="ml-auto text-[10px] font-bold text-white/40">⌘K</kbd>
                 </button>
               </div>
 
               <div className="flex items-center gap-2">
                 <Link href="/dashboard/notifications">
-                  <button className="relative p-3 rounded-2xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                  <button className="relative p-3 rounded-2xl text-white/50 hover:text-violet-400 hover:bg-indigo-50 transition-all">
                     <Bell className="h-5 w-5" />
                     {unreadCount > 0 && (
                       <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full border-2 border-white bg-rose-500" />
@@ -385,15 +385,15 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   </button>
                 </Link>
 
-                <div className="h-8 w-[1px] bg-slate-200 mx-1" />
+                <div className="h-8 w-[1px] bg-white/10 mx-1" />
 
                 <Link href="/dashboard/settings" className="flex items-center gap-3 group">
                   <div className="text-right hidden xl:block">
-                    <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
-                    <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Profile</p>
+                    <p className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors leading-none">{currentUser?.name?.split(" ")[0]}</p>
+                    <p className="text-[10px] font-medium text-white/50 uppercase tracking-widest mt-1">Profile</p>
                   </div>
-                  <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-slate-200">
-                    <AvatarFallback className="text-xs font-black bg-slate-100 text-slate-600">
+                  <Avatar className="h-10 w-10 ring-2 ring-transparent group-hover:ring-indigo-500/20 transition-all border border-white/10">
+                    <AvatarFallback className="text-xs font-black bg-white/8 text-white/70">
                       {getInitials(currentUser?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -466,7 +466,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                             <p className="text-sm font-semibold text-gray-800 truncate">{r.label}</p>
                             <p className="text-xs text-gray-400 capitalize">{r.type} · {r.sub}</p>
                           </div>
-                          <span className="text-[10px] text-slate-600 group-hover:text-purple-600 transition-colors">↵ Open</span>
+                          <span className="text-[10px] text-white/70 group-hover:text-purple-600 transition-colors">↵ Open</span>
                         </Link>
                       ))}
                     </>

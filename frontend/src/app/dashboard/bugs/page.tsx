@@ -262,7 +262,7 @@ export default function BugsPage() {
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="premium" onClick={() => { resetForm(); setCreateError(""); setShowCreateDialog(true); }} className="shadow-rose-500/20 !bg-rose-600 hover:!bg-rose-700">
+          <Button variant="glow" onClick={() => { resetForm(); setCreateError(""); setShowCreateDialog(true); }} className="shadow-rose-500/20 !bg-rose-600 hover:!bg-rose-700">
             <Plus className="h-4 w-4" />
             <span className="text-sm font-bold">Report New Bug</span>
           </Button>
@@ -344,8 +344,8 @@ export default function BugsPage() {
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
                 className="p-0 h-10 bg-white/0 border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-white/0 rounded-none flex items-center gap-2 group">
-                <span className="text-sm font-black uppercase tracking-widest text-white/65 group-hover:text-white/70 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
-                <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
+                <span className="text-sm font-black uppercase tracking-widest text-white/65 group-hover:text-white/70 group-data-[state=active]:text-violet-400 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-white/8 text-[10px] font-black text-white/55 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-violet-400 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -354,7 +354,7 @@ export default function BugsPage() {
             {filteredBugs.length === 0 ? (
               <div className="card-base rounded-2xl p-6">
                 <div className="w-20 h-20 rounded-3xl bg-white/4 flex items-center justify-center mb-6">
-                  <Bug className="h-10 w-10 text-slate-200" />
+                  <Bug className="h-10 w-10 text-white/30" />
                 </div>
                 <h3 className="text-xl font-bold text-white">No bugs found</h3>
                 <p className="text-white/55 mt-2 font-medium">Try adjusting your filters or report a new issue.</p>
@@ -380,7 +380,7 @@ export default function BugsPage() {
                               bug.severity === 'critical' ? 'bg-rose-500 animate-pulse' : 
                               bug.severity === 'major' ? 'bg-amber-500' : 'bg-blue-500'
                             )} />
-                            <h3 className="text-lg font-bold text-white truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
+                            <h3 className="text-lg font-bold text-white truncate tracking-tight group-hover:text-violet-400 transition-colors">{bug.title}</h3>
                           </div>
                           
                           <p className="text-sm text-white/55 line-clamp-2 leading-relaxed mb-6">
@@ -399,7 +399,7 @@ export default function BugsPage() {
                               <span>{formatRelativeTime(bug.createdAt)}</span>
                             </div>
                             {assignee && (
-                              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600">
+                              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-violet-400">
                                 <ArrowUpCircle className="h-3.5 w-3.5" />
                                 <span>Assigned to {assignee.name}</span>
                               </div>
@@ -421,7 +421,7 @@ export default function BugsPage() {
                             </div>
                           </div>
                           <div className="w-10 h-10 rounded-2xl bg-white/4 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
-                            <Plus className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 rotate-45" />
+                            <Plus className="h-5 w-5 text-white/40 group-hover:text-violet-400 rotate-45" />
                           </div>
                         </div>
                       </div>
@@ -437,7 +437,7 @@ export default function BugsPage() {
       {/* Create Bug Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={(open) => { if (!open) { setShowCreateDialog(false); setCreateError(""); } }}>
         <DialogContent className="sm:max-w-[650px] !rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
-          <div className="bg-slate-950 p-10 flex items-center gap-6">
+          <div className="bg-[#080b14] p-10 flex items-center gap-6">
             <div className="w-16 h-16 rounded-[2rem] bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
               <AlertTriangle className="h-8 w-8 text-rose-500" />
             </div>
@@ -464,11 +464,11 @@ export default function BugsPage() {
                     </div>
                     <div>
                       <p className="text-sm font-black text-white">Bug Intelligence</p>
-                      <p className="text-[10px] font-bold text-indigo-500 uppercase">Automated Prioritization</p>
+                      <p className="text-[10px] font-bold text-violet-400 uppercase">Automated Prioritization</p>
                     </div>
                   </div>
                   <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-indigo-200 text-indigo-600 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-indigo-200 text-violet-400 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
                     {aiLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                     {aiLoading ? "ANALYZING..." : "ANALYZE NOW"}
                   </button>
@@ -482,7 +482,7 @@ export default function BugsPage() {
                     <div className="grid grid-cols-3 gap-3">
                       {[
                         { label: "Suggested Severity", value: aiSuggestion.severity.toUpperCase(), color: "text-rose-600" },
-                        { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-indigo-600" },
+                        { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-violet-400" },
                         { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
                       ].map((item, idx) => (
                         <div key={idx} className="bg-white p-3 rounded-xl border border-white/8 text-center">
@@ -568,7 +568,7 @@ export default function BugsPage() {
             <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
             <div className="flex items-center gap-4">
               {createError && <p className="text-xs font-bold text-rose-500">{createError}</p>}
-              <Button variant="premium" onClick={handleCreateBug} disabled={!formTitle.trim() || creating} className="!h-14 !px-8 shadow-indigo-500/20">
+              <Button variant="glow" onClick={handleCreateBug} disabled={!formTitle.trim() || creating} className="!h-14 !px-8 shadow-indigo-500/20">
                 {creating ? <RefreshCw className="h-5 w-5 animate-spin" /> : <><Send className="h-4 w-4" /><span>SUBMIT REPORT</span></>}
               </Button>
             </div>
@@ -588,7 +588,7 @@ export default function BugsPage() {
             const isAssignedToMe = bug.assigneeId === currentUser?.id;
             return (
               <div className="flex flex-col h-[90vh]">
-                <div className="bg-slate-950 p-10 flex items-start justify-between">
+                <div className="bg-[#080b14] p-10 flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-4">
                       <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
@@ -661,7 +661,7 @@ export default function BugsPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
-                              <AvatarFallback className="bg-slate-200 text-white/70 font-black text-xs">{assignee ? getInitials(assignee.name) : "?"}</AvatarFallback>
+                              <AvatarFallback className="bg-white/10 text-white/70 font-black text-xs">{assignee ? getInitials(assignee.name) : "?"}</AvatarFallback>
                             </Avatar>
                             <div>
                               <p className="text-sm font-bold text-white">{assignee?.name || "Unassigned"}</p>
@@ -685,10 +685,10 @@ export default function BugsPage() {
 
                     <div className="space-y-4">
                       {loadingComments ? (
-                        <div className="flex justify-center py-10"><RefreshCw className="h-6 w-6 animate-spin text-slate-200" /></div>
+                        <div className="flex justify-center py-10"><RefreshCw className="h-6 w-6 animate-spin text-white/30" /></div>
                       ) : comments.length === 0 ? (
                         <div className="text-center py-12 border-2 border-dashed border-white/8 rounded-[2rem]">
-                          <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-3" />
+                          <MessageSquare className="h-8 w-8 text-white/30 mx-auto mb-3" />
                           <p className="text-xs font-bold text-white/65 uppercase tracking-widest">No activity yet</p>
                         </div>
                       ) : (
@@ -707,7 +707,7 @@ export default function BugsPage() {
                                     isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-white/8 text-white/70 rounded-tl-none")}>
                                     {c.content}
                                   </div>
-                                  <p className="text-[8px] font-black text-slate-300 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
+                                  <p className="text-[8px] font-black text-white/40 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
                                 </div>
                               </div>
                             );

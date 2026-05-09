@@ -71,10 +71,10 @@ export default function ActivityPage() {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Project Operations</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Project Operations</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Activity <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
-        <p className="text-slate-500 mt-2 font-medium max-w-xl">
+        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Activity <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
+        <p className="text-white/60 mt-2 font-medium max-w-xl">
           Real-time surveillance of all project operations, modifications, and system events across the workspace.
         </p>
       </div>
@@ -82,49 +82,49 @@ export default function ActivityPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {statCards.map((stat) => (
-          <div key={stat.label} className="premium-card p-6 flex flex-col items-center text-center group hover:scale-105 transition-all">
+          <div key={stat.label} className="card-base rounded-2xl p-6">
             <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 shadow-sm", 
-              stat.label === "Total Actions" ? "bg-slate-900 text-white" :
-              stat.label === "Tasks" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+              stat.label === "Total Actions" ? "bg-[#0f1729] text-white" :
+              stat.label === "Tasks" ? "bg-indigo-50 text-violet-400 border-indigo-100" :
               stat.label === "Bugs" ? "bg-rose-50 text-rose-600 border-rose-100" :
               "bg-emerald-50 text-emerald-600 border-emerald-100"
             )}>
               <stat.icon className="h-6 w-6" />
             </div>
             <div className="space-y-1">
-              <p className="text-3xl font-black text-slate-900">{stat.value}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
+              <p className="text-3xl font-black text-white">{stat.value}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/50">{stat.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Timeline */}
-      <div className="premium-card p-10">
+      <div className="card-base rounded-2xl p-6">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
-              <Activity className="h-6 w-6 text-slate-400" />
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/6 flex items-center justify-center">
+              <Activity className="h-6 w-6 text-white/50" />
             </div>
             <div>
-              <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Operational Timeline</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Chronological System Events</p>
+              <h2 className="text-sm font-black uppercase tracking-widest text-white">Operational Timeline</h2>
+              <p className="text-[10px] font-bold text-white/50 uppercase">Chronological System Events</p>
             </div>
           </div>
-          <div className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Live Monitoring Active</span>
+          <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/6">
+            <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">Live Monitoring Active</span>
           </div>
         </div>
 
         <ScrollArea className="h-[700px] pr-6">
           {Object.keys(groupedActivities).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-              <div className="w-20 h-20 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
-                <Activity className="h-10 w-10 text-slate-200" />
+              <div className="w-20 h-20 rounded-full bg-white/5 border border-white/6 flex items-center justify-center">
+                <Activity className="h-10 w-10 text-white/30" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-black text-slate-900 uppercase tracking-widest">No Operational History</p>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Actions will materialize as protocols are executed</p>
+                <p className="text-sm font-black text-white uppercase tracking-widest">No Operational History</p>
+                <p className="text-[10px] text-white/50 font-bold uppercase">Actions will materialize as protocols are executed</p>
               </div>
             </div>
           ) : (
@@ -132,14 +132,14 @@ export default function ActivityPage() {
               <div key={date} className="mb-12 last:mb-0">
                 {/* Date header */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 py-4 mb-6 border-b border-slate-50">
-                  <span className="text-xs font-black text-indigo-600 uppercase tracking-[0.2em]">
+                  <span className="text-xs font-black text-violet-400 uppercase tracking-[0.2em]">
                     {date}
                   </span>
                 </div>
 
                 <div className="space-y-4 relative">
                   {/* Timeline line */}
-                  <div className="absolute left-6 top-8 bottom-0 w-px bg-slate-100" />
+                  <div className="absolute left-6 top-8 bottom-0 w-px bg-white/8" />
 
                   {dateActivities.map((activity, i) => {
                     const user = getUserById(activity.userId);
@@ -152,29 +152,29 @@ export default function ActivityPage() {
                         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 z-10 border transition-all shadow-sm group-hover:scale-110", 
                           activity.action === "resolved" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
                           activity.action === "reported" ? "bg-rose-50 text-rose-600 border-rose-100" :
-                          activity.action === "joined" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
-                          "bg-slate-50 text-slate-600 border-slate-100"
+                          activity.action === "joined" ? "bg-indigo-50 text-violet-400 border-indigo-100" :
+                          "bg-white/5 text-white/70 border-white/6"
                         )}>
                           <Icon className="h-5 w-5" />
                         </div>
 
                         {/* Content */}
                         <div className="flex-1 pb-8 group-last:pb-0">
-                          <div className="p-6 rounded-[2rem] bg-slate-50/50 border border-transparent group-hover:border-slate-100 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
+                          <div className="p-6 rounded-[2rem] bg-white/5/50 border border-transparent group-hover:border-white/6 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
                             <div className="space-y-2">
-                              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                                <span className="font-black text-slate-900 uppercase tracking-tight mr-1">{user?.name || "System Actor"}</span>{" "}
+                              <p className="text-sm font-medium text-white/70 leading-relaxed">
+                                <span className="font-black text-white uppercase tracking-tight mr-1">{user?.name || "System Actor"}</span>{" "}
                                 {activity.details}
                               </p>
                               <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <span className="text-[10px] font-black text-white/50 uppercase tracking-widest">
                                   {formatRelativeTime(activity.createdAt)}
                                 </span>
                                 {entityKey && (
                                   <Badge className={cn("text-[9px] font-black uppercase tracking-widest",
-                                    entityKey === "task" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+                                    entityKey === "task" ? "bg-indigo-50 text-violet-400 border-indigo-100" :
                                     entityKey === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" :
-                                    "bg-slate-100 text-slate-600 border-slate-200"
+                                    "bg-white/8 text-white/70 border-white/10"
                                   )}>
                                     {entityKey}
                                   </Badge>
@@ -183,7 +183,7 @@ export default function ActivityPage() {
                             </div>
 
                             <Avatar className="h-10 w-10 border-2 border-white shadow-sm shrink-0">
-                              <AvatarFallback className="text-[10px] font-black bg-slate-900 text-white">
+                              <AvatarFallback className="text-[10px] font-black bg-[#0f1729] text-white">
                                 {user ? getInitials(user.name) : "?"}
                               </AvatarFallback>
                             </Avatar>

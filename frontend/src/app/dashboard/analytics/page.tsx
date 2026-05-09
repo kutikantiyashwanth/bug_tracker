@@ -76,12 +76,12 @@ export default function AnalyticsPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Mission Intelligence</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Mission Intelligence</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Performance <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Analytics</span></h1>
-          <p className="text-slate-500 font-medium max-w-xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Performance <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Analytics</span></h1>
+          <p className="text-white/60 font-medium max-w-xl">
             {activeProject ? (
-              <>Synthesizing data for <span className="text-indigo-600 font-black">{activeProject.name}</span>. Deep-dive into velocity metrics and defect density.</>
+              <>Synthesizing data for <span className="text-violet-400 font-black">{activeProject.name}</span>. Deep-dive into velocity metrics and defect density.</>
             ) : (
               "Please select a project from the workspace to initialize intelligence protocols."
             )}
@@ -89,21 +89,21 @@ export default function AnalyticsPage() {
         </div>
         <div className="flex items-center gap-3">
           <button onClick={fetchAnalytics} disabled={loading}
-            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all">
-            <RefreshCw className={cn("h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors", loading && "animate-spin")} />
-            <span className="text-xs font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-600">Sync Intelligence</span>
+            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-white/10 shadow-sm hover:border-indigo-500/30 hover:bg-white/5 transition-all">
+            <RefreshCw className={cn("h-4 w-4 text-white/50 group-hover:text-violet-400 transition-colors", loading && "animate-spin")} />
+            <span className="text-xs font-black uppercase tracking-widest text-white/70 group-hover:text-violet-400">Sync Intelligence</span>
           </button>
         </div>
       </div>
 
       {!data && !loading && (
-        <div className="premium-card py-20 flex flex-col items-center justify-center text-center space-y-4">
-          <div className="w-20 h-20 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center">
-            <BarChart3 className="h-10 w-10 text-slate-300" />
+        <div className="card-base rounded-2xl p-6">
+          <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/6 flex items-center justify-center">
+            <BarChart3 className="h-10 w-10 text-white/40" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-xl font-bold text-slate-900">No Intelligence Data Available</h3>
-            <p className="text-slate-500 text-sm max-w-xs">Select an active project to synchronize real-time velocity and defect metrics.</p>
+            <h3 className="text-xl font-bold text-white">No Intelligence Data Available</h3>
+            <p className="text-white/60 text-sm max-w-xs">Select an active project to synchronize real-time velocity and defect metrics.</p>
           </div>
         </div>
       )}
@@ -111,7 +111,7 @@ export default function AnalyticsPage() {
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-40 rounded-[2.5rem] bg-slate-100/50 animate-pulse border border-slate-100" />
+            <div key={i} className="h-40 rounded-[2.5rem] bg-white/8/50 animate-pulse border border-white/6" />
           ))}
         </div>
       )}
@@ -143,18 +143,18 @@ export default function AnalyticsPage() {
                 icon: Zap, label: "Weekly Momentum",
                 value: data.successMetrics.tasksCompletedThisWeek,
                 sub: `${data.successMetrics.bugsResolvedThisWeek} BUGS RESOLVED`,
-                iconCls: "bg-indigo-50 text-indigo-600 border-indigo-100", 
+                iconCls: "bg-indigo-50 text-violet-400 border-indigo-100", 
                 accent: "border-indigo-500/10 hover:border-indigo-500/30",
               },
               {
                 icon: Activity, label: "System Cycles",
                 value: data.successMetrics.totalActivities,
                 sub: "TOTAL OPERATIONS LOGGED",
-                iconCls: "bg-slate-900 text-white border-slate-800", 
-                accent: "border-slate-900/10 hover:border-slate-900/30",
+                iconCls: "bg-[#0f1729] text-white border-white/10", 
+                accent: "border-white/10/10 hover:border-white/10/30",
               },
             ].map((card, i) => (
-              <div key={i} className={cn("premium-card p-8 group transition-all", card.accent)}>
+              <div key={i} className={cn("card-base rounded-2xl p-6", card.accent)}>
                 <div className="flex items-start justify-between mb-6">
                   <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center border shadow-sm", card.iconCls)}>
                     <card.icon className="h-6 w-6" />
@@ -168,24 +168,24 @@ export default function AnalyticsPage() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
-                  <p className="text-4xl font-black text-slate-900 tracking-tight group-hover:scale-105 transition-transform origin-left">{card.value}</p>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2">{card.sub}</p>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/50">{card.label}</p>
+                  <p className="text-4xl font-black text-white tracking-tight group-hover:scale-105 transition-transform origin-left">{card.value}</p>
+                  <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest pt-2">{card.sub}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* ── Productivity Chart ── */}
-          <div className="premium-card p-10 space-y-10">
+          <div className="card-base rounded-2xl p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
-                  <BarChart3 className="h-6 w-6 text-indigo-500" />
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/6 flex items-center justify-center">
+                  <BarChart3 className="h-6 w-6 text-violet-400" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Velocity Diagnostics</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Operational flow over last 7 sessions</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white">Velocity Diagnostics</h3>
+                  <p className="text-[10px] font-bold text-white/50 uppercase">Operational flow over last 7 sessions</p>
                 </div>
               </div>
               {/* Legend */}
@@ -198,7 +198,7 @@ export default function AnalyticsPage() {
                 ].map((l) => (
                   <div key={l.label} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-md shadow-sm" style={{ background: l.color }} />
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{l.label}</span>
+                    <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">{l.label}</span>
                   </div>
                 ))}
               </div>
@@ -216,8 +216,8 @@ export default function AnalyticsPage() {
                     <Bar value={day.bugsResolved}  color="#f59e0b" max={chartMax} />
                   </div>
                   {/* Day label */}
-                  <div className="p-2 rounded-xl bg-slate-50 group-hover:bg-indigo-50 border border-slate-100 group-hover:border-indigo-100 transition-all">
-                    <p className="text-center text-[10px] font-black text-slate-600 group-hover:text-indigo-600 uppercase tracking-widest">{day.label}</p>
+                  <div className="p-2 rounded-xl bg-white/5 group-hover:bg-indigo-50 border border-white/6 group-hover:border-indigo-100 transition-all">
+                    <p className="text-center text-[10px] font-black text-white/70 group-hover:text-violet-400 uppercase tracking-widest">{day.label}</p>
                   </div>
                 </div>
               ))}
@@ -226,14 +226,14 @@ export default function AnalyticsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Task breakdown */}
-            <div className="premium-card p-8 space-y-8">
+            <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                   <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Task Lifecycle</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Velocity Distribution</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white">Task Lifecycle</h3>
+                  <p className="text-[10px] font-bold text-white/50 uppercase">Velocity Distribution</p>
                 </div>
               </div>
               <div className="space-y-6">
@@ -248,11 +248,11 @@ export default function AnalyticsPage() {
                     <div className="flex justify-between items-end">
                       <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color }} />
-                        <span className="text-[10px] font-black tracking-widest text-slate-500">{item.label}</span>
+                        <span className="text-[10px] font-black tracking-widest text-white/60">{item.label}</span>
                       </div>
-                      <span className="text-sm font-black text-slate-900">{item.count}</span>
+                      <span className="text-sm font-black text-white">{item.count}</span>
                     </div>
-                    <div className="h-2 rounded-full bg-slate-50 border border-slate-100 overflow-hidden">
+                    <div className="h-2 rounded-full bg-white/5 border border-white/6 overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-1000 ease-out"
                         style={{ width: `${data.taskStats.total > 0 ? (item.count / data.taskStats.total) * 100 : 0}%`, background: item.color }} />
                     </div>
@@ -262,14 +262,14 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Bug breakdown */}
-            <div className="premium-card p-8 space-y-8">
+            <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                   <Bug className="h-6 w-6 text-rose-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Threat Matrix</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Defect Severity Analysis</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white">Threat Matrix</h3>
+                  <p className="text-[10px] font-bold text-white/50 uppercase">Defect Severity Analysis</p>
                 </div>
               </div>
 
@@ -279,14 +279,14 @@ export default function AnalyticsPage() {
                   { label: "MAJOR DEFECTS",    count: data.bugStats.major,    color: "#f97316" },
                   { label: "MINOR ISSUES",    count: data.bugStats.minor,    color: "#3b82f6" },
                 ].map((item) => (
-                  <div key={item.label} className="p-4 rounded-[1.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all">
+                  <div key={item.label} className="p-4 rounded-[1.5rem] bg-white/5/50 border border-white/6 flex items-center justify-between group hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
-                      <span className="text-[10px] font-black tracking-widest text-slate-500 uppercase">{item.label}</span>
+                      <span className="text-[10px] font-black tracking-widest text-white/60 uppercase">{item.label}</span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-lg font-black text-slate-900">{item.count}</span>
-                      <div className="w-20 h-2 rounded-full bg-slate-200/50 overflow-hidden">
+                      <span className="text-lg font-black text-white">{item.count}</span>
+                      <div className="w-20 h-2 rounded-full bg-white/10/50 overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${data.bugStats.total > 0 ? (item.count / data.bugStats.total) * 100 : 0}%`, background: item.color }} />
                       </div>
                     </div>
@@ -294,12 +294,12 @@ export default function AnalyticsPage() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
+              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/6">
                 {[
                   { label: "OPEN",     count: data.bugStats.open,       cls: "bg-rose-50 text-rose-600 border-rose-100" },
                   { label: "PROGRESS", count: data.bugStats.inProgress, cls: "bg-amber-50 text-amber-600 border-amber-100" },
                   { label: "RESOLVED", count: data.bugStats.resolved,   cls: "bg-emerald-50 text-emerald-600 border-emerald-100" },
-                  { label: "CLOSED",   count: data.bugStats.closed,     cls: "bg-slate-100 text-slate-600 border-slate-200" },
+                  { label: "CLOSED",   count: data.bugStats.closed,     cls: "bg-white/8 text-white/70 border-white/10" },
                 ].map((item) => (
                   <div key={item.label} className={cn("flex flex-col p-4 rounded-2xl border transition-all", item.cls)}>
                     <span className="text-[9px] font-black tracking-widest uppercase opacity-60">{item.label}</span>
@@ -310,14 +310,14 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Upcoming deadlines */}
-            <div className="premium-card p-8 space-y-8">
+            <div className="card-base rounded-2xl p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                   <Calendar className="h-6 w-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Timeline Alerts</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Critical Proximity Deadlines</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white">Timeline Alerts</h3>
+                  <p className="text-[10px] font-bold text-white/50 uppercase">Critical Proximity Deadlines</p>
                 </div>
               </div>
               {data.upcomingDeadlines.length === 0 ? (
@@ -330,21 +330,21 @@ export default function AnalyticsPage() {
               ) : (
                 <div className="space-y-4">
                   {data.upcomingDeadlines.map((task) => (
-                    <div key={task.id} className="group p-5 rounded-[2rem] bg-white border border-slate-200 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all relative overflow-hidden">
+                    <div key={task.id} className="group p-5 rounded-[2rem] bg-white border border-white/10 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all relative overflow-hidden">
                       <div className={cn("absolute left-0 top-0 bottom-0 w-1.5", 
                         task.daysLeft <= 1 ? "bg-rose-500" : task.daysLeft <= 3 ? "bg-amber-500" : "bg-emerald-500"
                       )} />
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1 min-w-0 space-y-1">
-                          <p className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{task.title}</p>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase">
-                            {task.daysLeft <= 1 ? <span className="text-rose-500">DUE IMMINENTLY</span> : <span className="text-indigo-500">{task.daysLeft} DAYS UNTIL EXPIRY</span>}
+                          <p className="text-xs font-black text-white truncate uppercase tracking-tight">{task.title}</p>
+                          <p className="text-[10px] font-bold text-white/50 uppercase">
+                            {task.daysLeft <= 1 ? <span className="text-rose-500">DUE IMMINENTLY</span> : <span className="text-violet-400">{task.daysLeft} DAYS UNTIL EXPIRY</span>}
                           </p>
                         </div>
                         <Badge className={cn("font-black text-[9px] uppercase tracking-widest px-2",
                           task.priority === "CRITICAL" ? "bg-rose-50 text-rose-600 border-rose-100" : 
                           task.priority === "HIGH" ? "bg-amber-50 text-amber-600 border-amber-100" : 
-                          "bg-indigo-50 text-indigo-600 border-indigo-100"
+                          "bg-indigo-50 text-violet-400 border-indigo-100"
                         )}>
                           {task.priority}
                         </Badge>
@@ -357,14 +357,14 @@ export default function AnalyticsPage() {
           </div>
 
           {/* ── Success Metrics ── */}
-          <div className="premium-card p-10 space-y-10">
+          <div className="card-base rounded-2xl p-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-                <Target className="h-6 w-6 text-indigo-600" />
+                <Target className="h-6 w-6 text-violet-400" />
               </div>
               <div>
-                <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Intelligence Success Matrix</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase">Key Performance Indicators vs Benchmarks</p>
+                <h3 className="text-sm font-black uppercase tracking-widest text-white">Intelligence Success Matrix</h3>
+                <p className="text-[10px] font-bold text-white/50 uppercase">Key Performance Indicators vs Benchmarks</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -399,21 +399,21 @@ export default function AnalyticsPage() {
                 },
               ].map((metric, i) => (
                 <div key={i} className={cn("p-8 rounded-[2.5rem] text-center border transition-all hover:scale-105", 
-                  metric.met ? "bg-slate-50/50 border-slate-100" : "bg-white border-slate-200"
+                  metric.met ? "bg-white/5/50 border-white/6" : "bg-white border-white/10"
                 )}>
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm"
                     style={{ background: metric.color + "15", color: metric.color, border: `1px solid ${metric.color}20` }}>
                     <metric.icon className="h-7 w-7" />
                   </div>
-                  <p className="text-4xl font-black text-slate-900 tracking-tight">{metric.value}</p>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] mt-3 text-slate-500">{metric.label}</p>
+                  <p className="text-4xl font-black text-white tracking-tight">{metric.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] mt-3 text-white/60">{metric.label}</p>
                   <div className="flex items-center justify-center gap-2 mt-4">
                     <div className={cn("w-2 h-2 rounded-full animate-pulse", metric.met ? "bg-emerald-500" : "bg-rose-500")} />
                     <span className={cn("text-[10px] font-black uppercase tracking-widest", metric.met ? "text-emerald-600" : "text-rose-600")}>
                       {metric.met ? "MET" : "UNDER"}
                     </span>
                   </div>
-                  <p className="text-[9px] font-black mt-2 text-slate-400 uppercase tracking-widest">{metric.target}</p>
+                  <p className="text-[9px] font-black mt-2 text-white/50 uppercase tracking-widest">{metric.target}</p>
                 </div>
               ))}
             </div>

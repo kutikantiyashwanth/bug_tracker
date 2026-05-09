@@ -71,7 +71,7 @@ export default function ProjectsPage() {
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/65">Enterprise Workspaces</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Your <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Your <span className="text-violet-400 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
           <p className="text-white/55 mt-2 font-medium max-w-xl">
             Select a workspace to view detailed analytics, track team progress, and manage technical debt.
           </p>
@@ -83,7 +83,7 @@ export default function ProjectsPage() {
             Join Project
           </Button>
           {isAdmin && (
-            <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="shadow-indigo-500/20">
+            <Button variant="glow" onClick={() => setShowCreateDialog(true)} className="shadow-indigo-500/20">
               <Plus className="h-4 w-4 mr-2" />
               New Project
             </Button>
@@ -102,7 +102,7 @@ export default function ProjectsPage() {
               <p className="text-white/55 mt-2 font-medium mb-10">
                 You haven't initialized any projects yet. Create a workspace to start tracking bugs with your team.
               </p>
-              <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="h-14 px-8">
+              <Button variant="glow" onClick={() => setShowCreateDialog(true)} className="h-14 px-8">
                 <Plus className="h-5 w-5 mr-2" /> Create First Project
               </Button>
             </div>
@@ -112,7 +112,7 @@ export default function ProjectsPage() {
               <p className="text-white/55 mt-2 font-medium mb-10">
                 You're not a member of any project. Use an invite code from your administrator to get started.
               </p>
-              <Button variant="premium" onClick={() => setShowJoinDialog(true)} className="h-14 px-8">
+              <Button variant="glow" onClick={() => setShowJoinDialog(true)} className="h-14 px-8">
                 <Users className="h-5 w-5 mr-2" /> Enter Invite Code
               </Button>
             </div>
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-black text-white tracking-tight group-hover:text-indigo-600 transition-colors">{project.name}</h3>
+                        <h3 className="text-lg font-black text-white tracking-tight group-hover:text-violet-400 transition-colors">{project.name}</h3>
                         {isActive && (
                           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         )}
@@ -154,7 +154,7 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                   <div className="p-2 rounded-xl bg-white/4 group-hover:bg-indigo-50 transition-colors">
-                    <ExternalLink className="h-4 w-4 text-slate-300 group-hover:text-indigo-500" />
+                    <ExternalLink className="h-4 w-4 text-white/40 group-hover:text-violet-400" />
                   </div>
                 </div>
 
@@ -178,7 +178,7 @@ export default function ProjectsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-black text-white/65 uppercase tracking-widest">Sprint Velocity</span>
-                    <span className="text-xs font-black text-indigo-600">{completionRate}%</span>
+                    <span className="text-xs font-black text-violet-400">{completionRate}%</span>
                   </div>
                   <div className="h-2 rounded-full bg-white/8 overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000" style={{ width: `${completionRate}%` }} />
@@ -191,7 +191,7 @@ export default function ProjectsPage() {
                       const user = getUserById(member.userId);
                       return (
                         <Avatar key={member.userId} className="h-8 w-8 ring-2 ring-white transition-transform hover:-translate-y-1">
-                          <AvatarFallback className="text-[8px] font-black bg-slate-200 text-white/70">
+                          <AvatarFallback className="text-[8px] font-black bg-white/10 text-white/70">
                             {user ? getInitials(user.name) : "?"}
                           </AvatarFallback>
                         </Avatar>
@@ -207,7 +207,7 @@ export default function ProjectsPage() {
                   {isAdmin && (
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
-                      className="flex items-center gap-2 text-[10px] font-black text-white/65 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
+                      className="flex items-center gap-2 text-[10px] font-black text-white/65 hover:text-violet-400 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
                     >
                       {copiedId === project.id ? (
                         <><Check className="h-3 w-3 text-emerald-500" /> Copied</>
@@ -227,9 +227,9 @@ export default function ProjectsPage() {
       {/* Create Project Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent className="!rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
-          <div className="bg-slate-950 p-10 flex items-center gap-6">
+          <div className="bg-[#080b14] p-10 flex items-center gap-6">
             <div className="w-16 h-16 rounded-[2rem] bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Plus className="h-8 w-8 text-indigo-500" />
+              <Plus className="h-8 w-8 text-violet-400" />
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">New Workspace</DialogTitle>
@@ -252,7 +252,7 @@ export default function ProjectsPage() {
 
           <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
             <button onClick={() => setShowCreateDialog(false)} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Discard</button>
-            <Button variant="premium" onClick={handleCreate} disabled={!formName.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
+            <Button variant="glow" onClick={handleCreate} disabled={!formName.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <Plus className="h-5 w-5 mr-2" /> CREATE WORKSPACE
             </Button>
           </div>
@@ -262,9 +262,9 @@ export default function ProjectsPage() {
       {/* Join Project Dialog */}
       <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
         <DialogContent className="!rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
-          <div className="bg-slate-950 p-10 flex items-center gap-6">
+          <div className="bg-[#080b14] p-10 flex items-center gap-6">
             <div className="w-16 h-16 rounded-[2rem] bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Users className="h-8 w-8 text-indigo-500" />
+              <Users className="h-8 w-8 text-violet-400" />
             </div>
             <div>
               <DialogTitle className="text-3xl font-black text-white tracking-tight">Access Key</DialogTitle>
@@ -293,7 +293,7 @@ export default function ProjectsPage() {
 
           <div className="p-10 bg-white/4 flex items-center justify-between border-t border-white/10">
             <button onClick={() => { setShowJoinDialog(false); setInviteCode(""); setJoinError(""); }} className="text-xs font-black uppercase tracking-widest text-white/65 hover:text-white/70 transition-colors">Back</button>
-            <Button variant="premium" onClick={handleJoin} disabled={!inviteCode.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
+            <Button variant="glow" onClick={handleJoin} disabled={!inviteCode.trim()} className="!h-14 !px-8 shadow-indigo-500/20">
               <ArrowRight className="h-5 w-5 mr-2" /> JOIN WORKSPACE
             </Button>
           </div>
