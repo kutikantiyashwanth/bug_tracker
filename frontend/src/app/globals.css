@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -97,7 +97,8 @@
   }
 
   .glass-dark {
-    @apply backdrop-blur-xl bg-slate-900/40 border border-white/10;
+    @apply backdrop-blur-xl border border-white/10;
+    background: rgba(15, 20, 40, 0.6);
   }
 
   /* --- Animations --- */
@@ -220,18 +221,42 @@
   @apply opacity-100;
 }
 
-/* --- Sidebar Refinement --- */
+/* --- Icon color utility classes used across dashboard --- */
+.icon-violet  { @apply bg-violet-100  text-violet-600; }
+.icon-rose    { @apply bg-rose-100    text-rose-600; }
+.icon-emerald { @apply bg-emerald-100 text-emerald-600; }
+.icon-cyan    { @apply bg-cyan-100    text-cyan-600; }
+.icon-blue    { @apply bg-blue-100    text-blue-600; }
+.icon-amber   { @apply bg-amber-100   text-amber-600; }
+.icon-indigo  { @apply bg-indigo-100  text-indigo-600; }
+.icon-teal    { @apply bg-teal-100    text-teal-600; }
+
+/* Stat card accent borders */
+.stat-emerald { @apply border-l-4 border-emerald-500; }
+.stat-rose    { @apply border-l-4 border-rose-500; }
+.stat-violet  { @apply border-l-4 border-violet-500; }
+.stat-cyan    { @apply border-l-4 border-cyan-500; }
+
+/* --- Sidebar Nav Links — dark sidebar bg is #0a0f1d --- */
 .nav-link {
-  @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200;
-  color: var(--muted-foreground);
+  @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .nav-link:hover {
-  @apply bg-accent text-accent-foreground;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-link.active {
-  @apply bg-primary text-primary-foreground shadow-lg shadow-primary/20;
+  background: rgba(99, 102, 241, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3), 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.nav-link.active .nav-icon,
+.nav-link:hover .nav-icon {
+  color: inherit;
 }
 
 /* --- Badge Polishing --- */
