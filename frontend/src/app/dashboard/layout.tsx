@@ -167,7 +167,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
         <div>
           <p className="text-lg font-black tracking-tighter text-white">Bug<span className="text-purple-400">Tracker</span></p>
-          <div className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest bg-white/0/5 text-white/65",
+          <div className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest bg-white/5 text-white/65",
             userRole === "admin"     ? "text-violet-400" :
             userRole === "developer" ? "text-cyan-400" :
                                        "text-amber-400"
@@ -182,8 +182,8 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
       <div className="px-4 py-4 shrink-0">
         {(!Array.isArray(projects) || projects.length === 0) ? (
           <Link href="/dashboard/projects"
-            className="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all glass hover:bg-white/0/10 group">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/0/5 group-hover:bg-white/0/20 transition-colors">
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all rounded-2xl hover:bg-white/10 group">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/5 group-hover:bg-white/20 transition-colors">
               <Plus className="h-4 w-4 text-white" />
             </div>
             <span className="text-sm font-semibold text-white/90">Setup Workspace</span>
@@ -191,7 +191,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         ) : (
           <div className="relative">
             <button onClick={() => setProjectMenuOpen(!projectMenuOpen)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all glass-dark hover:bg-white/0/5 text-left group">
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all rounded-2xl-dark hover:bg-white/5 text-left group">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-black shrink-0 bg-gradient-to-tr from-purple-600 to-blue-600 shadow-inner">
                 {activeProject?.name.substring(0, 2).toUpperCase() || "??"}
               </div>
@@ -203,15 +203,15 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
             </button>
 
             {projectMenuOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 p-2 rounded-2xl glass-dark border-white/10 shadow-2xl z-50 animate-slide-up">
+              <div className="absolute top-full left-0 right-0 mt-2 p-2 rounded-2xl rounded-2xl border border-white/8 shadow-2xl z-50 animate-slide-up">
                 <div className="max-h-60 overflow-y-auto no-scrollbar space-y-1">
                   {projects.map((project) => (
                     <button key={project.id}
                       onClick={() => { setActiveProject(project.id); setProjectMenuOpen(false); }}
                       className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all",
-                        project.id === activeProjectId ? "bg-white/0/10 text-white" : "text-white/75 hover:bg-white/0/5 hover:text-white"
+                        project.id === activeProjectId ? "bg-white/10 text-white" : "text-white/75 hover:bg-white/5 hover:text-white"
                       )}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0 bg-white/0/10">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0 bg-white/10">
                         {project.name.substring(0, 2).toUpperCase()}
                       </div>
                       <span className="truncate flex-1 font-semibold">{project.name}</span>
@@ -221,7 +221,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 </div>
                 <div className="mt-2 pt-2 border-t border-white/5">
                   <Link href="/dashboard/projects" onClick={() => setProjectMenuOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/0/5 transition-all">
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all">
                     <Plus className="h-4 w-4" />
                     <span className="font-semibold">New Project</span>
                   </Link>
@@ -244,11 +244,11 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 return (
                   <Link key={item.href} href={item.href} onClick={() => setSidebarOpen(false)}
                     className={cn(
-                      "nav-link group relative",
-                      isActive ? "active" : "hover:bg-white/0/5 hover:text-white"
+                      "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all group relative",
+                      isActive ? "active" : "hover:bg-white/5 hover:text-white"
                     )}>
                     <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300",
-                      isActive ? "bg-white/0/20 text-white" : "bg-white/0/5 text-white/50 group-hover:bg-white/0/10 group-hover:text-white"
+                      isActive ? "bg-white/20 text-white" : "bg-white/5 text-white/50 group-hover:bg-white/10 group-hover:text-white"
                     )}>
                       <Icon className="h-4 w-4" />
                     </div>
@@ -273,7 +273,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   const user = getUserById(member.userId);
                   if (!user) return null;
                   return (
-                    <div key={member.userId} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/0/5 transition-all group cursor-pointer">
+                    <div key={member.userId} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all group cursor-pointer">
                       <div className="relative shrink-0">
                         <Avatar className="h-8 w-8 border border-white/10 group-hover:border-white/30 transition-colors">
                           <AvatarFallback className="text-[10px] font-black bg-gradient-to-br from-slate-700 to-slate-900 text-white/90">
@@ -297,7 +297,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
       {/* ── User Profile ── */}
       <div className="p-4 shrink-0">
-        <div className="p-3 rounded-2xl glass-dark border-white/5 flex items-center gap-3 group relative overflow-hidden">
+        <div className="p-3 rounded-2xl rounded-2xl border border-white/6 flex items-center gap-3 group relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <Avatar className="h-10 w-10 border border-white/10">
             <AvatarFallback className="text-xs font-black bg-gradient-to-tr from-indigo-500 to-purple-600 text-white">
@@ -337,7 +337,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
           "fixed inset-y-0 left-0 z-50 w-[280px] bg-[#0f172a] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] lg:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
-          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/0/5 transition-all"
+          <button className="absolute right-4 top-4 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5" />
           </button>
