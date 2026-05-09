@@ -68,52 +68,54 @@ export default function ProjectsPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-1 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Enterprise Workspaces</span>
+            <div className="w-8 h-1 bg-violet-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">System Workspaces</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Your <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
-          <p className="text-slate-500 mt-2 font-medium max-w-xl">
-            Select a workspace to view detailed analytics, track team progress, and manage technical debt.
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            Network <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">Environment</span>
+          </h1>
+          <p className="text-slate-400 font-medium max-w-xl">
+            Initialize or join a high-performance workspace to begin operational tracking.
           </p>
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={() => setShowJoinDialog(true)} className="rounded-2xl border-slate-200 text-slate-600 font-bold hover:bg-slate-50">
+          <Button variant="outline" onClick={() => setShowJoinDialog(true)} className="rounded-2xl border-white/10 bg-white/5 text-slate-300 font-bold hover:bg-white/10 transition-all">
             <Users className="h-4 w-4 mr-2" />
-            Join Project
+            Join Cluster
           </Button>
           {isAdmin && (
-            <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="shadow-indigo-500/20">
+            <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="shadow-violet-500/20">
               <Plus className="h-4 w-4 mr-2" />
-              New Project
+              New Node
             </Button>
           )}
         </div>
       </div>
 
       {projects.length === 0 ? (
-        <div className="premium-card flex flex-col items-center justify-center py-32 border-dashed">
-          <div className="w-24 h-24 rounded-[2.5rem] bg-indigo-50 flex items-center justify-center mb-8 border border-indigo-100 shadow-inner">
-            <FolderOpen className="h-10 w-10 text-indigo-400" />
+        <div className="p-20 rounded-3xl bg-[#080c1d] border border-white/5 border-dashed flex flex-col items-center justify-center">
+          <div className="w-24 h-24 rounded-[2.5rem] bg-violet-500/10 flex items-center justify-center mb-8 border border-violet-500/20">
+            <FolderOpen className="h-10 w-10 text-violet-400" />
           </div>
           {isAdmin ? (
             <div className="text-center max-w-sm">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">No Active Workspaces</h3>
+              <h3 className="text-2xl font-black text-white tracking-tight">No Active Clusters</h3>
               <p className="text-slate-500 mt-2 font-medium mb-10">
                 You haven't initialized any projects yet. Create a workspace to start tracking bugs with your team.
               </p>
               <Button variant="premium" onClick={() => setShowCreateDialog(true)} className="h-14 px-8">
-                <Plus className="h-5 w-5 mr-2" /> Create First Project
+                <Plus className="h-5 w-5 mr-2" /> Create First Node
               </Button>
             </div>
           ) : (
             <div className="text-center max-w-sm">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">Join a Workspace</h3>
+              <h3 className="text-2xl font-black text-white tracking-tight">Access Restricted</h3>
               <p className="text-slate-500 mt-2 font-medium mb-10">
                 You're not a member of any project. Use an invite code from your administrator to get started.
               </p>
               <Button variant="premium" onClick={() => setShowJoinDialog(true)} className="h-14 px-8">
-                <Users className="h-5 w-5 mr-2" /> Enter Invite Code
+                <Users className="h-5 w-5 mr-2" /> Authenticate with Key
               </Button>
             </div>
           )}
@@ -131,74 +133,74 @@ export default function ProjectsPage() {
             <div
               key={project.id}
               className={cn(
-                "premium-card group cursor-pointer transition-all duration-500 relative",
-                isActive ? "border-indigo-500/40 ring-4 ring-indigo-500/5 bg-gradient-to-br from-indigo-50/50 to-white" : "hover:border-indigo-500/20"
+                "p-8 rounded-3xl bg-[#080c1d] border border-white/5 cursor-pointer transition-all duration-500 relative overflow-hidden group",
+                isActive ? "border-violet-500/40 ring-4 ring-violet-500/5 bg-violet-500/[0.02]" : "hover:border-violet-500/20"
               )}
               onClick={() => setActiveProject(project.id)}
             >
               <div className="flex flex-col h-full space-y-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl transition-transform group-hover:scale-110 shadow-lg", 
-                      isActive ? "bg-indigo-600 text-white shadow-indigo-500/20" : "bg-slate-100 text-slate-400")}>
+                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl transition-transform group-hover:scale-110", 
+                      isActive ? "bg-violet-600 text-white shadow-xl shadow-violet-500/20" : "bg-white/5 text-slate-500 border border-white/5")}>
                       {project.name.substring(0, 1).toUpperCase()}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{project.name}</h3>
+                        <h3 className="text-lg font-bold text-white tracking-tight group-hover:text-violet-400 transition-colors">{project.name}</h3>
                         {isActive && (
                           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         )}
                       </div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Project Workspace</p>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mt-0.5">Core System</p>
                     </div>
                   </div>
-                  <div className="p-2 rounded-xl bg-slate-50 group-hover:bg-indigo-50 transition-colors">
-                    <ExternalLink className="h-4 w-4 text-slate-300 group-hover:text-indigo-500" />
+                  <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-violet-500/10 transition-colors border border-white/5">
+                    <ExternalLink className="h-4 w-4 text-slate-500 group-hover:text-violet-400" />
                   </div>
                 </div>
 
-                <p className="text-sm text-slate-500 font-medium line-clamp-2 leading-relaxed flex-1">
-                  {project.description || "No project description provided. This workspace is being used for active bug tracking and sprint management."}
+                 <p className="text-sm text-slate-400 font-medium line-clamp-2 leading-relaxed flex-1">
+                  {project.description || "Operational workspace for system analysis and rapid defect mitigation."}
                 </p>
 
-                <div className="grid grid-cols-3 gap-4 py-6 border-y border-slate-100">
+                 <div className="grid grid-cols-3 gap-4 py-6 border-y border-white/5">
                   {[
                     { label: "TASKS", value: projectTasks.length, icon: CheckCircle2 },
                     { label: "BUGS", value: projectBugs.length, icon: Bug },
                     { label: "TEAM", value: project.members.length, icon: Users },
                   ].map((stat, idx) => (
                     <div key={idx} className="text-center">
-                      <p className="text-sm font-black text-slate-900 tracking-tight">{stat.value}</p>
-                      <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.1em] mt-0.5">{stat.label}</p>
+                      <p className="text-base font-bold text-white tracking-tight">{stat.value}</p>
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] mt-0.5">{stat.label}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="space-y-3">
+                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sprint Velocity</span>
-                    <span className="text-xs font-black text-indigo-600">{completionRate}%</span>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Operational Health</span>
+                    <span className="text-xs font-bold text-violet-400">{completionRate}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000" style={{ width: `${completionRate}%` }} />
+                  <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-1000" style={{ width: `${completionRate}%` }} />
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <div className="flex -space-x-2">
+                   <div className="flex -space-x-2">
                     {project.members.slice(0, 4).map((member) => {
                       const user = getUserById(member.userId);
                       return (
-                        <Avatar key={member.userId} className="h-8 w-8 ring-2 ring-white transition-transform hover:-translate-y-1">
-                          <AvatarFallback className="text-[8px] font-black bg-slate-200 text-slate-600">
+                        <Avatar key={member.userId} className="h-8 w-8 ring-2 ring-[#080c1d] transition-transform hover:-translate-y-1">
+                          <AvatarFallback className="text-[8px] font-black bg-white/10 text-slate-400">
                             {user ? getInitials(user.name) : "?"}
                           </AvatarFallback>
                         </Avatar>
                       );
                     })}
                     {project.members.length > 4 && (
-                      <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-400 ring-2 ring-white">
+                      <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-[10px] font-bold text-slate-500 ring-2 ring-[#080c1d]">
                         +{project.members.length - 4}
                       </div>
                     )}
@@ -207,12 +209,12 @@ export default function ProjectsPage() {
                   {isAdmin && (
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
-                      className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
+                      className="flex items-center gap-2 text-[10px] font-bold text-slate-500 hover:text-violet-400 uppercase tracking-[0.2em] transition-all p-2 rounded-xl hover:bg-white/5"
                     >
                       {copiedId === project.id ? (
                         <><Check className="h-3 w-3 text-emerald-500" /> Copied</>
                       ) : (
-                        <><Copy className="h-3 w-3" /> Copy Key</>
+                        <><Copy className="h-3 w-3" /> Get Key</>
                       )}
                     </button>
                   )}
