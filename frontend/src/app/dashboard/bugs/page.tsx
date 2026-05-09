@@ -294,37 +294,44 @@ export default function BugsPage() {
         ))}
       </div>
 
-
-      {/* ── Search, Filters & Tabs ── */}
+      {/* Filters & Navigation */}
       <div className="space-y-6">
-        {/* Search & Filters */}
-        <div className="p-6 rounded-3xl bg-[#080c1d] border border-white/5 flex flex-col lg:flex-row gap-6 items-center">
-          <div className="relative flex-1 w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Search defects by ID, title, or description..."
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-2 rounded-3xl bg-slate-100/50 border border-slate-200/60">
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search reports by title, description or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500/50 transition-all"
+              className="pl-12 h-12 bg-white border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
             />
           </div>
-          <div className="flex items-center gap-4 w-full lg:w-auto">
-            <select value={filterSeverity} onChange={(e) => setFilterSeverity(e.target.value)}
-              className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
-              <option value="all">All Severities</option>
-              <option value="critical">Critical Only</option>
-              <option value="major">Major Issues</option>
-              <option value="minor">Minor Tweaks</option>
-            </select>
-            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-              className="flex-1 lg:w-40 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white focus:outline-none focus:border-rose-500/50">
-              <option value="all">All States</option>
-              <option value="open">Open</option>
-              <option value="in-progress">Active</option>
-              <option value="resolved">Resolved</option>
-              <option value="closed">Finalized</option>
-            </select>
+          
+          <div className="flex items-center gap-3 px-2">
+            <Select value={filterSeverity} onValueChange={setFilterSeverity}>
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+                <SelectValue placeholder="Severity" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Severities</SelectItem>
+                <SelectItem value="minor">Minor</SelectItem>
+                <SelectItem value="major">Major</SelectItem>
+                <SelectItem value="critical">Critical</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+                <SelectValue placeholder="Lifecycle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="open">Open</SelectItem>
+                <SelectItem value="in-progress">Fixing</SelectItem>
+                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="closed">Closed</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

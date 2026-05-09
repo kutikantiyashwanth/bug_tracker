@@ -110,55 +110,60 @@ export default function DashboardPage() {
 
   const statCards = [
     {
-      icon: CheckCircle2, label: "Execution Velocity", value: `${stats.completionRate}%`,
-      sub: `${stats.completed}/${stats.total} finalized`, trend: "+12%", up: true,
-      iconClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20", accent: "stat-emerald",
+      icon: CheckCircle2, label: "Tasks Completed", value: `${stats.completed}/${stats.total}`,
+      sub: `${stats.completionRate}% complete`, trend: "+12%", up: true,
+      iconClass: "icon-emerald w-10 h-10", accent: "stat-emerald",
     },
     {
-      icon: Bug, label: "Threat Level", value: stats.openBugs,
-      sub: `${stats.resolvedBugs} neutralised`, trend: stats.openBugs > 3 ? "High" : "Optimal", up: stats.openBugs <= 3,
-      iconClass: "bg-rose-500/15 text-rose-400 border-rose-500/20", accent: "stat-rose",
+      icon: Bug, label: "Open Bugs", value: stats.openBugs,
+      sub: `${stats.resolvedBugs} resolved`, trend: stats.openBugs > 3 ? "High" : "Low", up: stats.openBugs <= 3,
+      iconClass: "icon-rose w-10 h-10", accent: "stat-rose",
     },
     {
-      icon: Zap, label: "Active Cycles", value: stats.inProgress,
-      sub: `${stats.testing} in validation`,
-      iconClass: "bg-violet-500/15 text-violet-400 border-violet-500/20", accent: "stat-violet",
+      icon: Zap, label: "In Progress", value: stats.inProgress,
+      sub: `${stats.testing} in testing`,
+      iconClass: "icon-violet w-10 h-10", accent: "stat-violet",
     },
     {
-      icon: Users, label: "Team Synergy", value: stats.members,
-      sub: "active collaborators",
-      iconClass: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20", accent: "stat-cyan",
+      icon: Users, label: "Team Members", value: stats.members,
+      sub: "active now",
+      iconClass: "icon-cyan w-10 h-10", accent: "stat-cyan",
     },
   ];
 
   return (
     <div className="space-y-10 animate-slide-up">
 
-      {/* ── Header ── */}
+      {/* ── Header / Greeting ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
+        <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-1 bg-violet-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Mission Intelligence</span>
+            <div className="w-8 h-1 bg-indigo-500 rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Dashboard Overview</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">Workspace</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+            {greeting},{" "}
+            <span className="text-brand">{currentUser?.name?.split(" ")[0] || "there"}</span>
+            {" "}✨
           </h1>
-          <p className="text-slate-400 font-medium max-w-xl">
-            {activeProject ? (
-              <>Synthesizing operational data for <span className="text-violet-400 font-bold">{activeProject.name}</span>. Systems nominal.</>
-            ) : (
-              "Initialize project sequence from the workspace selector."
-            )}
+          <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
+            {activeProject
+              ? <>You're currently viewing metrics for <span className="text-indigo-600 font-bold">{activeProject.name}</span>. Here's what needs your attention today.</>
+              : "Select a project from the sidebar to view detailed analytics and manage your team."}
           </p>
         </div>
         
         <div className="flex items-center gap-3">
           <button
             onClick={() => { if (activeProjectId) { fetchTasks(activeProjectId); fetchBugs(activeProjectId); fetchActivities(activeProjectId); }}}
-            className="group flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:border-violet-500/30 hover:bg-white/10 transition-all">
-            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-violet-400 group-hover:rotate-180 transition-all duration-500" />
-            <span className="text-xs font-black uppercase tracking-widest text-slate-300 group-hover:text-violet-400">Sync Data</span>
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-indigo-100/50">
+            <RefreshCw className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500" />
+            <span className="text-sm font-bold text-slate-600 group-hover:text-indigo-600">Refresh Data</span>
+          </button>
+          
+          <button className="btn-premium shadow-indigo-500/25">
+            <Plus className="h-4 w-4" />
+            <span className="text-sm font-bold">Quick Action</span>
           </button>
         </div>
       </div>
@@ -167,7 +172,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, i) => (
           <div key={i}
-            className="p-6 rounded-3xl bg-[#080c1d] border border-white/5 hover:border-violet-500/20 transition-all duration-500 group relative overflow-hidden"
+            className="premium-card group relative overflow-hidden"
             style={{ animationDelay: `${i * 100}ms` }}>
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-125 transition-transform duration-700">
               <card.icon className="h-24 w-24" />
@@ -181,7 +186,7 @@ export default function DashboardPage() {
                 {card.trend && (
                   <div className={cn(
                     "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
-                    card.up ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400"
+                    card.up ? "bg-emerald-100 text-emerald-600" : "bg-rose-100 text-rose-600"
                   )}>
                     {card.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                     {card.trend}
@@ -190,13 +195,13 @@ export default function DashboardPage() {
               </div>
               
               <div className="space-y-1">
-                <p className="text-4xl font-extrabold text-white tracking-tight">{card.value}</p>
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{card.label}</p>
+                <p className="text-3xl font-black text-slate-900 tracking-tight">{card.value}</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{card.label}</p>
               </div>
               
-              <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{card.sub}</span>
-                <ArrowUpRight className="h-3 w-3 text-slate-600 group-hover:text-violet-400 transition-colors" />
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400">{card.sub}</span>
+                <ArrowUpRight className="h-3 w-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
               </div>
             </div>
           </div>
@@ -208,19 +213,19 @@ export default function DashboardPage() {
         
         {/* Productivity Analytics */}
         <div className="xl:col-span-2 space-y-8">
-          <div className="rounded-3xl bg-[#080c1d] border border-white/5 overflow-hidden">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+          <div className="premium-card !p-0 overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-violet-400" />
+                <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                  <TrendingUp className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white tracking-tight">Performance Analytics</h3>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Velocity & Bug Resolution Metrics</p>
+                  <h3 className="text-lg font-bold text-slate-900">Performance Analytics</h3>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-tighter">Velocity & Bug Resolution over 7 days</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest">
-                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-violet-500" /> Tasks</div>
+              <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-500" /> Tasks</div>
                 <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Bugs</div>
               </div>
             </div>
@@ -238,14 +243,14 @@ export default function DashboardPage() {
                       <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dx={-10} />
                   <Tooltip 
                     contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}
                   />
-                  <Area type="monotone" dataKey="tasksDone" name="Tasks" stroke="#8b5cf6" strokeWidth={4} fill="url(#gradTasks)" dot={{ r: 4, fill: '#8b5cf6', strokeWidth: 2, stroke: '#080c1d' }} activeDot={{ r: 6, strokeWidth: 0 }} />
-                  <Area type="monotone" dataKey="bugsResolved" name="Bugs" stroke="#10b981" strokeWidth={4} fill="url(#gradBugs)" dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#080c1d' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                  <Area type="monotone" dataKey="tasksDone" name="Tasks" stroke="#6366f1" strokeWidth={4} fill="url(#gradTasks)" dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                  <Area type="monotone" dataKey="bugsResolved" name="Bugs" stroke="#10b981" strokeWidth={4} fill="url(#gradBugs)" dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

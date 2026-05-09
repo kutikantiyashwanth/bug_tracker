@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useStore } from "@/lib/store-api";
@@ -46,7 +46,7 @@ export default function SettingsPage() {
 
   if (!currentUser) return null;
 
-  // ΓöÇΓöÇ Add / remove skill ΓöÇΓöÇ
+  // ── Add / remove skill ──
   const addSkill = () => {
     const s = newSkill.trim();
     if (s && !skills.includes(s)) {
@@ -56,7 +56,7 @@ export default function SettingsPage() {
   };
   const removeSkill = (s: string) => setSkills(skills.filter((x) => x !== s));
 
-  // ΓöÇΓöÇ Save profile ΓöÇΓöÇ
+  // ── Save profile ──
   const handleSaveProfile = async () => {
     if (!name.trim()) { setProfileError("Name is required"); return; }
     setProfileSaving(true);
@@ -72,7 +72,7 @@ export default function SettingsPage() {
     }
   };
 
-  // ΓöÇΓöÇ Change password ΓöÇΓöÇ
+  // ── Change password ──
   const handleChangePassword = async () => {
     setPwError("");
     if (!currentPw) { setPwError("Enter your current password"); return; }
@@ -108,7 +108,7 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Profile & Security */}
         <div className="lg:col-span-2 space-y-8">
-          {/* ΓöÇΓöÇ Profile ΓöÇΓöÇ */}
+          {/* ── Profile ── */}
           <div className="premium-card space-y-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -201,7 +201,7 @@ export default function SettingsPage() {
             </Button>
           </div>
 
-          {/* ΓöÇΓöÇ Security ΓöÇΓöÇ */}
+          {/* ── Security ── */}
           <div className="premium-card space-y-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800">
@@ -219,7 +219,7 @@ export default function SettingsPage() {
                 <div className="relative">
                   <Input type={showPw ? "text" : "password"} value={currentPw}
                     onChange={(e) => setCurrentPw(e.target.value)}
-                    placeholder="ΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇó" 
+                    placeholder="••••••••" 
                     className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
                   <button type="button" onClick={() => setShowPw(!showPw)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors">
@@ -264,7 +264,7 @@ export default function SettingsPage() {
 
         {/* Right Column: Notifications & Danger Zone */}
         <div className="space-y-8">
-          {/* ΓöÇΓöÇ Notifications ΓöÇΓöÇ */}
+          {/* ── Notifications ── */}
           <div className="premium-card space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100">
@@ -301,7 +301,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* ΓöÇΓöÇ Danger Zone ΓöÇΓöÇ */}
+          {/* ── Danger Zone ── */}
           <div className="premium-card border-rose-100 bg-rose-50/30 space-y-6">
             <div>
               <h2 className="text-sm font-black uppercase tracking-widest text-rose-600">Danger Zone</h2>

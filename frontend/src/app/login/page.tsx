@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -152,7 +152,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex bg-slate-950 font-jakarta">
 
-      {/* ΓöÇΓöÇ Left Panel: Visual Hero ΓöÇΓöÇ */}
+      {/* ── Left Panel: Visual Hero ── */}
       <div className="hidden lg:flex lg:w-[50%] flex-col relative overflow-hidden bg-[#0f172a]">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)]" />
@@ -209,7 +209,7 @@ export default function LoginPage() {
 
           {/* Bottom Badge */}
           <div className="pt-20 mt-auto flex items-center justify-between border-t border-white/5 opacity-50">
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/40">┬⌐ 2026 ANTIGRAVITY LABS</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/40">© 2026 ANTIGRAVITY LABS</p>
             <div className="flex gap-4">
               <GitBranch className="h-4 w-4 text-white/20" />
               <Shield className="h-4 w-4 text-white/20" />
@@ -218,7 +218,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ΓöÇΓöÇ Right Panel: Auth Flow ΓöÇΓöÇ */}
+      {/* ── Right Panel: Auth Flow ── */}
       <div className="flex-1 flex items-center justify-center p-8 lg:p-16 relative">
         {/* Mobile Gradient Orbs */}
         <div className="lg:hidden absolute inset-0 overflow-hidden -z-10">
@@ -325,7 +325,7 @@ export default function LoginPage() {
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-500 transition-colors">
                       <Lock className="h-5 w-5" />
                     </div>
-                    <input type={showPassword ? "text" : "password"} placeholder="ΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇó" value={password} onChange={(e) => setPassword(e.target.value)} required
+                    <input type={showPassword ? "text" : "password"} placeholder="••••••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required
                       className="w-full pl-12 pr-12 h-14 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 outline-none focus:bg-white/[0.05] focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium" />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/60 transition-colors">

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store-api";
@@ -89,7 +89,7 @@ export default function NotificationsPage() {
   return (
     <div className="space-y-10 animate-slide-up max-w-4xl">
 
-      {/* ΓöÇΓöÇ Header ΓöÇΓöÇ */}
+      {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
@@ -122,7 +122,7 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      {/* ΓöÇΓöÇ Summary Cards ΓöÇΓöÇ */}
+      {/* ── Summary Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { type: "task_assigned",     label: "TASK ALERTS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-100" },
@@ -159,7 +159,7 @@ export default function NotificationsPage() {
         })}
       </div>
 
-      {/* ΓöÇΓöÇ Filter Tabs ΓöÇΓöÇ */}
+      {/* ── Filter Tabs ── */}
       <div className="flex items-center gap-3 overflow-x-auto pb-2">
         {FILTERS.map((f) => {
           const count = f.key === "all"
@@ -189,7 +189,7 @@ export default function NotificationsPage() {
         })}
       </div>
 
-      {/* ΓöÇΓöÇ Main List ΓöÇΓöÇ */}
+      {/* ── Main List ── */}
       <div className="premium-card overflow-hidden">
         <ScrollArea className="h-[600px]">
           {filtered.length === 0 ? (
@@ -292,7 +292,7 @@ export default function NotificationsPage() {
         </ScrollArea>
       </div>
 
-      {/* ΓöÇΓöÇ Footer ΓöÇΓöÇ */}
+      {/* ── Footer ── */}
       <div className="rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 text-white border border-slate-800">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">

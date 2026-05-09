@@ -192,13 +192,13 @@ export default function RegisterPage() {
           </div>
 
           <div className="mt-auto pt-6 border-t border-white/8">
-            <p className="text-white/20 text-xs">© 2026 Student Bug Tracker · Built for teams</p>
+            <p className="text-white/20 text-xs">┬⌐ 2026 Student Bug Tracker ΓêÖ Built for teams</p>
           </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════
-          RIGHT PANEL — Register Form
+          RIGHT PANEL ΓöÇ Register Form
       ══════════════════════════════════════ */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-10 overflow-y-auto" style={{ background: "#080b14" }}>
         <div className="w-full max-w-[400px] py-4">
@@ -224,7 +224,7 @@ export default function RegisterPage() {
             <span className="text-xs text-white/35 shrink-0 font-medium">Step {step} / 2</span>
           </div>
 
-          {/* ── STEP 1 ── */}
+          {/* ΓöÇ┬áSTEP 1 ΓöÇ┬á*/}
           {step === 1 && (
             <div className="animate-fade-in space-y-8">
               <div className="space-y-2">
@@ -334,7 +334,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* ── STEP 2 ── */}
+          {/* ΓöÇ┬áSTEP 2 ΓöÇ┬á*/}
           {step === 2 && (
             <form onSubmit={handleSubmit} className="animate-scale-in space-y-8">
               <div className="space-y-2">
