@@ -124,19 +124,19 @@ export default function GitHubPage() {
       </div>
 
       {/* ── Connect Repository ── */}
-      <div className="rounded-3xl bg-slate-900 p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
-          <Github className="h-36 w-36 text-white" />
+      <div className="rounded-3xl border-2 border-slate-200 bg-white p-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-[0.04]">
+          <Github className="h-36 w-36 text-slate-900" />
         </div>
         <div className="relative z-10 space-y-5">
           <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-2xl bg-slate-900 flex items-center justify-center shrink-0">
               <Github className="h-5 w-5 text-white" />
             </div>
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Repository URL</p>
-              <h2 className="text-base font-black text-white">
-                {repoUrl ? "Repository connected" : "Connect your GitHub repository"}
+              <h2 className="text-base font-black text-slate-900">
+                {repoUrl ? "Repository connected ✓" : "Connect your GitHub repository"}
               </h2>
             </div>
           </div>
@@ -148,48 +148,27 @@ export default function GitHubPage() {
               onKeyDown={(e) => e.key === "Enter" && handleSaveRepo()}
               placeholder="https://github.com/your-username/your-repo"
               className="github-url-input"
-              style={{
-                flex: 1,
-                height: "48px",
-                padding: "0 16px",
-                borderRadius: "16px",
-                background: "rgba(255,255,255,0.15)",
-                border: "1.5px solid rgba(255,255,255,0.35)",
-                color: "#ffffff",
-                fontSize: "13px",
-                fontFamily: "monospace",
-                outline: "none",
-                width: "100%",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.border = "1.5px solid #6366f1";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.25)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.border = "1.5px solid rgba(255,255,255,0.35)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
             />
-            <Button
+            <button
               onClick={handleSaveRepo}
               disabled={!repoInput.trim()}
-              className="h-12 px-6 rounded-2xl bg-white text-slate-900 font-bold text-sm hover:bg-slate-100 shrink-0"
+              className="h-12 px-6 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-700 transition-colors shrink-0 disabled:opacity-40 flex items-center gap-2"
             >
               {repoSaved
-                ? <><Check className="h-4 w-4 mr-2 text-emerald-600" /> Saved</>
-                : <><Save className="h-4 w-4 mr-2" /> Save URL</>
+                ? <><Check className="h-4 w-4 text-emerald-400" /> Saved</>
+                : <><Save className="h-4 w-4" /> Save URL</>
               }
-            </Button>
+            </button>
           </div>
 
           {repoUrl && (
-            <p className="text-xs text-slate-400 font-medium">
-              Connected to: <span className="text-white font-bold break-all">{repoUrl}</span>
+            <p className="text-xs text-slate-500 font-medium">
+              Connected: <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold hover:underline break-all">{repoUrl}</a>
             </p>
           )}
           {!repoUrl && (
-            <p className="text-xs text-slate-500 font-medium">
-              Paste your GitHub repo URL above, e.g. <span className="text-slate-400 font-mono">https://github.com/username/repo</span>
+            <p className="text-xs text-slate-400">
+              e.g. <span className="font-mono text-slate-600">https://github.com/username/repo-name</span>
             </p>
           )}
         </div>
