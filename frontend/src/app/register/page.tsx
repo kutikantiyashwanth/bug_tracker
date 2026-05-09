@@ -8,16 +8,10 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
   Bug, ArrowRight, User, Mail, Lock, Eye, EyeOff,
-  AlertCircle, CheckCircle2, X, Plus, Sparkles,
+  AlertCircle, CheckCircle2, X, Plus,
   Shield, Code2, TestTube2, Zap, Star,
 } from "lucide-react";
 import type { Role } from "@/lib/types";
-
-const ROLE_OPTIONS = [
-  { value: "admin",     label: "Project Lead",     icon: Shield,    bg: "bg-indigo-100", text: "text-indigo-600", active: "border-indigo-400 bg-indigo-50" },
-  { value: "developer", label: "Team Member",     icon: Code2,     bg: "bg-emerald-100",   text: "text-emerald-600",   active: "border-emerald-400 bg-emerald-50" },
-  { value: "tester",    label: "QA Analyst",    icon: TestTube2, bg: "bg-amber-100",  text: "text-amber-600",  active: "border-amber-400 bg-amber-50" },
-];
 
 const SKILL_SUGGESTIONS = ["React", "Node.js", "TypeScript", "Python", "Testing", "UI/UX", "DevOps", "SQL", "Git", "Java", "Flutter", "AWS"];
 
@@ -28,7 +22,7 @@ export default function RegisterPage() {
   const [name,     setName]     = useState("");
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
-  const [role,     setRole]     = useState<Role>("developer");
+  const role: Role               = "developer";
   const [skills,   setSkills]   = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
   const [showPw,   setShowPw]   = useState(false);
@@ -60,8 +54,6 @@ export default function RegisterPage() {
     setError("");
     try {
       await register(name, email, password, role, skills);
-      // Admins go straight to dashboard to create a project
-      // Developers/Testers go to projects page to join via invite code
       if (role === "admin") {
         router.push("/dashboard");
       } else {
@@ -72,57 +64,75 @@ export default function RegisterPage() {
     }
   };
 
+  // Shared input style helpers
+  const inputBase = "w-full rounded-xl text-white placeholder:text-white/25 outline-none transition-all font-medium";
+  const inputStyle = {
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.1)",
+  };
+  const onFocusInput = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.currentTarget.style.border = "1px solid rgba(139,92,246,0.5)";
+    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(139,92,246,0.1)";
+  };
+  const onBlurInput = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.currentTarget.style.border = "1px solid rgba(255,255,255,0.1)";
+    e.currentTarget.style.boxShadow = "none";
+  };
+
   return (
-    <div className="min-h-screen flex overflow-hidden" style={{ background: "#ffffff" }}>
+    <div className="min-h-screen flex font-sans" style={{ background: "#050810" }}>
 
       {/* ══════════════════════════════════════
           LEFT PANEL
       ══════════════════════════════════════ */}
-      <div className="hidden lg:flex lg:w-[52%] relative flex-col overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-700 via-blue-700 to-indigo-800" />
-          <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full opacity-25 animate-float-slow"
-            style={{ background: "radial-gradient(circle, #2563eb 0%, transparent 70%)" }} />
-          <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20 animate-float"
-            style={{ background: "radial-gradient(circle, #6d28d9 0%, transparent 70%)", animationDelay: "1.5s" }} />
-          <div className="absolute top-[30%] left-[20%] w-[250px] h-[250px] rounded-full opacity-15 animate-float-slow"
-            style={{ background: "radial-gradient(circle, #f59e0b 0%, transparent 70%)", animationDelay: "0.8s" }} />
-          <div className="absolute inset-0 opacity-[0.04]"
-            style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
-        </div>
+      <div className="hidden lg:flex lg:w-[52%] relative flex-col overflow-hidden" style={{ background: "#070b18" }}>
+        {/* Mesh gradient */}
+        <div className="absolute inset-0" style={{
+          background: "radial-gradient(ellipse at 25% 25%, rgba(139,92,246,0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 75%, rgba(6,182,212,0.14) 0%, transparent 55%)"
+        }} />
+        {/* Grid */}
+        <div className="absolute inset-0 opacity-[0.06]" style={{
+          backgroundImage: "linear-gradient(rgba(139,92,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.6) 1px, transparent 1px)",
+          backgroundSize: "48px 48px"
+        }} />
+        {/* Orbs */}
+        <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 animate-float-slow"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-15 animate-float"
+          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.5) 0%, transparent 70%)", animationDelay: "1.5s" }} />
 
         <div className="relative z-10 flex flex-col h-full p-12">
 
           {/* Logo */}
           <div className="flex items-center gap-3 animate-fade-in-down">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg"
-              style={{ background: "linear-gradient(135deg, #6d28d9, #2563eb)" }}>
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg"
+              style={{ background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", boxShadow: "0 0 24px rgba(139,92,246,0.4)" }}>
               <Bug className="h-5 w-5 text-white" />
             </div>
             <div>
-              <span className="text-white font-bold text-lg tracking-tight">BugTracker</span>
+              <span className="text-white font-black text-xl tracking-tight">Bug<span style={{ color: "#8b5cf6" }}>Tracker</span></span>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-white/40 text-[10px]">Join 1,000+ student teams</span>
+                <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">V2.4 Enterprise</span>
               </div>
             </div>
           </div>
 
           {/* Hero */}
           <div className="mt-16 animate-slide-up" style={{ animationDelay: "100ms" }}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 mb-6">
-              <Star className="h-3.5 w-3.5 text-amber-400" />
-              <span className="text-white/70 text-xs font-medium">Free for student teams</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/10 mb-6">
+              <Zap className="h-3.5 w-3.5 text-amber-400" />
+              <span className="text-white/70 text-xs font-bold uppercase tracking-widest">Accelerate Your Workflow</span>
             </div>
             <h1 className="text-5xl font-black text-white leading-[1.1] tracking-tight">
               Join your team.<br />
               <span className="bg-clip-text text-transparent"
-                style={{ backgroundImage: "linear-gradient(135deg, #2563eb, #6d28d9)" }}>
+                style={{ backgroundImage: "linear-gradient(135deg, #8b5cf6, #06b6d4)" }}>
                 Start tracking.
               </span>
             </h1>
-            <p className="text-white/50 mt-4 text-base leading-relaxed max-w-sm">
-              Create your account in seconds and start collaborating on bugs, tasks, and projects with your team.
+            <p className="text-white/40 mt-4 text-base leading-relaxed max-w-sm">
+              The next-generation bug tracking platform built for high-performance student teams and engineering squads.
             </p>
           </div>
 
@@ -131,17 +141,25 @@ export default function RegisterPage() {
             <p className="text-white/30 text-xs font-bold uppercase tracking-widest mb-4">Setup Progress</p>
             <div className="space-y-3">
               {[
-                { n: "01", label: "Basic Information",   done: step > 1 },
-                { n: "02", label: "Role & Skills",        done: false },
-                { n: "03", label: "Join or Create Project", done: false },
+                { n: "01", label: "Basic Information",      done: step > 1 },
+                { n: "02", label: "Skills",                  done: false },
+                { n: "03", label: "Join or Create Project",  done: false },
               ].map((s, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className={cn(
                     "w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all",
-                    s.done ? "bg-emerald-500 text-white" :
-                    (step === 1 && i === 0) || (step === 2 && i === 1) ? "bg-white text-purple-700" :
-                    "bg-white/10 text-white/30"
-                  )}>
+                    s.done
+                      ? "bg-emerald-500 text-white"
+                      : (step === 1 && i === 0) || (step === 2 && i === 1)
+                        ? "text-white"
+                        : "text-white/30"
+                  )}
+                  style={
+                    s.done ? {} :
+                    (step === 1 && i === 0) || (step === 2 && i === 1)
+                      ? { background: "linear-gradient(135deg, #8b5cf6, #06b6d4)" }
+                      : { background: "rgba(255,255,255,0.08)" }
+                  }>
                     {s.done ? <CheckCircle2 className="h-4 w-4" /> : s.n}
                   </div>
                   <span className={cn("text-sm transition-colors",
@@ -154,19 +172,19 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Real features list */}
+          {/* Features list */}
           <div className="mt-10 animate-slide-up" style={{ animationDelay: "200ms" }}>
             <p className="text-white/30 text-xs font-bold uppercase tracking-widest mb-3">Everything included</p>
             <div className="space-y-2">
               {[
-                { icon: Bug,          label: "Bug Tracking & Reporting",   color: "from-rose-500 to-red-600" },
+                { icon: Bug,          label: "Bug Tracking & Reporting",      color: "from-rose-500 to-red-600" },
                 { icon: Zap,          label: "Kanban Board with Drag & Drop", color: "from-violet-500 to-purple-600" },
-                { icon: Shield,       label: "Role-Based Access Control",  color: "from-blue-500 to-indigo-600" },
-                { icon: CheckCircle2, label: "Real-time Notifications",    color: "from-teal-500 to-cyan-600" },
-                { icon: Star,         label: "Activity Log & Analytics",   color: "from-amber-500 to-orange-500" },
+                { icon: Shield,       label: "Role-Based Access Control",     color: "from-blue-500 to-indigo-600" },
+                { icon: CheckCircle2, label: "Real-time Notifications",       color: "from-teal-500 to-cyan-600" },
+                { icon: Star,         label: "Activity Log & Analytics",      color: "from-amber-500 to-orange-500" },
               ].map((f, i) => (
-                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/4 border border-white/8 stagger-item"
-                  style={{ animationDelay: `${300 + i * 70}ms` }}>
+                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-white/6"
+                  style={{ background: "rgba(255,255,255,0.025)", animationDelay: `${300 + i * 70}ms` }}>
                   <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-gradient-to-br", f.color)}>
                     <f.icon className="h-3.5 w-3.5 text-white" />
                   </div>
@@ -177,8 +195,8 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="mt-auto pt-6 border-t border-white/10">
-            <p className="text-white/25 text-xs">© 2026 Student Bug Tracker · Built for teams</p>
+          <div className="mt-auto pt-6 border-t border-white/8">
+            <p className="text-white/20 text-xs">© 2026 Student Bug Tracker · Built for teams</p>
           </div>
         </div>
       </div>
@@ -186,33 +204,36 @@ export default function RegisterPage() {
       {/* ══════════════════════════════════════
           RIGHT PANEL — Register Form
       ══════════════════════════════════════ */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-10 bg-white overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-10 overflow-y-auto" style={{ background: "#080b14" }}>
         <div className="w-full max-w-[400px] py-4">
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 lg:hidden">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #6d28d9, #2563eb)" }}>
+              style={{ background: "linear-gradient(135deg, #8b5cf6, #06b6d4)" }}>
               <Bug className="h-4 w-4 text-white" />
             </div>
-            <span className="font-bold text-gray-900">BugTracker</span>
+            <span className="font-bold text-white">BugTracker</span>
           </div>
 
           {/* Progress bar */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
               <div className="h-full rounded-full transition-all duration-500"
-                style={{ width: step === 1 ? "50%" : "100%", background: "linear-gradient(90deg, #6d28d9, #2563eb)" }} />
+                style={{
+                  width: step === 1 ? "50%" : "100%",
+                  background: "linear-gradient(90deg, #8b5cf6, #06b6d4)"
+                }} />
             </div>
-            <span className="text-xs text-gray-400 shrink-0 font-medium">Step {step} / 2</span>
+            <span className="text-xs text-white/35 shrink-0 font-medium">Step {step} / 2</span>
           </div>
 
           {/* ── STEP 1 ── */}
           {step === 1 && (
-            <div className="animate-fade-in space-y-5">
-              <div>
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight">Create account</h2>
-                <p className="text-gray-400 text-sm mt-1">Fill in your basic details</p>
+            <div className="animate-fade-in space-y-8">
+              <div className="space-y-2">
+                <h2 className="text-4xl font-black text-white tracking-tight">Create account</h2>
+                <p className="text-white/40 font-medium text-sm">Join the next-gen engineering workspace.</p>
               </div>
 
               {/* Prevent autofill */}
@@ -220,37 +241,59 @@ export default function RegisterPage() {
               <input type="password" className="hidden" autoComplete="new-password" readOnly />
 
               <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Full Name</label>
-                  <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
-                    <Input placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35 ml-1">Full Name</label>
+                  <div className="relative group">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/25 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      placeholder="John Doe"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       autoComplete="off"
-                      className="pl-10 h-12 bg-gray-50 border-gray-200 rounded-xl text-sm focus:border-purple-400 focus:bg-white transition-all" />
+                      className={cn(inputBase, "pl-12 h-14 text-base")}
+                      style={inputStyle}
+                      onFocus={onFocusInput}
+                      onBlur={onBlurInput}
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
-                    <Input type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35 ml-1">Email Address</label>
+                  <div className="relative group">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/25 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type="email"
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       autoComplete="off"
-                      className="pl-10 h-12 bg-gray-50 border-gray-200 rounded-xl text-sm focus:border-purple-400 focus:bg-white transition-all" />
+                      className={cn(inputBase, "pl-12 h-14 text-base")}
+                      style={inputStyle}
+                      onFocus={onFocusInput}
+                      onBlur={onBlurInput}
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
-                    <Input type={showPw ? "text" : "password"} placeholder="Min 6 characters"
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35 ml-1">Password</label>
+                  <div className="relative group">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/25 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type={showPw ? "text" : "password"}
+                      placeholder="Min 6 characters"
                       autoComplete="new-password"
-                      value={password} onChange={(e) => setPassword(e.target.value)}
-                      className="pl-10 pr-11 h-12 bg-gray-50 border-gray-200 rounded-xl text-sm focus:border-purple-400 focus:bg-white transition-all" />
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={cn(inputBase, "pl-12 pr-12 h-14 text-base")}
+                      style={inputStyle}
+                      onFocus={onFocusInput}
+                      onBlur={onBlurInput}
+                    />
                     <button type="button" onClick={() => setShowPw(!showPw)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-600 transition-colors">
-                      {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60 transition-colors">
+                      {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                   </div>
                   {password.length > 0 && (
@@ -258,12 +301,12 @@ export default function RegisterPage() {
                       <div className="flex gap-1 flex-1">
                         {[1,2,3].map((i) => (
                           <div key={i} className={cn("h-1.5 flex-1 rounded-full transition-all duration-300",
-                            i <= pwStrength ? pwBar[pwStrength] : "bg-gray-200"
+                            i <= pwStrength ? pwBar[pwStrength] : "bg-white/10"
                           )} />
                         ))}
                       </div>
                       <span className={cn("text-[10px] font-bold",
-                        pwStrength === 1 ? "text-red-500" : pwStrength === 2 ? "text-amber-500" : "text-emerald-500"
+                        pwStrength === 1 ? "text-red-400" : pwStrength === 2 ? "text-amber-400" : "text-emerald-400"
                       )}>{pwLabel[pwStrength]}</span>
                     </div>
                   )}
@@ -271,66 +314,52 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border bg-red-50 border-red-200 text-red-600 animate-fade-in">
-                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" /><span>{error}</span>
+                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-500/20 animate-fade-in"
+                  style={{ background: "rgba(244,63,94,0.08)" }}>
+                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-400" />
+                  <span className="text-rose-400">{error}</span>
                 </div>
               )}
 
               <button onClick={handleNext}
-                className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5"
-                style={{ background: "linear-gradient(135deg, #6d28d9 0%, #2563eb 100%)", boxShadow: "0 8px 24px rgba(108,92,231,0.35)" }}>
-                Continue <ArrowRight className="h-4 w-4" />
+                className="w-full h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 transition-all group"
+                style={{
+                  background: "linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)",
+                  boxShadow: "0 8px 32px rgba(139,92,246,0.3)"
+                }}>
+                <span>Continue Registration</span>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <p className="text-center text-sm text-gray-400">
+              <p className="text-center text-sm font-medium text-white/25">
                 Already have an account?{" "}
-                <Link href="/login" className="font-bold text-purple-600 hover:text-purple-700 transition-colors">Sign in →</Link>
+                <Link href="/login" className="font-bold transition-colors hover:underline underline-offset-4" style={{ color: "#8b5cf6" }}>Sign in here</Link>
               </p>
             </div>
           )}
 
           {/* ── STEP 2 ── */}
           {step === 2 && (
-            <form onSubmit={handleSubmit} className="animate-scale-in space-y-5">
-              <div>
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight">Your role & skills</h2>
-                <p className="text-gray-400 text-sm mt-1">Help your team know what you do</p>
-              </div>
-
-              {/* Role */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Select Role</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {ROLE_OPTIONS.map((r) => (
-                    <button key={r.value} type="button" onClick={() => setRole(r.value as Role)}
-                      className={cn(
-                        "flex flex-col items-center gap-2 p-3 rounded-2xl border-2 text-center transition-all duration-200",
-                        role === r.value ? r.active + " shadow-sm" : "border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50"
-                      )}>
-                      <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", r.bg, r.text)}>
-                        <r.icon className="h-4.5 w-4.5 h-[18px] w-[18px]" />
-                      </div>
-                      <span className={cn("text-[11px] font-bold",
-                        role === r.value ? r.text : "text-gray-500"
-                      )}>{r.label}</span>
-                    </button>
-                  ))}
-                </div>
+            <form onSubmit={handleSubmit} className="animate-scale-in space-y-8">
+              <div className="space-y-2">
+                <h2 className="text-4xl font-black text-white tracking-tight">Your skills</h2>
+                <p className="text-white/40 font-medium text-sm">Help your team know what you do</p>
               </div>
 
               {/* Skills */}
-              <div className="space-y-2">
-                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
-                  Skills <span className="text-gray-300 normal-case font-normal">(optional)</span>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35 ml-1">
+                  Technical Arsenal <span className="text-white/20 normal-case font-medium ml-1">(Optional)</span>
                 </label>
 
                 {skills.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {skills.map((s) => (
-                      <span key={s} className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
+                      <span key={s} className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                        style={{ background: "rgba(139,92,246,0.15)", color: "#a78bfa", border: "1px solid rgba(139,92,246,0.25)" }}>
                         {s}
                         <button type="button" onClick={() => setSkills(skills.filter((x) => x !== s))}
-                          className="hover:text-red-500 transition-colors ml-0.5">
+                          className="hover:text-rose-400 transition-colors ml-0.5">
                           <X className="h-3 w-3" />
                         </button>
                       </span>
@@ -339,20 +368,33 @@ export default function RegisterPage() {
                 )}
 
                 <div className="flex gap-2">
-                  <Input placeholder="Add a skill and press Enter"
-                    value={newSkill} onChange={(e) => setNewSkill(e.target.value)}
+                  <Input
+                    placeholder="e.g. React, Node.js, Python"
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill(newSkill))}
-                    className="h-10 bg-gray-50 border-gray-200 rounded-xl text-sm flex-1 focus:border-purple-400 focus:bg-white" />
+                    className="h-14 rounded-2xl text-sm flex-1 text-white placeholder:text-white/20 border-white/10 focus:border-purple-500/50"
+                    style={{ background: "rgba(255,255,255,0.04)" }}
+                  />
                   <button type="button" onClick={() => addSkill(newSkill)}
-                    className="px-3 h-10 rounded-xl bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors font-bold text-sm">
-                    <Plus className="h-4 w-4" />
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all border border-white/10 bg-white/5 hover:bg-white/10 hover:border-purple-500/50">
+                    <Plus className="h-5 w-5 text-purple-400" />
                   </button>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
                   {SKILL_SUGGESTIONS.filter((s) => !skills.includes(s)).slice(0, 7).map((s) => (
                     <button key={s} type="button" onClick={() => addSkill(s)}
-                      className="px-2 py-0.5 rounded-full border border-gray-200 text-xs text-gray-400 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 transition-all font-medium">
+                      className="px-2 py-0.5 rounded-full text-xs font-medium transition-all text-white/35 hover:text-purple-300"
+                      style={{ border: "1px solid rgba(255,255,255,0.1)" }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.border = "1px solid rgba(139,92,246,0.4)";
+                        (e.currentTarget as HTMLElement).style.background = "rgba(139,92,246,0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.1)";
+                        (e.currentTarget as HTMLElement).style.background = "transparent";
+                      }}>
                       + {s}
                     </button>
                   ))}
@@ -360,29 +402,37 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border bg-red-50 border-red-200 text-red-600 animate-fade-in">
-                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" /><span>{error}</span>
+                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-500/20 animate-fade-in"
+                  style={{ background: "rgba(244,63,94,0.08)" }}>
+                  <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-400" />
+                  <span className="text-rose-400">{error}</span>
                 </div>
               )}
 
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <button type="button" onClick={() => { setStep(1); setError(""); }}
-                  className="h-12 px-5 rounded-xl border-2 border-gray-200 text-sm font-bold text-gray-500 hover:bg-gray-50 transition-all">
+                  className="h-14 px-8 rounded-2xl text-sm font-bold text-white/50 hover:text-white/80 transition-all border border-white/10 bg-white/5 hover:bg-white/10">
                   Back
                 </button>
                 <button type="submit" disabled={isLoading}
-                  className="flex-1 h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 disabled:opacity-50 transition-all hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg, #6d28d9 0%, #2563eb 100%)", boxShadow: "0 8px 24px rgba(108,92,231,0.35)" }}>
+                  className="flex-1 h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-3 transition-all group"
+                  style={{
+                    background: "linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)",
+                    boxShadow: "0 8px 32px rgba(139,92,246,0.3)"
+                  }}>
                   {isLoading
-                    ? <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                    : <><CheckCircle2 className="h-4 w-4" /> Create Account</>
+                    ? <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                    : <>
+                        <span>Initialize Profile</span>
+                        <CheckCircle2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                      </>
                   }
                 </button>
               </div>
 
-              <p className="text-center text-sm text-gray-400">
+              <p className="text-center text-sm font-medium text-white/25">
                 Already have an account?{" "}
-                <Link href="/login" className="font-bold text-purple-600 hover:text-purple-700 transition-colors">Sign in →</Link>
+                <Link href="/login" className="font-bold transition-colors hover:underline underline-offset-4" style={{ color: "#8b5cf6" }}>Sign in here</Link>
               </p>
             </form>
           )}
@@ -391,4 +441,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
