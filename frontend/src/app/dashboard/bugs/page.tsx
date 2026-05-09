@@ -231,17 +231,17 @@ export default function BugsPage() {
 
   const severityIcon = (severity: Severity) => {
     switch (severity) {
-      case "critical": return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case "major": return <ArrowUpCircle className="h-4 w-4 text-orange-600" />;
-      default: return <Bug className="h-4 w-4 text-blue-600" />;
+      case "critical": return <AlertTriangle className="h-4 w-4 text-red-300" />;
+      case "major": return <ArrowUpCircle className="h-4 w-4 text-orange-300" />;
+      default: return <Bug className="h-4 w-4 text-blue-300" />;
     }
   };
 
   const statusIcon = (status: BugStatus) => {
     switch (status) {
       case "open": return <div className="w-2 h-2 rounded-full bg-red-500" />;
-      case "in-progress": return <Clock className="h-3.5 w-3.5 text-amber-600" />;
-      case "resolved": return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />;
+      case "in-progress": return <Clock className="h-3.5 w-3.5 text-amber-300" />;
+      case "resolved": return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />;
       case "closed": return <CheckCircle2 className="h-3.5 w-3.5 text-slate-400" />;
     }
   };
@@ -272,10 +272,10 @@ export default function BugsPage() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-600", bg: "bg-rose-50", icon: Bug },
-          { label: "In Development", value: stats.inProgress, color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
-          { label: "Resolved", value: stats.resolved, color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle2 },
-          { label: "Critical Priority", value: stats.critical, color: "text-rose-600", bg: "bg-rose-100/50", icon: AlertTriangle },
+          { label: "Active Issues", value: stats.open + stats.inProgress, color: "text-rose-300", bg: "bg-rose-50", icon: Bug },
+          { label: "In Development", value: stats.inProgress, color: "text-amber-300", bg: "bg-amber-50", icon: Clock },
+          { label: "Resolved", value: stats.resolved, color: "text-emerald-300", bg: "bg-emerald-50", icon: CheckCircle2 },
+          { label: "Critical Priority", value: stats.critical, color: "text-rose-300", bg: "bg-rose-500/15/50", icon: AlertTriangle },
         ].map((stat, i) => (
           <div key={i} className="premium-card group relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-500">
@@ -303,13 +303,13 @@ export default function BugsPage() {
               placeholder="Search reports by title, description or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 bg-white border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
+              className="pl-12 h-12 bg-transparent/0 border-transparent focus:border-indigo-500/30 rounded-2xl shadow-sm text-sm font-medium"
             />
           </div>
           
           <div className="flex items-center gap-3 px-2">
             <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-transparent/0 shadow-sm font-bold text-xs">
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
               <SelectContent>
@@ -321,7 +321,7 @@ export default function BugsPage() {
             </Select>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-xs">
+              <SelectTrigger className="w-40 h-12 rounded-2xl border-transparent bg-transparent/0 shadow-sm font-bold text-xs">
                 <SelectValue placeholder="Lifecycle" />
               </SelectTrigger>
               <SelectContent>
@@ -344,8 +344,8 @@ export default function BugsPage() {
             ].map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} 
                 className="p-0 h-10 bg-transparent border-b-2 border-transparent data-[state=active]:border-indigo-500 data-[state=active]:bg-transparent rounded-none flex items-center gap-2 group">
-                <span className="text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-600 transition-colors">{tab.label}</span>
-                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-600 transition-all">{tab.count}</span>
+                <span className="text-sm font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 group-data-[state=active]:text-indigo-300 transition-colors">{tab.label}</span>
+                <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500 group-data-[state=active]:bg-indigo-50 group-data-[state=active]:text-indigo-300 transition-all">{tab.count}</span>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -380,7 +380,7 @@ export default function BugsPage() {
                               bug.severity === 'critical' ? 'bg-rose-500 animate-pulse' : 
                               bug.severity === 'major' ? 'bg-amber-500' : 'bg-blue-500'
                             )} />
-                            <h3 className="text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-600 transition-colors">{bug.title}</h3>
+                            <h3 className="text-lg font-bold text-slate-900 truncate tracking-tight group-hover:text-indigo-300 transition-colors">{bug.title}</h3>
                           </div>
                           
                           <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-6">
@@ -399,7 +399,7 @@ export default function BugsPage() {
                               <span>{formatRelativeTime(bug.createdAt)}</span>
                             </div>
                             {assignee && (
-                              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600">
+                              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-300">
                                 <ArrowUpCircle className="h-3.5 w-3.5" />
                                 <span>Assigned to {assignee.name}</span>
                               </div>
@@ -410,8 +410,8 @@ export default function BugsPage() {
                         <div className="flex items-center gap-4 lg:pl-6 lg:border-l border-slate-100 shrink-0">
                           <div className="flex flex-col items-end gap-2">
                             <Badge className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", 
-                              bug.severity === 'critical' ? 'bg-rose-100 text-rose-600' : 
-                              bug.severity === 'major' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                              bug.severity === 'critical' ? 'bg-rose-500/15 text-rose-300' : 
+                              bug.severity === 'major' ? 'bg-amber-500/15 text-amber-300' : 'bg-blue-500/15 text-blue-300'
                             )}>
                               {bug.severity}
                             </Badge>
@@ -468,7 +468,7 @@ export default function BugsPage() {
                     </div>
                   </div>
                   <button type="button" onClick={analyzeWithAI} disabled={!formTitle.trim() || aiLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-indigo-200 text-indigo-600 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-transparent/0 border border-indigo-200 text-indigo-300 text-xs font-black hover:bg-indigo-50 transition-all shadow-sm">
                     {aiLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                     {aiLoading ? "ANALYZING..." : "ANALYZE NOW"}
                   </button>
@@ -476,16 +476,16 @@ export default function BugsPage() {
 
                 {aiSuggestion ? (
                   <div className="space-y-4 animate-slide-up">
-                    <p className="text-xs font-medium text-slate-600 leading-relaxed bg-white/50 p-4 rounded-2xl border border-white/80">
+                    <p className="text-xs font-medium text-slate-600 leading-relaxed bg-transparent/0/50 p-4 rounded-2xl border border-white/80">
                       {aiSuggestion.reason}
                     </p>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { label: "Suggested Severity", value: aiSuggestion.severity.toUpperCase(), color: "text-rose-600" },
-                        { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-indigo-600" },
-                        { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-600" },
+                        { label: "Suggested Severity", value: aiSuggestion.severity.toUpperCase(), color: "text-rose-300" },
+                        { label: "Est. Resolution", value: (aiSuggestion as any).estimatedTime || "2-4 hours", color: "text-indigo-300" },
+                        { label: "Confidence", value: (aiSuggestion as any).confidence || "High", color: "text-emerald-300" },
                       ].map((item, idx) => (
-                        <div key={idx} className="bg-white p-3 rounded-xl border border-slate-100 text-center">
+                        <div key={idx} className="bg-transparent/0 p-3 rounded-xl border border-slate-100 text-center">
                           <p className="text-[8px] font-black uppercase text-slate-400 mb-1">{item.label}</p>
                           <p className={cn("text-[10px] font-black", item.color)}>{item.value}</p>
                         </div>
@@ -610,9 +610,9 @@ export default function BugsPage() {
                           <p className="text-xs font-bold text-white/90">{reporter?.name || "Anonymous"}</p>
                         </div>
                       </div>
-                      <div className="h-8 w-px bg-white/10" />
+                      <div className="h-8 w-px bg-transparent/0/10" />
                       <div className="flex items-center gap-3">
-                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/10")}>
+                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center bg-transparent/0/5 border border-white/10")}>
                           {statusIcon(bug.status)}
                         </div>
                         <div>
@@ -622,7 +622,7 @@ export default function BugsPage() {
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-white/5 text-white/40 hover:text-white transition-colors">
+                  <button onClick={() => setShowDetailDialog(null)} className="p-2 rounded-2xl bg-transparent/0/5 text-white/40 hover:text-white transition-colors">
                     <Trash2 className="h-6 w-6 rotate-45" />
                   </button>
                 </div>
@@ -704,7 +704,7 @@ export default function BugsPage() {
                                 <div className={cn("max-w-[80%] space-y-1", isMe && "text-right")}>
                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{isMe ? "You" : (author?.name || "Member")}</p>
                                   <div className={cn("px-5 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm", 
-                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-white border border-slate-100 text-slate-600 rounded-tl-none")}>
+                                    isMe ? "bg-indigo-600 text-white rounded-tr-none" : "bg-transparent/0 border border-slate-100 text-slate-600 rounded-tl-none")}>
                                     {c.content}
                                   </div>
                                   <p className="text-[8px] font-black text-slate-300 uppercase tracking-tighter">{formatRelativeTime(c.createdAt)}</p>
@@ -750,7 +750,7 @@ export default function BugsPage() {
 
                     {permissions.changeBugStatus && (
                       <Select value={bug.status} onValueChange={(v) => { handleStatusChange(bug.id, v as BugStatus); setShowDetailDialog({ ...bug, status: v as BugStatus }); }}>
-                        <SelectTrigger className="w-40 h-12 rounded-xl border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
+                        <SelectTrigger className="w-40 h-12 rounded-xl border-slate-200 bg-transparent/0 font-black text-[10px] uppercase tracking-widest"><SelectValue /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="open">Open</SelectItem>
                           <SelectItem value="in-progress">In Progress</SelectItem>

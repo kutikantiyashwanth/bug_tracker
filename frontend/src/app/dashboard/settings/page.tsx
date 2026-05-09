@@ -99,7 +99,7 @@ export default function SettingsPage() {
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Account Preferences</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">System <span className="text-indigo-300 underline decoration-indigo-500/20 underline-offset-8">Settings</span></h1>
         <p className="text-slate-500 mt-2 font-medium max-w-xl">
           Customize your professional profile, manage security protocols, and configure your notification ecosystem.
         </p>
@@ -133,7 +133,7 @@ export default function SettingsPage() {
                 <p className="text-xl font-black text-slate-900 tracking-tight">{currentUser.name}</p>
                 <p className="text-sm font-medium text-slate-500">{currentUser.email}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
+                  <Badge className="bg-indigo-50 text-indigo-300 border-indigo-100 font-black text-[10px] tracking-widest uppercase px-3 py-1">
                     {currentUser.role?.toUpperCase()}
                   </Badge>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -160,7 +160,7 @@ export default function SettingsPage() {
               <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Technical Competencies</Label>
               <div className="flex flex-wrap gap-2">
                 {skills.map((s) => (
-                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
+                  <div key={s} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-transparent/0 border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 group shadow-sm hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
                     {s}
                     <button onClick={() => removeSkill(s)} className="text-slate-300 hover:text-rose-500 transition-colors">
                       <X className="h-3 w-3" />
@@ -185,8 +185,8 @@ export default function SettingsPage() {
 
             {profileError && (
               <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center gap-3">
-                <AlertCircle className="h-5 w-5 text-rose-600" /> 
-                <p className="text-xs font-bold text-rose-600">{profileError}</p>
+                <AlertCircle className="h-5 w-5 text-rose-300" /> 
+                <p className="text-xs font-bold text-rose-300">{profileError}</p>
               </div>
             )}
 
@@ -222,7 +222,7 @@ export default function SettingsPage() {
                     placeholder="••••••••" 
                     className="h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 font-bold pr-14" />
                   <button type="button" onClick={() => setShowPw(!showPw)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors">
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-300 transition-colors">
                     {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
@@ -245,7 +245,7 @@ export default function SettingsPage() {
 
             {pwError && (
               <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center">
-                <p className="text-xs font-bold text-rose-600">{pwError}</p>
+                <p className="text-xs font-bold text-rose-300">{pwError}</p>
               </div>
             )}
 
@@ -294,7 +294,7 @@ export default function SettingsPage() {
                       checked={notifPrefs[pref.key as keyof typeof notifPrefs]}
                       onChange={(e) => setNotifPrefs({ ...notifPrefs, [pref.key]: e.target.checked })}
                       className="sr-only peer" />
-                    <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+                    <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-transparent/0 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
                   </label>
                 </div>
               ))}
@@ -304,14 +304,14 @@ export default function SettingsPage() {
           {/* ── Danger Zone ── */}
           <div className="premium-card border-rose-100 bg-rose-50/30 space-y-6">
             <div>
-              <h2 className="text-sm font-black uppercase tracking-widest text-rose-600">Danger Zone</h2>
+              <h2 className="text-sm font-black uppercase tracking-widest text-rose-300">Danger Zone</h2>
               <p className="text-[10px] font-bold text-rose-500/60 uppercase mt-1">Terminal Session Management</p>
             </div>
             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
               Terminating your current active session will flush all local cached authentication tokens.
             </p>
             <Button onClick={() => logout()} variant="outline"
-              className="w-full h-12 rounded-xl border-rose-200 text-rose-600 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all">
+              className="w-full h-12 rounded-xl border-rose-500/25 text-rose-300 font-black uppercase tracking-widest text-[10px] hover:bg-rose-600 hover:text-white transition-all">
               Terminate Session
             </Button>
           </div>

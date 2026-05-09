@@ -24,10 +24,10 @@ import type { Task, TaskStatus, Priority } from "@/lib/types";
 
 const columns: { id: TaskStatus; label: string; topColor: string; dotColor: string; bg: string; textColor: string }[] = [
   { id: "backlog",     label: "Backlog",     topColor: "border-t-slate-400",   dotColor: "bg-slate-400",   bg: "bg-slate-50",   textColor: "text-slate-600" },
-  { id: "todo",        label: "To Do",       topColor: "border-t-blue-500",    dotColor: "bg-blue-500",    bg: "bg-blue-50",    textColor: "text-blue-700" },
-  { id: "in-progress", label: "In Progress", topColor: "border-t-violet-500",  dotColor: "bg-violet-500",  bg: "bg-violet-50",  textColor: "text-violet-700" },
-  { id: "testing",     label: "Testing",     topColor: "border-t-amber-500",   dotColor: "bg-amber-500",   bg: "bg-amber-50",   textColor: "text-amber-700" },
-  { id: "done",        label: "Done",        topColor: "border-t-emerald-500", dotColor: "bg-emerald-500", bg: "bg-emerald-50", textColor: "text-emerald-700" },
+  { id: "todo",        label: "To Do",       topColor: "border-t-blue-500",    dotColor: "bg-blue-500",    bg: "bg-blue-50",    textColor: "text-blue-300" },
+  { id: "in-progress", label: "In Progress", topColor: "border-t-violet-500",  dotColor: "bg-violet-500",  bg: "bg-violet-50",  textColor: "text-violet-300" },
+  { id: "testing",     label: "Testing",     topColor: "border-t-amber-500",   dotColor: "bg-amber-500",   bg: "bg-amber-50",   textColor: "text-amber-300" },
+  { id: "done",        label: "Done",        topColor: "border-t-emerald-500", dotColor: "bg-emerald-500", bg: "bg-emerald-50", textColor: "text-emerald-300" },
 ];
 
 export default function KanbanPage() {
@@ -141,9 +141,9 @@ export default function KanbanPage() {
     const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== "done";
 
     const priorityConfig: Record<string, { label: string; cls: string; dot: string }> = {
-      critical: { label: "CRITICAL", cls: "text-rose-600 bg-rose-50", dot: "bg-rose-500" },
-      high:     { label: "HIGH",     cls: "text-orange-600 bg-orange-50", dot: "bg-orange-500" },
-      medium:   { label: "MEDIUM",   cls: "text-amber-600 bg-amber-50", dot: "bg-amber-500" },
+      critical: { label: "CRITICAL", cls: "text-rose-300 bg-rose-50", dot: "bg-rose-500" },
+      high:     { label: "HIGH",     cls: "text-orange-300 bg-orange-50", dot: "bg-orange-500" },
+      medium:   { label: "MEDIUM",   cls: "text-amber-300 bg-amber-50", dot: "bg-amber-500" },
       low:      { label: "LOW",      cls: "text-slate-500 bg-slate-50", dot: "bg-slate-400" },
     };
     const pc = priorityConfig[task.priority] || priorityConfig.medium;
@@ -154,7 +154,7 @@ export default function KanbanPage() {
         onDragStart={() => handleDragStart(task.id)}
         onDragEnd={() => { setDraggedTask(null); setDragOverColumn(null); }}
         className={cn(
-          "group relative rounded-[1.5rem] bg-white border border-slate-200/60 p-5 cursor-grab active:cursor-grabbing transition-all duration-300",
+          "group relative rounded-[1.5rem] bg-transparent/0 border border-slate-200/60 p-5 cursor-grab active:cursor-grabbing transition-all duration-300",
           "hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1",
           draggedTask === task.id && "opacity-50 rotate-2 scale-95 shadow-2xl"
         )}
@@ -169,16 +169,16 @@ export default function KanbanPage() {
               <MoreHorizontal className="h-4 w-4 text-slate-400" />
             </button>
             {showEditMenu === task.id && (
-              <div className="absolute right-0 top-10 w-48 py-2 rounded-2xl border border-slate-100 bg-white shadow-2xl z-20 animate-in fade-in zoom-in duration-200">
+              <div className="absolute right-0 top-10 w-48 py-2 rounded-2xl border border-slate-100 bg-transparent/0 shadow-2xl z-20 animate-in fade-in zoom-in duration-200">
                 <button
                   onClick={() => openEditDialog(task)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-indigo-50 hover:text-indigo-300 transition-colors"
                 >
                   <Edit3 className="h-3.5 w-3.5" /> Edit Task
                 </button>
                 <button
                   onClick={() => { deleteTask(task.id); setShowEditMenu(null); }}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-rose-600 hover:bg-rose-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-widest text-rose-300 hover:bg-rose-50 transition-colors"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Delete
                 </button>
@@ -201,7 +201,7 @@ export default function KanbanPage() {
         </div>
 
         {/* Title */}
-        <h4 className="text-sm font-black text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">{task.title}</h4>
+        <h4 className="text-sm font-black text-slate-900 leading-tight group-hover:text-indigo-300 transition-colors">{task.title}</h4>
         {task.description && (
           <p className="text-[11px] text-slate-500 mt-2 line-clamp-2 leading-relaxed font-medium">{task.description}</p>
         )}
@@ -228,7 +228,7 @@ export default function KanbanPage() {
             <div className={cn(
               "flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg",
               isOverdue
-                ? "bg-rose-50 text-rose-600"
+                ? "bg-rose-50 text-rose-300"
                 : "bg-slate-50 text-slate-400"
             )}>
               {isOverdue ? <AlertCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
@@ -249,7 +249,7 @@ export default function KanbanPage() {
             <div className="w-8 h-1 bg-violet-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Flow Orchestration</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Project <span className="text-violet-600 underline decoration-violet-500/20 underline-offset-8">Kanban</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Project <span className="text-violet-300 underline decoration-violet-500/20 underline-offset-8">Kanban</span></h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             Visualize your team's workflow and manage task velocity through interactive column orchestration.
           </p>
@@ -291,7 +291,7 @@ export default function KanbanPage() {
                 </div>
                 <button
                   onClick={() => openCreateDialog(column.id)}
-                  className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm"
+                  className="w-8 h-8 rounded-xl bg-transparent/0 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-300 hover:border-indigo-200 transition-all shadow-sm"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -303,7 +303,7 @@ export default function KanbanPage() {
                   <TaskCard key={task.id} task={task} />
                 ))}
                 {colTasks.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-white/40">
+                  <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-[1.5rem] bg-transparent/0/40">
                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Awaiting Flow</p>
                   </div>
                 )}

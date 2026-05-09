@@ -17,27 +17,27 @@ const typeConfig: Record<string, {
 }> = {
   task_assigned: {
     icon: Kanban, label: "Task Assigned",
-    bg: "bg-violet-100", text: "text-violet-700", border: "border-violet-200",
+    bg: "bg-violet-500/15", text: "text-violet-300", border: "border-violet-500/25",
   },
   deadline_reminder: {
     icon: Clock, label: "Deadline Reminder",
-    bg: "bg-amber-100", text: "text-amber-700", border: "border-amber-200",
+    bg: "bg-amber-500/15", text: "text-amber-300", border: "border-amber-500/25",
   },
   bug_assigned: {
     icon: Bug, label: "Bug Assigned",
-    bg: "bg-red-100", text: "text-red-700", border: "border-red-200",
+    bg: "bg-red-500/15", text: "text-red-300", border: "border-red-500/25",
   },
   project_invite: {
     icon: UserPlus, label: "Project Invite",
-    bg: "bg-cyan-100", text: "text-cyan-700", border: "border-cyan-200",
+    bg: "bg-cyan-500/15", text: "text-cyan-300", border: "border-cyan-500/25",
   },
   task_moved: {
     icon: ArrowRight, label: "Task Updated",
-    bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200",
+    bg: "bg-blue-500/15", text: "text-blue-300", border: "border-blue-500/25",
   },
   bug_resolved: {
     icon: CheckCircle2, label: "Bug Resolved",
-    bg: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200",
+    bg: "bg-emerald-500/15", text: "text-emerald-300", border: "border-emerald-500/25",
   },
 };
 
@@ -97,11 +97,11 @@ export default function NotificationsPage() {
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Communication Hub</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
-            System <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span>
+            System <span className="text-indigo-300 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span>
           </h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             {unreadCount > 0
-              ? <><span className="text-indigo-600 font-black">{unreadCount} PENDING ALERTS</span> requiring immediate attention.</>
+              ? <><span className="text-indigo-300 font-black">{unreadCount} PENDING ALERTS</span> requiring immediate attention.</>
               : "System status nominal. All protocols are synchronized."}
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function NotificationsPage() {
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="p-3 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all"
+            className="p-3 rounded-2xl bg-transparent/0 border border-slate-200 shadow-sm hover:border-indigo-500/30 hover:bg-slate-50 transition-all"
           >
             <RefreshCw className={cn("h-4 w-4 text-slate-400", loading && "animate-spin")} />
           </button>
@@ -125,10 +125,10 @@ export default function NotificationsPage() {
       {/* ── Summary Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
-          { type: "task_assigned",     label: "TASK ALERTS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-100" },
-          { type: "deadline_reminder", label: "TIMELINES",    icon: Clock,    bg: "bg-amber-50",   text: "text-amber-600",   border: "border-amber-100" },
-          { type: "bug_assigned",      label: "DEFECTS",      icon: Bug,      bg: "bg-rose-50",    text: "text-rose-600",    border: "border-rose-100" },
-          { type: "project_invite",    label: "INVITATIONS",  icon: UserPlus, bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100" },
+          { type: "task_assigned",     label: "TASK ALERTS",  icon: Kanban,   bg: "bg-indigo-50",  text: "text-indigo-300",  border: "border-indigo-100" },
+          { type: "deadline_reminder", label: "TIMELINES",    icon: Clock,    bg: "bg-amber-50",   text: "text-amber-300",   border: "border-amber-100" },
+          { type: "bug_assigned",      label: "DEFECTS",      icon: Bug,      bg: "bg-rose-50",    text: "text-rose-300",    border: "border-rose-100" },
+          { type: "project_invite",    label: "INVITATIONS",  icon: UserPlus, bg: "bg-emerald-50", text: "text-emerald-300", border: "border-emerald-100" },
         ].map((item) => {
           const count  = notifications.filter((n) => n.type === item.type).length;
           const unread = notifications.filter((n) => n.type === item.type && !n.read).length;
@@ -174,13 +174,13 @@ export default function NotificationsPage() {
                 "flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                 isActive
                   ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10"
-                  : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-200 hover:text-indigo-600"
+                  : "bg-transparent/0 border border-slate-200 text-slate-500 hover:border-indigo-200 hover:text-indigo-300"
               )}
             >
               <f.icon className="h-4 w-4" />
               {f.label}
               {count > 0 && (
-                <span className={cn("px-1.5 py-0.5 rounded-md", isActive ? "bg-white/20 text-white" : "bg-indigo-100 text-indigo-600")}>
+                <span className={cn("px-1.5 py-0.5 rounded-md", isActive ? "bg-transparent/0/20 text-white" : "bg-indigo-500/15 text-indigo-300")}>
                   {count}
                 </span>
               )}
@@ -210,8 +210,8 @@ export default function NotificationsPage() {
             <div className="divide-y divide-slate-50">
               {Object.entries(grouped).map(([date, items]) => (
                 <div key={date}>
-                  <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 px-8 py-4 border-b border-slate-50">
-                    <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">{date}</span>
+                  <div className="sticky top-0 bg-transparent/0/80 backdrop-blur-md z-10 px-8 py-4 border-b border-slate-50">
+                    <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.3em]">{date}</span>
                   </div>
                   <div className="divide-y divide-slate-50">
                     {items.map((notification) => {
@@ -267,7 +267,7 @@ export default function NotificationsPage() {
                               {notification.link && (
                                 <Link
                                   href={notification.link}
-                                  className="shrink-0 p-3 rounded-2xl bg-white border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-600 hover:bg-indigo-50 transition-all shadow-sm"
+                                  className="shrink-0 p-3 rounded-2xl bg-transparent/0 border border-slate-200 text-slate-400 hover:text-indigo-300 hover:border-indigo-600 hover:bg-indigo-50 transition-all shadow-sm"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <ArrowRight className="h-5 w-5" />
@@ -277,7 +277,7 @@ export default function NotificationsPage() {
                             {!notification.read && (
                               <div className="flex items-center gap-2 pt-2">
                                 <div className="w-1 h-1 rounded-full bg-indigo-600" />
-                                <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">Awaiting interaction</span>
+                                <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest">Awaiting interaction</span>
                               </div>
                             )}
                           </div>
@@ -295,7 +295,7 @@ export default function NotificationsPage() {
       {/* ── Footer ── */}
       <div className="rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 text-white border border-slate-800">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-transparent/0/10 border border-white/10 flex items-center justify-center">
             <Mail className="h-6 w-6 text-indigo-400" />
           </div>
           <div className="space-y-1">
@@ -305,7 +305,7 @@ export default function NotificationsPage() {
         </div>
         <Link
           href="/dashboard/settings"
-          className="px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all"
+          className="px-6 py-3 rounded-xl bg-transparent/0/10 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-transparent/0 hover:text-slate-900 transition-all"
         >
           CONFIGURE RELAY
         </Link>

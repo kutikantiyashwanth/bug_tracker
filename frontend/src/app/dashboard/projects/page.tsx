@@ -71,7 +71,7 @@ export default function ProjectsPage() {
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Enterprise Workspaces</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Your <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Your <span className="text-indigo-300 underline decoration-indigo-500/20 underline-offset-8">Projects</span></h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             Select a workspace to view detailed analytics, track team progress, and manage technical debt.
           </p>
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{project.name}</h3>
+                        <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-indigo-300 transition-colors">{project.name}</h3>
                         {isActive && (
                           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         )}
@@ -178,7 +178,7 @@ export default function ProjectsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sprint Velocity</span>
-                    <span className="text-xs font-black text-indigo-600">{completionRate}%</span>
+                    <span className="text-xs font-black text-indigo-300">{completionRate}%</span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000" style={{ width: `${completionRate}%` }} />
@@ -207,7 +207,7 @@ export default function ProjectsPage() {
                   {isAdmin && (
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(project.inviteCode, project.id); }}
-                      className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
+                      className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-300 uppercase tracking-widest transition-all p-2 rounded-xl hover:bg-indigo-50"
                     >
                       {copiedId === project.id ? (
                         <><Check className="h-3 w-3 text-emerald-500" /> Copied</>
@@ -286,7 +286,7 @@ export default function ProjectsPage() {
             </div>
             {joinError && (
               <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center">
-                <p className="text-xs font-bold text-rose-600">{joinError}</p>
+                <p className="text-xs font-bold text-rose-300">{joinError}</p>
               </div>
             )}
           </div>

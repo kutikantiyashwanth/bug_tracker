@@ -17,19 +17,19 @@ const actionIcons: Record<string, any> = {
 };
 
 const actionConfig: Record<string, { bg: string; text: string; border: string }> = {
-  created:  { bg: "bg-blue-100",    text: "text-blue-700",    border: "border-blue-200" },
-  moved:    { bg: "bg-violet-100",  text: "text-violet-700",  border: "border-violet-200" },
-  reported: { bg: "bg-red-100",     text: "text-red-700",     border: "border-red-200" },
-  resolved: { bg: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200" },
-  joined:   { bg: "bg-cyan-100",    text: "text-cyan-700",    border: "border-cyan-200" },
-  assigned: { bg: "bg-amber-100",   text: "text-amber-700",   border: "border-amber-200" },
+  created:  { bg: "bg-blue-500/15",    text: "text-blue-300",    border: "border-blue-500/25" },
+  moved:    { bg: "bg-violet-500/15",  text: "text-violet-300",  border: "border-violet-500/25" },
+  reported: { bg: "bg-red-500/15",     text: "text-red-300",     border: "border-red-500/25" },
+  resolved: { bg: "bg-emerald-500/15", text: "text-emerald-300", border: "border-emerald-500/25" },
+  joined:   { bg: "bg-cyan-500/15",    text: "text-cyan-300",    border: "border-cyan-500/25" },
+  assigned: { bg: "bg-amber-500/15",   text: "text-amber-300",   border: "border-amber-500/25" },
 };
 
 const entityBadge: Record<string, string> = {
-  task:    "bg-violet-100 text-violet-700 border border-violet-200",
-  bug:     "bg-red-100 text-red-700 border border-red-200",
-  project: "bg-blue-100 text-blue-700 border border-blue-200",
-  member:  "bg-cyan-100 text-cyan-700 border border-cyan-200",
+  task:    "bg-violet-500/15 text-violet-300 border border-violet-500/25",
+  bug:     "bg-red-500/15 text-red-300 border border-red-500/25",
+  project: "bg-blue-500/15 text-blue-300 border border-blue-500/25",
+  member:  "bg-cyan-500/15 text-cyan-300 border border-cyan-500/25",
 };
 
 export default function ActivityPage() {
@@ -59,10 +59,10 @@ export default function ActivityPage() {
   }, [projectActivities]);
 
   const statCards = [
-    { label: "Total Actions", value: projectActivities.length,                                                                                    icon: Activity,  bg: "bg-violet-100", text: "text-violet-700" },
-    { label: "Tasks",         value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "task").length,   icon: GitBranch, bg: "bg-indigo-100", text: "text-indigo-700" },
-    { label: "Bugs",          value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "bug").length,    icon: Bug,       bg: "bg-red-100",    text: "text-red-700" },
-    { label: "Members",       value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "member").length, icon: Users,     bg: "bg-cyan-100",   text: "text-cyan-700" },
+    { label: "Total Actions", value: projectActivities.length,                                                                                    icon: Activity,  bg: "bg-violet-500/15", text: "text-violet-300" },
+    { label: "Tasks",         value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "task").length,   icon: GitBranch, bg: "bg-indigo-500/15", text: "text-indigo-300" },
+    { label: "Bugs",          value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "bug").length,    icon: Bug,       bg: "bg-red-500/15",    text: "text-red-300" },
+    { label: "Members",       value: projectActivities.filter((a) => a.entityType?.toLowerCase() === "member").length, icon: Users,     bg: "bg-cyan-500/15",   text: "text-cyan-300" },
   ];
 
   return (
@@ -73,7 +73,7 @@ export default function ActivityPage() {
           <div className="w-8 h-1 bg-indigo-500 rounded-full" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Project Operations</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Activity <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Activity <span className="text-indigo-300 underline decoration-indigo-500/20 underline-offset-8">Audit</span></h1>
         <p className="text-slate-500 mt-2 font-medium max-w-xl">
           Real-time surveillance of all project operations, modifications, and system events across the workspace.
         </p>
@@ -85,9 +85,9 @@ export default function ActivityPage() {
           <div key={stat.label} className="premium-card p-6 flex flex-col items-center text-center group hover:scale-105 transition-all">
             <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 shadow-sm", 
               stat.label === "Total Actions" ? "bg-slate-900 text-white" :
-              stat.label === "Tasks" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
-              stat.label === "Bugs" ? "bg-rose-50 text-rose-600 border-rose-100" :
-              "bg-emerald-50 text-emerald-600 border-emerald-100"
+              stat.label === "Tasks" ? "bg-indigo-50 text-indigo-300 border-indigo-100" :
+              stat.label === "Bugs" ? "bg-rose-50 text-rose-300 border-rose-100" :
+              "bg-emerald-50 text-emerald-300 border-emerald-100"
             )}>
               <stat.icon className="h-6 w-6" />
             </div>
@@ -131,8 +131,8 @@ export default function ActivityPage() {
             Object.entries(groupedActivities).map(([date, dateActivities]) => (
               <div key={date} className="mb-12 last:mb-0">
                 {/* Date header */}
-                <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 py-4 mb-6 border-b border-slate-50">
-                  <span className="text-xs font-black text-indigo-600 uppercase tracking-[0.2em]">
+                <div className="sticky top-0 bg-transparent/0/80 backdrop-blur-md z-10 py-4 mb-6 border-b border-slate-50">
+                  <span className="text-xs font-black text-indigo-300 uppercase tracking-[0.2em]">
                     {date}
                   </span>
                 </div>
@@ -150,9 +150,9 @@ export default function ActivityPage() {
                       <div key={activity.id} className="flex gap-6 group">
                         {/* Action icon bubble */}
                         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 z-10 border transition-all shadow-sm group-hover:scale-110", 
-                          activity.action === "resolved" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
-                          activity.action === "reported" ? "bg-rose-50 text-rose-600 border-rose-100" :
-                          activity.action === "joined" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
+                          activity.action === "resolved" ? "bg-emerald-50 text-emerald-300 border-emerald-100" :
+                          activity.action === "reported" ? "bg-rose-50 text-rose-300 border-rose-100" :
+                          activity.action === "joined" ? "bg-indigo-50 text-indigo-300 border-indigo-100" :
                           "bg-slate-50 text-slate-600 border-slate-100"
                         )}>
                           <Icon className="h-5 w-5" />
@@ -160,7 +160,7 @@ export default function ActivityPage() {
 
                         {/* Content */}
                         <div className="flex-1 pb-8 group-last:pb-0">
-                          <div className="p-6 rounded-[2rem] bg-slate-50/50 border border-transparent group-hover:border-slate-100 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
+                          <div className="p-6 rounded-[2rem] bg-slate-50/50 border border-transparent group-hover:border-slate-100 group-hover:bg-transparent/0 group-hover:shadow-xl group-hover:shadow-slate-200/50 transition-all flex items-start justify-between gap-6">
                             <div className="space-y-2">
                               <p className="text-sm font-medium text-slate-600 leading-relaxed">
                                 <span className="font-black text-slate-900 uppercase tracking-tight mr-1">{user?.name || "System Actor"}</span>{" "}
@@ -172,8 +172,8 @@ export default function ActivityPage() {
                                 </span>
                                 {entityKey && (
                                   <Badge className={cn("text-[9px] font-black uppercase tracking-widest",
-                                    entityKey === "task" ? "bg-indigo-50 text-indigo-600 border-indigo-100" :
-                                    entityKey === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" :
+                                    entityKey === "task" ? "bg-indigo-50 text-indigo-300 border-indigo-100" :
+                                    entityKey === "bug" ? "bg-rose-50 text-rose-300 border-rose-100" :
                                     "bg-slate-100 text-slate-600 border-slate-200"
                                   )}>
                                     {entityKey}

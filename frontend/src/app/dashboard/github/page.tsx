@@ -116,8 +116,8 @@ export default function GitHubPage() {
         <div className="w-16 h-16 rounded-2xl icon-purple flex items-center justify-center">
           <Github className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900 text-center">No Project Selected</h2>
-        <p className="text-sm text-gray-500 text-center">Select a project from the sidebar to manage GitHub links.</p>
+        <h2 className="text-xl font-bold text-white text-center">No Project Selected</h2>
+        <p className="text-sm text-white/55 text-center">Select a project from the sidebar to manage GitHub links.</p>
       </div>
     );
   }
@@ -140,7 +140,7 @@ export default function GitHubPage() {
         </div>
         {repoUrl && (
           <a href={repoUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white border border-slate-200 text-xs font-black uppercase tracking-widest hover:border-slate-900 hover:bg-slate-50 transition-all shadow-sm">
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-transparent/0 border border-slate-200 text-xs font-black uppercase tracking-widest hover:border-slate-900 hover:bg-slate-50 transition-all shadow-sm">
             <ExternalLink className="h-4 w-4" /> REPOSITORY
           </a>
         )}
@@ -153,7 +153,7 @@ export default function GitHubPage() {
         </div>
         <div className="relative z-10 space-y-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10">
+            <div className="w-12 h-12 rounded-2xl bg-transparent/0/10 flex items-center justify-center border border-white/10">
               <Github className="h-6 w-6" />
             </div>
             <div>
@@ -165,8 +165,8 @@ export default function GitHubPage() {
           <div className="flex gap-3">
             <Input value={repoInput} onChange={(e) => setRepoInput(e.target.value)}
               placeholder="https://github.com/owner/repository" 
-              className="h-14 bg-white/5 border-white/10 focus:border-indigo-500/50 text-white !rounded-2xl font-mono text-xs" />
-            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="h-14 px-8 !rounded-2xl !bg-white !text-slate-950 font-black text-xs uppercase tracking-widest hover:!bg-slate-200">
+              className="h-14 bg-transparent/0/5 border-white/10 focus:border-indigo-500/50 text-white !rounded-2xl font-mono text-xs" />
+            <Button onClick={handleSaveRepo} disabled={!repoInput.trim()} className="h-14 px-8 !rounded-2xl !bg-transparent/0 !text-slate-950 font-black text-xs uppercase tracking-widest hover:!bg-slate-200">
               {repoSaved ? "SAVED" : <><Save className="h-4 w-4 mr-2" /> COMMIT URL</>}
             </Button>
           </div>
@@ -177,9 +177,9 @@ export default function GitHubPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "TOTAL OBJECTS",   value: allItems.length,                          icon: Github,    bg: "bg-slate-50 text-slate-400" },
-          { label: "ACTIVE ISSUES", value: linkedIssues.length,                      icon: AlertCircle,    bg: "bg-indigo-50 text-indigo-600" },
-          { label: "PULL REQUESTS",    value: linkedPRs.length,                         icon: GitPullRequest,    bg: "bg-emerald-50 text-emerald-600" },
-          { label: "PENDING SYNC",      value: allItems.filter((i) => !i.link).length,   icon: Link2Off,    bg: "bg-rose-50 text-rose-600" },
+          { label: "ACTIVE ISSUES", value: linkedIssues.length,                      icon: AlertCircle,    bg: "bg-indigo-50 text-indigo-300" },
+          { label: "PULL REQUESTS",    value: linkedPRs.length,                         icon: GitPullRequest,    bg: "bg-emerald-50 text-emerald-300" },
+          { label: "PENDING SYNC",      value: allItems.filter((i) => !i.link).length,   icon: Link2Off,    bg: "bg-rose-50 text-rose-300" },
         ].map((s) => (
           <div key={s.label} className="premium-card p-6 flex flex-col items-center text-center group">
             <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110", s.bg)}>
@@ -225,17 +225,17 @@ export default function GitHubPage() {
               <div key={item.id} className="premium-card !p-0 group transition-all hover:shadow-xl hover:shadow-indigo-500/5">
                 <div className="p-6 sm:p-8 flex items-center gap-6">
                   <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border shadow-sm transition-all group-hover:scale-110",
-                    item.kind === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" : "bg-indigo-50 text-indigo-600 border-indigo-100")}>
+                    item.kind === "bug" ? "bg-rose-50 text-rose-300 border-rose-100" : "bg-indigo-50 text-indigo-300 border-indigo-100")}>
                     {item.kind === "bug" ? <Bug className="h-6 w-6" /> : <CheckSquare className="h-6 w-6" />}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
-                        <p className="text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-indigo-600 transition-colors">{item.title}</p>
+                        <p className="text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-indigo-300 transition-colors">{item.title}</p>
                         <div className="flex items-center gap-3 mt-1">
                           <span className={cn("text-[9px] font-black px-2 py-0.5 rounded-md border uppercase tracking-widest",
-                            item.kind === "bug" ? "bg-rose-50 text-rose-600 border-rose-100" : "bg-indigo-50 text-indigo-600 border-indigo-100")}>
+                            item.kind === "bug" ? "bg-rose-50 text-rose-300 border-rose-100" : "bg-indigo-50 text-indigo-300 border-indigo-100")}>
                             {item.kind}
                           </span>
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{item.status.replace('-', ' ')}</span>
@@ -253,17 +253,17 @@ export default function GitHubPage() {
                               <ExternalLink className="h-3 w-3 ml-1" />
                             </a>
                             <button onClick={() => handleOpenLinkForm(item.id, item.link!.type)}
-                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all">
+                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-indigo-300 hover:border-indigo-200 transition-all">
                               <Save className="h-4 w-4" />
                             </button>
                             <button onClick={() => handleRemoveLink(item.id)}
-                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all">
+                              className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-rose-300 hover:border-rose-500/25 transition-all">
                               <X className="h-4 w-4" />
                             </button>
                           </div>
                         ) : (
                           <button onClick={() => handleOpenLinkForm(item.id, item.kind === "bug" ? "issue" : "pr")}
-                            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-indigo-600 hover:text-indigo-600 transition-all shadow-sm">
+                            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-transparent/0 border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-indigo-600 hover:text-indigo-300 transition-all shadow-sm">
                             <Plus className="h-4 w-4" /> ESTABLISH SYNC
                           </button>
                         )}
@@ -278,7 +278,7 @@ export default function GitHubPage() {
                             <button key={t}
                               onClick={() => setLinkForm((f) => f ? { ...f, type: t } : f)}
                               className={cn("flex items-center gap-3 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex-1 justify-center",
-                                linkForm.type === t ? "bg-slate-900 text-white shadow-xl" : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-300")}
+                                linkForm.type === t ? "bg-slate-900 text-white shadow-xl" : "bg-transparent/0 border border-slate-200 text-slate-500 hover:border-indigo-300")}
                             >
                               {t === "issue" ? <Link2 className="h-4 w-4" /> : <GitPullRequest className="h-4 w-4" />}
                               {t === "issue" ? "ISSUE OBJECT" : "PULL REQUEST"}
@@ -290,13 +290,13 @@ export default function GitHubPage() {
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Reference Number</Label>
                             <Input value={linkForm.number}
                               onChange={(e) => setLinkForm((f) => f ? { ...f, number: e.target.value } : f)}
-                              placeholder="e.g. 1024" className="h-12 !rounded-xl bg-white border-slate-200 font-bold" />
+                              placeholder="e.g. 1024" className="h-12 !rounded-xl bg-transparent/0 border-slate-200 font-bold" />
                           </div>
                           <div className="space-y-2">
                             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Override URL (Optional)</Label>
                             <Input value={linkForm.url}
                               onChange={(e) => setLinkForm((f) => f ? { ...f, url: e.target.value } : f)}
-                              placeholder="Leave blank for auto-generation" className="h-12 !rounded-xl bg-white border-slate-200 font-mono text-xs" />
+                              placeholder="Leave blank for auto-generation" className="h-12 !rounded-xl bg-transparent/0 border-slate-200 font-mono text-xs" />
                           </div>
                         </div>
                         <div className="flex gap-3 justify-end pt-2">

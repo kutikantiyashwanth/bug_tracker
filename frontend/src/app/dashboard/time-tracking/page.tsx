@@ -138,7 +138,7 @@ export default function TimeTrackingPage() {
             <div className="w-8 h-1 bg-indigo-500 rounded-full" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Resource Utilization</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Time <span className="text-indigo-600 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Time <span className="text-indigo-300 underline decoration-indigo-500/20 underline-offset-8">Intelligence</span></h1>
           <p className="text-slate-500 mt-2 font-medium max-w-xl">
             Precision chronometry for project execution. Monitor velocity and resource allocation with granular temporal audit logs.
           </p>
@@ -193,9 +193,9 @@ export default function TimeTrackingPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "PROJECT TOTAL",  value: formatMinutes(stats.total),    icon: Clock,       bg: "bg-slate-900 text-white", border: "border-slate-800" },
-          { label: "INDIVIDUAL FOCUS",   value: formatMinutes(stats.user),     icon: Users,       bg: "bg-indigo-50 text-indigo-600", border: "border-indigo-100" },
-          { label: "BILLABLE OUTPUT",    value: formatMinutes(stats.billable), icon: DollarSign,  bg: "bg-emerald-50 text-emerald-600", border: "border-emerald-100" },
-          { label: "AUDIT ENTRIES",     value: stats.entries,                 icon: Calendar,    bg: "bg-amber-50 text-amber-600", border: "border-amber-100" },
+          { label: "INDIVIDUAL FOCUS",   value: formatMinutes(stats.user),     icon: Users,       bg: "bg-indigo-50 text-indigo-300", border: "border-indigo-100" },
+          { label: "BILLABLE OUTPUT",    value: formatMinutes(stats.billable), icon: DollarSign,  bg: "bg-emerald-50 text-emerald-300", border: "border-emerald-100" },
+          { label: "AUDIT ENTRIES",     value: stats.entries,                 icon: Calendar,    bg: "bg-amber-50 text-amber-300", border: "border-amber-100" },
         ].map((stat) => (
           <div key={stat.label} className="premium-card p-8 flex flex-col items-center text-center group hover:scale-105 transition-all">
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border shadow-sm transition-all group-hover:rotate-12", stat.bg, stat.border)}>
@@ -222,7 +222,7 @@ export default function TimeTrackingPage() {
             </div>
           </div>
           <div className="px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-100">
-            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Global Sync Active</span>
+            <span className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Global Sync Active</span>
           </div>
         </div>
 
@@ -263,7 +263,7 @@ export default function TimeTrackingPage() {
                         <div className="flex items-center gap-3">
                           <p className="text-sm font-black text-slate-900 uppercase tracking-tight">{user?.name || "System Actor"}</p>
                           {entry.billable && (
-                            <span className="text-[8px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100 font-black uppercase tracking-widest">
+                            <span className="text-[8px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-300 border border-emerald-100 font-black uppercase tracking-widest">
                               BILLABLE
                             </span>
                           )}
@@ -354,8 +354,8 @@ export default function TimeTrackingPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-white hover:border-indigo-200 transition-all group">
-              <input type="checkbox" checked={formBillable} onChange={(e) => setFormBillable(e.target.checked)} className="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500/20" />
+            <label className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-transparent/0 hover:border-indigo-200 transition-all group">
+              <input type="checkbox" checked={formBillable} onChange={(e) => setFormBillable(e.target.checked)} className="w-5 h-5 rounded-lg border-slate-300 text-indigo-300 focus:ring-indigo-500/20" />
               <div className="space-y-1">
                 <p className="text-xs font-black uppercase tracking-widest text-slate-900">Billable Output</p>
                 <p className="text-[10px] font-bold text-slate-400 uppercase">Associate this temporal session with project budget cycles.</p>
