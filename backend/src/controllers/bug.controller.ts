@@ -1,5 +1,6 @@
-// @ts-nocheck
-import { Request, Response, NextFunction } from 'express'; = async (req: Request, res: Response, next: NextFunction) => {
+﻿// @ts-nocheck
+import { Request, Response, NextFunction } from 'express';
+export const getBugs = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { projectId } = (req as any).params;
     const { status, severity, search } = (req as any).query;
@@ -149,3 +150,5 @@ export const deleteBug = async (req: Request, res: Response, next: NextFunction)
     res.json({ success: true, message: 'Bug deleted' });
   } catch (err) { next(err); }
 };
+
+

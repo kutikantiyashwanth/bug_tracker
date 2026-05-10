@@ -1,5 +1,6 @@
-// @ts-nocheck
-import { Request, Response, NextFunction } from 'express'; = async (req: Request, res: Response, next: NextFunction) => {
+﻿// @ts-nocheck
+import { Request, Response, NextFunction } from 'express';
+export const getNotifications = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as AuthRequest).user!.userId;
 
@@ -38,3 +39,5 @@ export const markAllAsRead = async (req: Request, res: Response, next: NextFunct
     res.json({ success: true, message: 'All notifications marked as read' });
   } catch (err) { next(err); }
 };
+
+

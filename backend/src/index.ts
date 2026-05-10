@@ -773,10 +773,7 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
           reporterName: reporter?.name || "Someone",
           projectName: project?.name || "Your Project",
           description: description,
-        }).then ? projectName: project?.name || "Your Project",
-          description: description,
-        }) : projectName: project?.name || "Your Project",
-          description: description,
+          loginToken: emailToken,
         }).then(() => console.log(`[Email] Bug assigned email sent to ${assignee.email}`))
           .catch((err: any) => console.error(`[Email] Failed to send bug assigned email:`, err.message));
       } else {
@@ -1548,6 +1545,8 @@ httpServer.listen(PORT, "0.0.0.0", async () => {
 });
 
 export { io };
+
+
 
 
 

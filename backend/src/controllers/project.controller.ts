@@ -1,5 +1,6 @@
-// @ts-nocheck
-import { Request, Response, NextFunction } from 'express'; = async (req: Request, res: Response, next: NextFunction) => {
+﻿// @ts-nocheck
+import { Request, Response, NextFunction } from 'express';
+export const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as AuthRequest).user!.userId;
     const projects = await prisma.project.findMany({
@@ -124,3 +125,5 @@ export const removeMember = async (req: Request, res: Response, next: NextFuncti
     res.json({ success: true, message: 'Member removed' });
   } catch (err) { next(err); }
 };
+
+

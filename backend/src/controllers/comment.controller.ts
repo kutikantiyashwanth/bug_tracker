@@ -1,5 +1,6 @@
-// @ts-nocheck
-import { Request, Response, NextFunction } from 'express'; = async (req: Request, res: Response, next: NextFunction) => {
+﻿// @ts-nocheck
+import { Request, Response, NextFunction } from 'express';
+export const createComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { bugId, taskId } = (req as any).params;
     const { content } = (req as any).body;
@@ -72,3 +73,5 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
     res.json({ success: true, message: 'Comment deleted' });
   } catch (err) { next(err); }
 };
+
+
