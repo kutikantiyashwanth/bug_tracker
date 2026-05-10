@@ -350,18 +350,14 @@ export default function RegisterPage() {
 
           {/* — STEP 2 — */}
           {step === 2 && (
-            <form onSubmit={handleSubmit} className="animate-scale-in space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-4xl font-black text-slate-900 tracking-tight">Your skills</h2>
-                <p className="text-slate-500 font-medium text-sm">Add skills so your team knows what you work on. You can skip this.</p>
+            <form onSubmit={handleSubmit} className="animate-scale-in space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Your skills</h2>
+                <p className="text-slate-500 font-medium text-sm">Optional — add skills so your team knows what you work on.</p>
               </div>
 
               {/* Skills */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                  Skills <span className="text-slate-300 normal-case font-medium ml-1">(Optional)</span>
-                </label>
-
+              <div className="space-y-2">
                 {skills.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {skills.map((s) => (
@@ -382,18 +378,18 @@ export default function RegisterPage() {
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill(newSkill))}
-                    className="h-14 rounded-2xl text-sm flex-1 text-slate-900 placeholder:text-slate-300 border-slate-200 focus:border-indigo-500/50 bg-white shadow-sm"
+                    className="h-11 rounded-2xl text-sm flex-1 text-slate-900 placeholder:text-slate-300 border-slate-200 bg-white shadow-sm"
                   />
-                  <button type="button" onClick={() => addSkill(newSkill)}
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all border border-slate-200 bg-white hover:bg-slate-50 hover:border-indigo-400/50 text-indigo-600 shadow-sm">
-                    <Plus className="h-5 w-5" />
+                  <button type="button" onClick={() => addSkill(newSkill)} style={{ transform: "none" }}
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center border border-slate-200 bg-white hover:bg-slate-50 text-indigo-600 shadow-sm transition-colors">
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
-                  {SKILL_SUGGESTIONS.filter((s) => !skills.includes(s)).slice(0, 7).map((s) => (
-                    <button key={s} type="button" onClick={() => addSkill(s)}
-                      className="px-2 py-0.5 rounded-full text-xs font-medium transition-all text-slate-400 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 bg-white shadow-sm">
+                  {SKILL_SUGGESTIONS.filter((s) => !skills.includes(s)).slice(0, 6).map((s) => (
+                    <button key={s} type="button" onClick={() => addSkill(s)} style={{ transform: "none" }}
+                      className="px-2 py-0.5 rounded-full text-xs font-medium text-slate-400 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 bg-white transition-colors">
                       + {s}
                     </button>
                   ))}
@@ -401,25 +397,22 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50 animate-fade-in">
+                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
                   <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
                   <span className="text-rose-600 font-medium">{error}</span>
                 </div>
               )}
 
-              <div className="flex gap-4">
-                <button type="button" onClick={() => { setStep(1); setError(""); }}
-                  className="h-14 px-8 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-600 transition-all border border-slate-200 bg-white shadow-sm">
+              <div className="flex gap-3">
+                <button type="button" onClick={() => { setStep(1); setError(""); }} style={{ transform: "none" }}
+                  className="h-12 px-6 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-600 border border-slate-200 bg-white shadow-sm transition-colors">
                   Back
                 </button>
-                <button type="submit" disabled={isLoading}
-                  className="flex-1 h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-3 transition-all group bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700">
+                <button type="submit" disabled={isLoading} style={{ transform: "none" }}
+                  className="flex-1 h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors disabled:opacity-60">
                   {isLoading
-                    ? <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                    : <>
-                        <span>Create Account</span>
-                        <CheckCircle2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                      </>
+                    ? <div className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                    : <><span>Create Account</span><CheckCircle2 className="h-4 w-4" /></>
                   }
                 </button>
               </div>
