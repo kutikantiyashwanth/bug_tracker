@@ -284,6 +284,30 @@ app.get("/api/v1/auth/me", authMiddleware, async (req: any, res) => {
 });
 
 // â”€â”€â”€ Update profile â”€â”€â”€
+
+// ─── Email Login Token (magic link) ───
+const emailLoginTokens = new Map();
+const createEmailLoginToken = (userId) => {
+  const token = require("crypto").randomBytes(32).toString("hex");
+  emailLoginTokens.set(token, { userId, expiresAt: Date.now() + 30 * 60 * 1000 });
+  for (const [k, v] of emailLoginTokens.entries()) { if (Date.now() > v.expiresAt) emailLoginTokens.delete(k); }
+  return token;
+};
+app.get("/api/v1/auth/email-login", async (req, res) => {
+  try {
+    const { token, redirect } = req.query;
+    if (!token) return res.status(400).json({ error: "Token required" });
+    const entry = emailLoginTokens.get(token);
+    if (!entry || Date.now() > entry.expiresAt) { emailLoginTokens.delete(token); return res.status(401).json({ error: "Invalid or expired token" }); }
+    emailLoginTokens.delete(token);
+    const user = await prisma.user.findUnique({ where: { id: entry.userId }, select: { id: true, email: true, name: true, role: true, skills: true } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+    const jwtToken = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET || "your-secret-key", { expiresIn: "7d" });
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    const redirectPath = redirect || "/dashboard/bugs";
+    res.redirect(`${frontendUrl}/auth/email-login?jwt=${jwtToken}&redirect=${encodeURIComponent(redirectPath)}`);
+  } catch (error) { res.status(500).json({ error: error.message }); }
+});
 app.patch("/api/v1/auth/profile", authMiddleware, async (req: any, res) => {
   try {
     const { name, skills } = req.body;
@@ -741,12 +765,17 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
       const project  = await prisma.project.findUnique({ where: { id: projectId } });
       if (assignee?.email) {
         console.log(`[Email] Sending bug assigned email to ${assignee.email}`);
+        const emailToken = createEmailLoginToken(assigneeId);
         sendBugAssignedEmail(assignee.email, {
           assigneeName: assignee.name,
           bugTitle: bug.title,
           severity: dbSeverity.toLowerCase(),
           reporterName: reporter?.name || "Someone",
           projectName: project?.name || "Your Project",
+          description: description,
+        }).then ? projectName: project?.name || "Your Project",
+          description: description,
+        }) : projectName: project?.name || "Your Project",
           description: description,
         }).then(() => console.log(`[Email] Bug assigned email sent to ${assignee.email}`))
           .catch((err: any) => console.error(`[Email] Failed to send bug assigned email:`, err.message));
@@ -810,6 +839,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
       const project   = await prisma.project.findUnique({ where: { id: bug.projectId } });
       if (assignee?.email) {
         console.log(`[Email] Sending bug assigned email to ${assignee.email}`);
+        const emailToken = createEmailLoginToken(assigneeId);
         sendBugAssignedEmail(assignee.email, {
           assigneeName: assignee.name,
           bugTitle: bug.title,
@@ -853,8 +883,8 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
             recipientName: recipient.name,
             bugTitle: bug.title,
             resolverName: resolver?.name || "Developer",
-            projectName: project?.name || "Your Project",
-          }).then(() => console.log(`[Email] Bug resolved email sent to ${recipient.email}`))
+            loginToken: commentToken,
+        }).then(() => console.log(`[Email] Bug resolved email sent to ${recipient.email}`))
             .catch((err: any) => console.error(`[Email] Failed to send bug resolved email:`, err.message));
         }
       }
@@ -1165,12 +1195,13 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
       const recipient = await prisma.user.findUnique({ where: { id: userId } });
       if (recipient?.email) {
         console.log(`[Email] Sending comment email to ${recipient.email}`);
+        const commentToken = createEmailLoginToken(userId);
         sendCommentEmail(recipient.email, {
           recipientName: recipient.name,
           commenterName: commenter?.name || "Someone",
           bugTitle: bug.title,
           comment: content.trim().substring(0, 200),
-          projectName: project?.name || "Your Project",
+          loginToken: commentToken,
         }).then(() => console.log(`[Email] Comment email sent to ${recipient.email}`))
           .catch((err: any) => console.error(`[Email] Failed to send comment email:`, err.message));
       }
@@ -1517,5 +1548,8 @@ httpServer.listen(PORT, "0.0.0.0", async () => {
 });
 
 export { io };
+
+
+
 
 

@@ -2,6 +2,12 @@
 import nodemailer from "nodemailer";
 
 const APP_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const BACKEND_URL = process.env.BACKEND_URL || (process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace('bug-tracker-ui', 'bug-tracker-api') : "http://localhost:5000");
+
+// Build a magic link that auto-logs in the recipient
+function magicLink(token: string, redirect: string): string {
+  return `${BACKEND_URL}/api/v1/auth/email-login?token=${token}&redirect=${encodeURIComponent(redirect)}`;
+}
 
 // ─── Base HTML template ───
 const baseTemplate = (content: string) => `
@@ -108,9 +114,11 @@ async function sendEmail(to: string, subject: string, html: string) {
 export async function sendBugAssignedEmail(to: string, data: {
   assigneeName: string; bugTitle: string; severity: string;
   reporterName: string; projectName: string; description?: string;
+  loginToken?: string;
 }) {
   const severityBadge = data.severity === "critical" ? "badge-red" :
                         data.severity === "major"    ? "badge-amber" : "badge-blue";
+  const viewLink = data.loginToken ? magicLink(data.loginToken, "/dashboard/bugs") : `${APP_URL}/dashboard/bugs`;
   const html = baseTemplate(`
     <p>Hi <strong>${data.assigneeName}</strong>,</p>
     <p>A bug has been assigned to you in <strong>${data.projectName}</strong>.</p>
@@ -122,8 +130,8 @@ export async function sendBugAssignedEmail(to: string, data: {
         &nbsp; Reported by <strong>${data.reporterName}</strong>
       </p>
     </div>
-    <a href="${APP_URL}/dashboard/bugs" class="btn">View Bug →</a>
-    <p style="font-size:11px; color:#9ca3af; margin-top:8px;">Log in as <strong>${data.assigneeName}</strong> to view this bug.</p>
+    <a href="${viewLink}" class="btn">View Bug →</a>
+    <p style="font-size:11px; color:#9ca3af; margin-top:8px;">This link will log you in as <strong>${data.assigneeName}</strong> automatically.</p>
   `);
   await sendEmail(to, `🐛 Bug Assigned: ${data.bugTitle}`, html);
 }
@@ -145,11 +153,12 @@ export async function sendBugResolvedEmail(to: string, data: {
 
 export async function sendTaskAssignedEmail(to: string, data: {
   assigneeName: string; taskTitle: string; priority: string;
-  projectName: string; description?: string;
+  projectName: string; description?: string; loginToken?: string;
 }) {
   const priorityBadge = data.priority === "critical" ? "badge-red" :
                         data.priority === "high"     ? "badge-amber" :
                         data.priority === "medium"   ? "badge-purple" : "badge-blue";
+  const viewLink = data.loginToken ? magicLink(data.loginToken, "/dashboard/kanban") : `${APP_URL}/dashboard/kanban`;
   const html = baseTemplate(`
     <p>Hi <strong>${data.assigneeName}</strong>,</p>
     <p>A new task has been assigned to you in <strong>${data.projectName}</strong>.</p>
@@ -160,15 +169,17 @@ export async function sendTaskAssignedEmail(to: string, data: {
         <span class="badge ${priorityBadge}">${data.priority.toUpperCase()} PRIORITY</span>
       </p>
     </div>
-    <a href="${APP_URL}/dashboard/kanban" class="btn">View Task →</a>
+    <a href="${viewLink}" class="btn">View Task →</a>
+    <p style="font-size:11px; color:#9ca3af; margin-top:8px;">This link will log you in as <strong>${data.assigneeName}</strong> automatically.</p>
   `);
   await sendEmail(to, `📋 Task Assigned: ${data.taskTitle}`, html);
 }
 
 export async function sendCommentEmail(to: string, data: {
   recipientName: string; commenterName: string; bugTitle: string;
-  comment: string; projectName: string;
+  comment: string; projectName: string; loginToken?: string;
 }) {
+  const viewLink = data.loginToken ? magicLink(data.loginToken, "/dashboard/bugs") : `${APP_URL}/dashboard/bugs`;
   const html = baseTemplate(`
     <p>Hi <strong>${data.recipientName}</strong>,</p>
     <p><strong>${data.commenterName}</strong> left a comment on a bug in <strong>${data.projectName}</strong>.</p>
@@ -176,7 +187,8 @@ export async function sendCommentEmail(to: string, data: {
       <h3>💬 ${data.bugTitle}</h3>
       <p style="font-style:italic; color:#374151">"${data.comment}"</p>
     </div>
-    <a href="${APP_URL}/dashboard/bugs" class="btn">Reply →</a>
+    <a href="${viewLink}" class="btn">Reply →</a>
+    <p style="font-size:11px; color:#9ca3af; margin-top:8px;">This link will log you in as <strong>${data.recipientName}</strong> automatically.</p>
   `);
   await sendEmail(to, `💬 New comment on: ${data.bugTitle}`, html);
 }
