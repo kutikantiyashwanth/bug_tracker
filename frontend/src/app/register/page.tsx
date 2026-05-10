@@ -115,7 +115,7 @@ export default function RegisterPage() {
           <div className="mt-16 animate-slide-up" style={{ animationDelay: "100ms" }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-100 bg-indigo-50 mb-6">
               <Zap className="h-3.5 w-3.5 text-indigo-600" />
-              <span className="text-indigo-600 text-xs font-bold uppercase tracking-widest">Accelerate Your Workflow</span>
+              <span className="text-indigo-600 text-xs font-bold uppercase tracking-widest">Free for student teams</span>
             </div>
             <h1 className="text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
               Join your team.<br />
@@ -124,7 +124,7 @@ export default function RegisterPage() {
               </span>
             </h1>
             <p className="text-slate-500 mt-4 text-base leading-relaxed max-w-sm">
-              The next-generation bug tracking platform built for high-performance student teams and engineering squads.
+              A bug tracking and project management platform built for student teams.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export default function RegisterPage() {
             <div className="animate-fade-in space-y-8">
               <div className="space-y-2">
                 <h2 className="text-4xl font-black text-slate-900 tracking-tight">Create account</h2>
-                <p className="text-slate-500 font-medium text-sm">Join the next-gen engineering workspace.</p>
+                <p className="text-slate-500 font-medium text-sm">Fill in your details to get started.</p>
               </div>
 
               <div className="space-y-4">
@@ -328,10 +328,6 @@ export default function RegisterPage() {
                     {role === "developer" && "💻 Developers can create tasks, fix bugs, and collaborate"}
                     {role === "tester" && "🧪 Testers can report bugs, test features, and provide feedback"}
                   </p>
-                  {/* DEBUG: Show current role value */}
-                  <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                    <strong>DEBUG - Current role value:</strong> {role}
-                  </div>
                 </div>
               </div>
 
@@ -343,8 +339,9 @@ export default function RegisterPage() {
               )}
 
               <button onClick={handleNext}
-                className="w-full h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 transition-all group bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700">
-                <span>Continue Registration</span>
+                className="w-full h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 transition-all group bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700"
+                style={{ transform: "none" }}>
+                <span>Continue</span>
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
@@ -360,13 +357,13 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="animate-scale-in space-y-8">
               <div className="space-y-2">
                 <h2 className="text-4xl font-black text-slate-900 tracking-tight">Your skills</h2>
-                <p className="text-slate-500 font-medium text-sm">Help your team know what you do</p>
+                <p className="text-slate-500 font-medium text-sm">Add skills so your team knows what you work on. You can skip this.</p>
               </div>
 
               {/* Skills */}
               <div className="space-y-3">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                  Technical Arsenal <span className="text-slate-300 normal-case font-medium ml-1">(Optional)</span>
+                  Skills <span className="text-slate-300 normal-case font-medium ml-1">(Optional)</span>
                 </label>
 
                 {skills.length > 0 && (
@@ -424,7 +421,7 @@ export default function RegisterPage() {
                   {isLoading
                     ? <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
                     : <>
-                        <span>Initialize Profile</span>
+                        <span>Create Account</span>
                         <CheckCircle2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
                       </>
                   }
