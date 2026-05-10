@@ -1150,15 +1150,15 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
       await prisma.notification.create({
         data: {
           userId,
-          type: "BUG_RESOLVED",
-          title: `ðŸ’¬ Comment on "${bug.title}"`,
+          type: "BUG_ASSIGNED",
+          title: `💬 Comment on "${bug.title}"`,
           message: `${commenter?.name || "Someone"}: ${content.trim().substring(0, 80)}`,
           link: `/dashboard/bugs`,
         },
       });
       io.to(`user:${userId}`).emit("notification", {
-        type: "comment",
-        title: `New comment on "${bug.title}"`,
+        type: "BUG_ASSIGNED",
+        title: `💬 New comment on "${bug.title}"`,
       });
 
       // Send email
@@ -1517,3 +1517,5 @@ httpServer.listen(PORT, "0.0.0.0", async () => {
 });
 
 export { io };
+
+
