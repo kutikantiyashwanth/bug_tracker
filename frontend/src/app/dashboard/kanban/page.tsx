@@ -112,13 +112,20 @@ export default function KanbanPage() {
     setShowCreateDialog(false);
   };
 
+  // Convert UTC ISO string → local datetime-local input value (avoids timezone shift on edit)
+  const toLocalInput = (iso: string) => {
+    const d = new Date(iso);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
+  };
+
   const openEditDialog = (task: Task) => {
     setEditTask(task);
     setFormTitle(task.title);
     setFormDesc(task.description);
     setFormPriority(task.priority);
     setFormAssignee(task.assigneeId || "");
-    setFormDueDate(task.dueDate ? task.dueDate.slice(0, 16) : "");
+    setFormDueDate(task.dueDate ? toLocalInput(task.dueDate) : "");
     setFormTags(task.tags?.join(", ") || "");
     setShowEditMenu(null);
   };

@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 /* eslint-disable */
 // Load env vars FIRST before anything else
 require('dotenv').config();
@@ -31,7 +31,7 @@ const io = new Server(httpServer, {
   },
 });
 
-// ─── Middleware ───
+// â”€â”€â”€ Middleware â”€â”€â”€
 app.use(cors({
   origin: function(origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
@@ -56,9 +56,9 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Cache-Control headers for GET requests ───
+// â”€â”€â”€ Cache-Control headers for GET requests â”€â”€â”€
 // Tells the browser/axios to treat responses as fresh for 30s,
-// then revalidate — keeps page loads fast without stale data.
+// then revalidate â€” keeps page loads fast without stale data.
 app.use((req, res, next) => {
   if (req.method === "GET") {
     res.setHeader("Cache-Control", "private, max-age=30, stale-while-revalidate=60");
@@ -68,8 +68,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// ─── In-Memory Cache ───
-// Lightweight TTL cache — avoids repeated DB hits for hot read endpoints.
+// â”€â”€â”€ In-Memory Cache â”€â”€â”€
+// Lightweight TTL cache â€” avoids repeated DB hits for hot read endpoints.
 // Falls back gracefully: cache miss = DB query, no external dependency.
 interface CacheEntry { data: any; expiresAt: number }
 const memCache = new Map<string, CacheEntry>();
@@ -105,7 +105,7 @@ const createNotification = async (data: {
   return notif;
 };
 
-// ─── Auth Middleware ───
+// â”€â”€â”€ Auth Middleware â”€â”€â”€
 const authMiddleware = async (req: any, res: any, next: any) => {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -132,7 +132,7 @@ export const addLog = (msg: string) => {
   console.log(log);
 };
 
-// ─── Health Check ───
+// â”€â”€â”€ Health Check â”€â”€â”€
 app.get("/api/v1/health", (_req, res) => {
   res.json({
     status: "ok",
@@ -148,14 +148,14 @@ app.get("/api/v1/health", (_req, res) => {
   });
 });
 
-// ─── Debug Logs ───
+// â”€â”€â”€ Debug Logs â”€â”€â”€
 app.get("/api/v1/debug-logs", (req: any, res) => {
-  // Simple check — only allow if secret matches or simple query param for now
+  // Simple check â€” only allow if secret matches or simple query param for now
   res.send(`
     <html>
       <head><title>Server Logs</title><style>body{background:#1a1a1a;color:#0f0;font-family:monospace;padding:20px;line-height:1.4}h1{color:#fff}</style></head>
       <body>
-        <h1>📜 Backend Debug Logs</h1>
+        <h1>ðŸ“œ Backend Debug Logs</h1>
         <div style="background:#000;padding:15px;border-radius:8px;border:1px solid #333">
           ${serverLogs.slice().reverse().map(l => `<div>${l}</div>`).join('')}
         </div>
@@ -165,12 +165,12 @@ app.get("/api/v1/debug-logs", (req: any, res) => {
   `);
 });
 
-// ─── Auth Routes ───
+// â”€â”€â”€ Auth Routes â”€â”€â”€
 app.post("/api/v1/auth/register", async (req, res) => {
   try {
     const { email, name, password, role, skills } = req.body;
 
-    console.log("📝 Registration request received:", { email, name, role, skills });
+    console.log("ðŸ“ Registration request received:", { email, name, role, skills });
 
     if (!email || !name || !password) {
       return res.status(400).json({ error: "Email, name, and password are required" });
@@ -184,7 +184,7 @@ app.post("/api/v1/auth/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const mappedRole = role?.toUpperCase() || "DEVELOPER";
-    console.log("🔄 Role mapping:", { received: role, mapped: mappedRole });
+    console.log("ðŸ”„ Role mapping:", { received: role, mapped: mappedRole });
 
     const user = await prisma.user.create({
       data: {
@@ -204,7 +204,7 @@ app.post("/api/v1/auth/register", async (req, res) => {
       },
     });
 
-    console.log("✅ User created successfully:", { id: user.id, email: user.email, role: user.role });
+    console.log("âœ… User created successfully:", { id: user.id, email: user.email, role: user.role });
 
     const token = jwt.sign(
       { userId: user.id, email: user.email },
@@ -283,7 +283,7 @@ app.get("/api/v1/auth/me", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── Update profile ───
+// â”€â”€â”€ Update profile â”€â”€â”€
 app.patch("/api/v1/auth/profile", authMiddleware, async (req: any, res) => {
   try {
     const { name, skills } = req.body;
@@ -301,7 +301,7 @@ app.patch("/api/v1/auth/profile", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── Change password ───
+// â”€â”€â”€ Change password â”€â”€â”€
 app.patch("/api/v1/auth/password", authMiddleware, async (req: any, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -322,7 +322,7 @@ app.patch("/api/v1/auth/password", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── Project Routes ───
+// â”€â”€â”€ Project Routes â”€â”€â”€
 app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
   try {
     const cacheKey = `projects:${req.user.userId}`;
@@ -350,9 +350,9 @@ app.get("/api/v1/projects", authMiddleware, async (req: any, res) => {
       orderBy: { updatedAt: "desc" },
     });
 
-    console.log(`📋 Fetched ${projects.length} projects for user ${req.user.userId}`);
+    console.log(`ðŸ“‹ Fetched ${projects.length} projects for user ${req.user.userId}`);
     if (projects.length > 0) {
-      console.log(`🔑 First project invite code: ${projects[0].inviteCode}`);
+      console.log(`ðŸ”‘ First project invite code: ${projects[0].inviteCode}`);
     }
 
     mc.set(cacheKey, projects, 120_000); // 2 min cache
@@ -396,7 +396,7 @@ app.post("/api/v1/projects", authMiddleware, async (req: any, res) => {
       },
     });
 
-    console.log("✅ Project created with invite code:", project.inviteCode);
+    console.log("âœ… Project created with invite code:", project.inviteCode);
 
     mc.del(`projects:${req.user.userId}`);
     res.status(201).json({
@@ -471,7 +471,7 @@ app.post("/api/v1/projects/join", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── Task Routes ───
+// â”€â”€â”€ Task Routes â”€â”€â”€
 app.get("/api/v1/projects/:projectId/tasks", authMiddleware, async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -504,7 +504,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
 
     if (!title) return res.status(400).json({ error: "Task title is required" });
 
-    // Convert frontend lowercase enums → DB uppercase
+    // Convert frontend lowercase enums â†’ DB uppercase
     const dbStatus   = (status   || "backlog").toUpperCase().replace("-", "_");
     const dbPriority = (priority || "medium").toUpperCase();
 
@@ -540,7 +540,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
     // Notify assignee if different from creator
     if (assigneeId && assigneeId !== req.user.userId) {
       const dueDateStr = dueDate
-        ? new Date(dueDate).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })
+        ? new Date(dueDate).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC", timeZoneName: "short" })
         : null;
 
       await prisma.notification.create({
@@ -548,7 +548,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
           userId: assigneeId,
           type: "TASK_ASSIGNED",
           title: "New Task Assigned",
-          message: `You have been assigned to "${task.title}"${dueDateStr ? ` — Due: ${dueDateStr}` : ""}`,
+          message: `You have been assigned to "${task.title}"${dueDateStr ? ` â€” Due: ${dueDateStr}` : ""}`,
           link: `/dashboard/kanban`,
         },
       });
@@ -566,7 +566,7 @@ app.post("/api/v1/projects/:projectId/tasks", authMiddleware, async (req: any, r
           priority: dbPriority.toLowerCase(),
           projectName: project?.name || "Your Project",
           description: dueDateStr
-            ? `${description || ""}\n\n⏰ Deadline: ${dueDateStr}`.trim()
+            ? `${description || ""}\n\nâ° Deadline: ${dueDateStr}`.trim()
             : description,
         }).then(() => console.log(`[Email] Task assigned email sent to ${assignee.email}`))
           .catch((err: any) => console.error(`[Email] Failed to send task assigned email:`, err.message));
@@ -599,7 +599,7 @@ app.patch("/api/v1/tasks/:taskId", authMiddleware, async (req: any, res) => {
       },
     });
 
-    // If due date was updated and task has an assignee → notify them
+    // If due date was updated and task has an assignee â†’ notify them
     if (updates.dueDate && task.assigneeId && task.assigneeId !== req.user.userId) {
       const dueDateStr = new Date(updates.dueDate).toLocaleString("en-US", {
         weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
@@ -608,7 +608,7 @@ app.patch("/api/v1/tasks/:taskId", authMiddleware, async (req: any, res) => {
         data: {
           userId: task.assigneeId,
           type: "DEADLINE_REMINDER",
-          title: `📅 Deadline Set: "${task.title}"`,
+          title: `ðŸ“… Deadline Set: "${task.title}"`,
           message: `Your deadline has been set to ${dueDateStr}`,
           link: `/dashboard/kanban`,
         },
@@ -623,7 +623,7 @@ app.patch("/api/v1/tasks/:taskId", authMiddleware, async (req: any, res) => {
           taskTitle: task.title,
           priority: (task.priority || "MEDIUM").toLowerCase(),
           projectName: "Your Project",
-          description: `⏰ Your deadline has been set to: ${dueDateStr}`,
+          description: `â° Your deadline has been set to: ${dueDateStr}`,
         });
       }
     }
@@ -652,7 +652,7 @@ app.delete("/api/v1/tasks/:taskId", authMiddleware, async (req, res) => {
   }
 });
 
-// ─── Bug Routes ───
+// â”€â”€â”€ Bug Routes â”€â”€â”€
 app.get("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, res) => {
   try {
     const { projectId } = req.params;
@@ -690,7 +690,7 @@ app.post("/api/v1/projects/:projectId/bugs", authMiddleware, async (req: any, re
 
     if (!title) return res.status(400).json({ error: "Bug title is required" });
 
-    // Convert frontend lowercase → DB uppercase
+    // Convert frontend lowercase â†’ DB uppercase
     const dbSeverity = (severity || "major").toUpperCase();
 
     const bug = await prisma.bug.create({
@@ -768,7 +768,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
     const { bugId } = req.params;
     const updates = req.body;
 
-    // Convert lowercase enums → uppercase for Prisma
+    // Convert lowercase enums â†’ uppercase for Prisma
     if (updates.status)   updates.status   = updates.status.toUpperCase().replace("-", "_");
     if (updates.severity) updates.severity = updates.severity.toUpperCase();
 
@@ -784,7 +784,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
       },
     });
 
-    // ── Notify new assignee when assigneeId changes ──
+    // â”€â”€ Notify new assignee when assigneeId changes â”€â”€
     const newAssigneeId = updates.assigneeId;
     const oldAssigneeId = existingBug?.assigneeId;
     if (
@@ -824,7 +824,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
       }
     }
 
-    // If marked resolved → notify reporter AND project owner
+    // If marked resolved â†’ notify reporter AND project owner
     if (updates.status === "RESOLVED" && bug.reporterId !== req.user.userId) {
       const resolver = await prisma.user.findUnique({ where: { id: req.user.userId } });
       const project = await prisma.project.findUnique({ where: { id: bug.projectId } });
@@ -838,7 +838,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
           data: {
             userId: uid,
             type: "BUG_RESOLVED",
-            title: `✅ Bug Resolved: "${bug.title}"`,
+            title: `âœ… Bug Resolved: "${bug.title}"`,
             message: `${resolver?.name || "Developer"} marked this bug as resolved. Please review and close.`,
             link: `/dashboard/bugs`,
           },
@@ -880,7 +880,7 @@ app.patch("/api/v1/bugs/:bugId", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── GitHub Link Routes ───
+// â”€â”€â”€ GitHub Link Routes â”€â”€â”€
 // GET all links for a project
 app.get("/api/v1/projects/:projectId/github-links", authMiddleware, async (req, res) => {
   try {
@@ -950,7 +950,7 @@ app.put("/api/v1/projects/:projectId/github-repo", authMiddleware, async (req, r
   }
 });
 
-// ─── Sprint Routes ───
+// â”€â”€â”€ Sprint Routes â”€â”€â”€
 // GET all sprints for a project
 app.get("/api/v1/projects/:projectId/sprints", authMiddleware, async (req, res) => {
   try {
@@ -1019,7 +1019,7 @@ app.delete("/api/v1/sprints/:sprintId", authMiddleware, async (req, res) => {
   }
 });
 
-// ─── AI Bug Analysis ───
+// â”€â”€â”€ AI Bug Analysis â”€â”€â”€
 app.post("/api/v1/ai/analyze-bug", authMiddleware, async (req: any, res) => {
   try {
     const { title = "", description = "", stepsToReproduce = "" } = req.body;
@@ -1028,35 +1028,35 @@ app.post("/api/v1/ai/analyze-bug", authMiddleware, async (req: any, res) => {
     let severity = "minor";
     let reason = "Appears to be a low-impact cosmetic issue";
     let priority = "low";
-    let estimatedTime = "30 min – 1 hour";
+    let estimatedTime = "30 min â€“ 1 hour";
     const tags: string[] = [];
 
-    // ── Critical patterns ──
+    // â”€â”€ Critical patterns â”€â”€
     if (text.match(/crash|system down|not working|cannot login|unable to login|blocked|data loss|data breach|security|payment fail|production down|urgent|critical|500 error|database error|server error|infinite loop|memory leak|null pointer|unhandled exception/)) {
       severity = "critical";
-      reason = "Keywords indicate a critical blocking issue — system crash, security risk, or data loss";
+      reason = "Keywords indicate a critical blocking issue â€” system crash, security risk, or data loss";
       priority = "critical";
-      estimatedTime = "2–4 hours";
+      estimatedTime = "2â€“4 hours";
       tags.push("critical", "urgent", "blocking");
     }
-    // ── Major patterns ──
+    // â”€â”€ Major patterns â”€â”€
     else if (text.match(/error|fail|wrong|incorrect|missing|broken|bug|issue|problem|not load|doesn't work|404|null|undefined|exception|invalid|unexpected|cannot|unable|won't|doesn't|not showing|not saving|not updating/)) {
       severity = "major";
       reason = "Keywords indicate a significant functional issue affecting core features";
       priority = "high";
-      estimatedTime = "3–6 hours";
+      estimatedTime = "3â€“6 hours";
       tags.push("bug", "functional");
     }
-    // ── Minor patterns ──
+    // â”€â”€ Minor patterns â”€â”€
     else {
       severity = "minor";
       reason = "Appears to be a minor UI, cosmetic, or low-impact issue";
       priority = "low";
-      estimatedTime = "30 min – 1 hour";
+      estimatedTime = "30 min â€“ 1 hour";
       tags.push("ui", "minor");
     }
 
-    // ── Category detection ──
+    // â”€â”€ Category detection â”€â”€
     if (text.match(/login|logout|auth|password|token|session|jwt|oauth|signup|register/)) tags.push("authentication");
     if (text.match(/ui|button|style|color|layout|display|visual|css|design|icon|font|spacing|alignment/)) tags.push("ui");
     if (text.match(/api|request|response|endpoint|fetch|axios|http|rest|graphql|websocket/)) tags.push("api");
@@ -1068,7 +1068,7 @@ app.post("/api/v1/ai/analyze-bug", authMiddleware, async (req: any, res) => {
     if (text.match(/payment|billing|invoice|subscription|stripe|paypal/)) tags.push("payments");
     if (text.match(/search|filter|sort|pagination|query/)) tags.push("search");
 
-    // ── Suggested assignee role ──
+    // â”€â”€ Suggested assignee role â”€â”€
     const suggestedRole = severity === "critical" ? "Senior Developer" :
                           severity === "major"    ? "Developer" : "Junior Developer / Tester";
 
@@ -1090,7 +1090,7 @@ app.post("/api/v1/ai/analyze-bug", authMiddleware, async (req: any, res) => {
   }
 });
 
-// ─── Comment Routes ───
+// â”€â”€â”€ Comment Routes â”€â”€â”€
 app.get("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) => {
   try {
     const comments = await prisma.comment.findMany({
@@ -1125,8 +1125,8 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
     });
 
     // Notify the other party:
-    // If developer comments → notify reporter AND project owner (admin)
-    // If admin/reporter comments → notify assignee (developer)
+    // If developer comments â†’ notify reporter AND project owner (admin)
+    // If admin/reporter comments â†’ notify assignee (developer)
     const commenter = await prisma.user.findUnique({ where: { id: req.user.userId } });
 
     // Get project owner
@@ -1134,12 +1134,12 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
     const notifyUserIds = new Set<string>();
 
     if (req.user.userId === bug.assigneeId) {
-      // Developer commenting → notify reporter
+      // Developer commenting â†’ notify reporter
       if (bug.reporterId) notifyUserIds.add(bug.reporterId);
       // Also notify project owner (admin) if different
       if (project?.ownerId) notifyUserIds.add(project.ownerId);
     } else {
-      // Reporter/admin commenting → notify assignee (developer)
+      // Reporter/admin commenting â†’ notify assignee (developer)
       if (bug.assigneeId) notifyUserIds.add(bug.assigneeId);
     }
 
@@ -1151,7 +1151,7 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
         data: {
           userId,
           type: "BUG_RESOLVED",
-          title: `💬 Comment on "${bug.title}"`,
+          title: `ðŸ’¬ Comment on "${bug.title}"`,
           message: `${commenter?.name || "Someone"}: ${content.trim().substring(0, 80)}`,
           link: `/dashboard/bugs`,
         },
@@ -1182,7 +1182,7 @@ app.post("/api/v1/bugs/:bugId/comments", authMiddleware, async (req: any, res) =
   }
 });
 
-// ─── Notification Routes ───
+// â”€â”€â”€ Notification Routes â”€â”€â”€
 app.get("/api/v1/notifications", authMiddleware, async (req: any, res) => {
   try {
     const cacheKey = `notifs:${req.user.userId}`;
@@ -1195,7 +1195,7 @@ app.get("/api/v1/notifications", authMiddleware, async (req: any, res) => {
       take: 50,
     });
 
-    mc.set(cacheKey, notifications, 30_000); // 30s — notifications
+    mc.set(cacheKey, notifications, 30_000); // 30s â€” notifications
     res.json({ success: true, data: notifications });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -1248,9 +1248,9 @@ app.get("/api/v1/projects/:projectId/activities", authMiddleware, async (req, re
   }
 });
 
-// ─── Socket.io ───
+// â”€â”€â”€ Socket.io â”€â”€â”€
 io.on("connection", (socket) => {
-  console.log(`🔌 User connected: ${socket.id}`);
+  console.log(`ðŸ”Œ User connected: ${socket.id}`);
 
   // Join personal room for notifications
   socket.on("join-user", (userId: string) => {
@@ -1274,11 +1274,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`🔌 User disconnected: ${socket.id}`);
+    console.log(`ðŸ”Œ User disconnected: ${socket.id}`);
   });
 });
 
-// ─── Deadline Reminder Job (runs every hour) ───
+// â”€â”€â”€ Deadline Reminder Job (runs every hour) â”€â”€â”€
 const checkDeadlines = async () => {
   try {
     const now = new Date();
@@ -1319,7 +1319,7 @@ const checkDeadlines = async () => {
         data: {
           userId: task.assigneeId,
           type: "DEADLINE_REMINDER",
-          title: `⏰ Deadline ${daysLeft <= 1 ? "Tomorrow!" : `in ${daysLeft} days`}`,
+          title: `â° Deadline ${daysLeft <= 1 ? "Tomorrow!" : `in ${daysLeft} days`}`,
           message: `Task "${task.title}" is due ${daysLeft <= 1 ? "tomorrow" : `in ${daysLeft} days`}`,
           link: `/dashboard/kanban`,
         },
@@ -1334,7 +1334,7 @@ const checkDeadlines = async () => {
         sendDeadlineReminderEmail(task.assignee.email, {
           recipientName: task.assignee.name,
           taskTitle: task.title,
-          dueDate: new Date(task.dueDate!).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+          dueDate: new Date(task.dueDate!).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC", timeZoneName: "short" }),
           daysLeft,
           projectName: task.project?.name || "Your Project",
         });
@@ -1353,7 +1353,7 @@ setInterval(checkDeadlines, 60 * 60 * 1000);
 // Also run once on startup after 30 seconds
 setTimeout(checkDeadlines, 30 * 1000);
 
-// ─── Analytics Endpoint ───
+// â”€â”€â”€ Analytics Endpoint â”€â”€â”€
 app.get("/api/v1/projects/:projectId/analytics", authMiddleware, async (req: any, res) => {
   try {
     const { projectId } = req.params;
@@ -1448,7 +1448,7 @@ app.get("/api/v1/projects/:projectId/analytics", authMiddleware, async (req: any
   }
 });
 
-// ─── Test Email Route ───
+// â”€â”€â”€ Test Email Route â”€â”€â”€
 app.post("/api/v1/test-email", authMiddleware, async (req: any, res) => {
   try {
     const { to } = req.body;
@@ -1456,24 +1456,24 @@ app.post("/api/v1/test-email", authMiddleware, async (req: any, res) => {
 
     addLog(`[TestEmail] Sending test email to: ${to}`);
     const { sendEmail } = require("./lib/email");
-    await sendEmail(to, "🐛 Test Email — Bug Tracker", `
+    await sendEmail(to, "ðŸ› Test Email â€” Bug Tracker", `
       <div style="font-family:sans-serif;padding:24px;background:#f9fafb;border-radius:12px;max-width:500px">
-        <h2 style="color:#6c5ce7">✅ Email is Working!</h2>
+        <h2 style="color:#6c5ce7">âœ… Email is Working!</h2>
         <p>This is a test email from your <strong>Student Bug Tracker</strong> backend.</p>
         <p>If you received this, email notifications are correctly configured.</p>
-        <p style="color:#9ca3af;font-size:12px">Sent via Resend API · ${new Date().toISOString()}</p>
+        <p style="color:#9ca3af;font-size:12px">Sent via Resend API Â· ${new Date().toISOString()}</p>
       </div>
     `);
-    addLog(`[TestEmail] ✅ Test email sent to ${to}`);
+    addLog(`[TestEmail] âœ… Test email sent to ${to}`);
     res.json({ success: true, message: `Test email sent to ${to}. Check debug logs at /api/v1/debug-logs` });
   } catch (error: any) {
-    addLog(`[TestEmail] ❌ Failed: ${error.message}`);
+    addLog(`[TestEmail] âŒ Failed: ${error.message}`);
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
 
-// ─── Start Server ───
+// â”€â”€â”€ Start Server â”€â”€â”€
 const PORT = parseInt(process.env.PORT || "5000", 10);
 
 // Handle uncaught errors gracefully so server stays up
@@ -1485,11 +1485,11 @@ process.on("unhandledRejection", (reason) => {
 });
 
 httpServer.listen(PORT, "0.0.0.0", async () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🗄️  DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
-  console.log(`🔑 JWT_SECRET set: ${!!process.env.JWT_SECRET}`);
+  console.log(`âœ… Server running on port ${PORT}`);
+  console.log(`ðŸ—„ï¸  DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
+  console.log(`ðŸ”‘ JWT_SECRET set: ${!!process.env.JWT_SECRET}`);
 
-  // ── Auto-seed demo accounts on startup ──
+  // â”€â”€ Auto-seed demo accounts on startup â”€â”€
   try {
     const bcrypt = require("bcryptjs");
     const hashedPassword = await bcrypt.hash("password123", 10);
@@ -1510,9 +1510,9 @@ httpServer.listen(PORT, "0.0.0.0", async () => {
       update: {},
       create: { name: "Tester User", email: "tester@test.com", password: hashedPassword, role: "TESTER", skills: ["QA", "Testing"] },
     });
-    console.log("✅ Demo accounts ready: admin@test.com / dev@test.com / tester@test.com (password: password123)");
+    console.log("âœ… Demo accounts ready: admin@test.com / dev@test.com / tester@test.com (password: password123)");
   } catch (err) {
-    console.error("⚠️  Auto-seed failed (non-fatal):", err.message);
+    console.error("âš ï¸  Auto-seed failed (non-fatal):", err.message);
   }
 });
 
