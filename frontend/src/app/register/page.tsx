@@ -194,7 +194,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-[400px] py-4">
 
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
+          <div className="flex items-center gap-2 mb-6 lg:hidden">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-indigo-600">
               <Bug className="h-4 w-4 text-white" />
             </div>
@@ -202,7 +202,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Progress bar */}
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-5">
             <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-100">
               <div className="h-full rounded-full transition-all duration-500 bg-indigo-600"
                 style={{ width: step === 1 ? "50%" : "100%" }} />
@@ -212,22 +212,23 @@ export default function RegisterPage() {
 
           {/* — STEP 1 — */}
           {step === 1 && (
-            <div className="animate-fade-in space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-4xl font-black text-slate-900 tracking-tight">Create account</h2>
+            <div className="animate-fade-in space-y-5">
+              <div className="space-y-1">
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Create account</h2>
                 <p className="text-slate-500 font-medium text-sm">Fill in your details to get started.</p>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
+              <div className="space-y-3">
+                {/* Name */}
+                <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Name</label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
                     <input
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className={cn(inputBase, "pl-12 h-14 text-base shadow-sm")}
+                      className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -235,16 +236,17 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Email */}
+                <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email Address</label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
                     <input
                       type="email"
                       placeholder="you@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={cn(inputBase, "pl-12 h-14 text-base shadow-sm")}
+                      className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -252,30 +254,31 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Password */}
+                <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Password</label>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
                     <input
                       type={showPw ? "text" : "password"}
                       placeholder="Min 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={cn(inputBase, "pl-12 pr-12 h-14 text-base shadow-sm")}
+                      className={cn(inputBase, "pl-11 pr-11 h-12 text-sm shadow-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
                     />
                     <button type="button" onClick={() => setShowPw(!showPw)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
-                      {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   {password.length > 0 && (
-                    <div className="flex items-center gap-2 mt-1.5">
+                    <div className="flex items-center gap-2">
                       <div className="flex gap-1 flex-1">
                         {[1,2,3].map((i) => (
-                          <div key={i} className={cn("h-1.5 flex-1 rounded-full transition-all duration-300",
+                          <div key={i} className={cn("h-1 flex-1 rounded-full transition-all duration-300",
                             i <= pwStrength ? pwBar[pwStrength] : "bg-slate-100"
                           )} />
                         ))}
@@ -287,15 +290,14 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                <div className="space-y-2">
+                {/* Role */}
+                <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Your Role</label>
                   <div className="relative group">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-indigo-600 transition-colors z-10 pointer-events-none" />
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 z-10 pointer-events-none" />
                     <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-                      <SelectTrigger className={cn(inputBase, "pl-12 h-14 text-base shadow-sm border border-slate-200")}
-                        style={inputStyle}
-                        onFocus={onFocusInput}
-                        onBlur={onBlurInput}>
+                      <SelectTrigger className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm border border-slate-200")}
+                        style={inputStyle}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -303,7 +305,7 @@ export default function RegisterPage() {
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-blue-500" />
                             <span className="font-bold">Developer</span>
-                            <span className="text-xs text-slate-400">- Build features & fix bugs</span>
+                            <span className="text-xs text-slate-400">- Build & fix bugs</span>
                           </div>
                         </SelectItem>
                         <SelectItem value="tester">
@@ -323,26 +325,20 @@ export default function RegisterPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-medium ml-1">
-                    {role === "admin" && "👑 Admins can manage projects, users, and all settings"}
-                    {role === "developer" && "💻 Developers can create tasks, fix bugs, and collaborate"}
-                    {role === "tester" && "🧪 Testers can report bugs, test features, and provide feedback"}
-                  </p>
                 </div>
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50 animate-fade-in">
+                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
                   <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
                   <span className="text-rose-600 font-medium">{error}</span>
                 </div>
               )}
 
-              <button onClick={handleNext}
-                className="w-full h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 transition-all group bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700"
-                style={{ transform: "none" }}>
+              <button onClick={handleNext} style={{ transform: "none" }}
+                className="w-full h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors">
                 <span>Continue</span>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4" />
               </button>
 
               <p className="text-center text-sm font-medium text-slate-500">
