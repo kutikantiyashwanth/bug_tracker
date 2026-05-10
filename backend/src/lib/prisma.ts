@@ -12,7 +12,9 @@ function getPrisma(): PrismaClient {
       log: process.env.NODE_ENV === 'production' ? ['error'] : ['error', 'warn'],
       datasources: {
         db: {
-          url: process.env.DATABASE_URL,
+          // connection_limit=5 keeps pool small for Render free tier (512MB RAM)
+          // connect_timeout=10 fails fast on cold DB connections
+          url: process.env.DATABASE_URL + (process.env.DATABASE_URL?.includes('?') ? '&' : '?') + 'connection_limit=5&connect_timeout=10',
         },
       },
     });

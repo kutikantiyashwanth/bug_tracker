@@ -192,7 +192,7 @@
 }
 
 .animate-slide-up {
-  animation: slide-up 0.5s ease-out forwards;
+  animation: slide-up 0.25s ease-out forwards;
 }
 
 /* --- Custom Components --- */

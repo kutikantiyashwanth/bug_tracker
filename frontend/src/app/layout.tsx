@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { BackendWakeup } from "@/components/BackendWakeup";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -25,7 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to backend — opens TCP before first API call */}
+        <link rel="preconnect" href="https://bug-tracker-api-d117.onrender.com" />
+        <link rel="dns-prefetch" href="https://bug-tracker-api-d117.onrender.com" />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
+        <BackendWakeup />
         {children}
       </body>
     </html>
