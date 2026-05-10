@@ -43,6 +43,7 @@ const baseTemplate = (content: string) => `
     </div>
     <div class="footer">
       <p>You received this because you're a member of a Bug Tracker project.</p>
+      <p style="margin-top:4px; color:#9ca3af; font-size:11px;">⚠️ Make sure you are logged in with <strong>your own account</strong> before clicking any links above.</p>
       <p style="margin-top:4px"><a href="${APP_URL}" style="color:#6c5ce7">Open Bug Tracker</a></p>
     </div>
   </div>
@@ -122,6 +123,7 @@ export async function sendBugAssignedEmail(to: string, data: {
       </p>
     </div>
     <a href="${APP_URL}/dashboard/bugs" class="btn">View Bug →</a>
+    <p style="font-size:11px; color:#9ca3af; margin-top:8px;">Log in as <strong>${data.assigneeName}</strong> to view this bug.</p>
   `);
   await sendEmail(to, `🐛 Bug Assigned: ${data.bugTitle}`, html);
 }
