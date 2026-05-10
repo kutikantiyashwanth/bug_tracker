@@ -5,6 +5,7 @@
 -- ═══════════════════════════════════════════════════════════
 
 
+
 -- ─── 1. DASHBOARD SUMMARY (run this first) ───────────────
 SELECT 
   (SELECT COUNT(*) FROM users)         AS total_users,
