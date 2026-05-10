@@ -15,6 +15,7 @@ router.post('/register',
   validate, register
 );
 
+
 router.post('/login',
   [
     body('email').isEmail().withMessage('Invalid email').normalizeEmail(),
