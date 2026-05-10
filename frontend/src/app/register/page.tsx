@@ -72,6 +72,7 @@ export default function RegisterPage() {
   const onFocusInput = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.style.border = "1px solid rgba(99,102,241,0.5)";
     e.currentTarget.style.boxShadow = "0 0 0 4px rgba(99,102,241,0.1)";
+    
   };
   const onBlurInput = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.style.border = "1px solid #e2e8f0";
