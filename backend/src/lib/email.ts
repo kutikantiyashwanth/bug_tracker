@@ -2,7 +2,7 @@
 import nodemailer from "nodemailer";
 
 const APP_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-const BACKEND_URL = process.env.BACKEND_URL || (process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace('bug-tracker-ui', 'bug-tracker-api') : "http://localhost:5000");
+const BACKEND_URL = process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || "http://localhost:5000";
 
 // Build a magic link that auto-logs in the recipient
 function magicLink(token: string, redirect: string): string {
