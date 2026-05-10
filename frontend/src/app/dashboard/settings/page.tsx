@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getInitials } from "@/lib/utils";
 import { User, Shield, Bell, Save, Check, X, Plus, Eye, EyeOff, AlertCircle } from "lucide-react";
 import type { Role } from "@/lib/types";
@@ -19,7 +18,6 @@ export default function SettingsPage() {
   // Profile state
   const [name,   setName]   = useState(currentUser?.name  || "");
   const [email,  setEmail]  = useState(currentUser?.email || "");
-  const [role,   setRole]   = useState<Role>((currentUser?.role?.toLowerCase() as Role) || "developer");
   const [skills, setSkills] = useState<string[]>(currentUser?.skills || []);
   const [newSkill, setNewSkill] = useState("");
   const [profileSaving, setProfileSaving] = useState(false);

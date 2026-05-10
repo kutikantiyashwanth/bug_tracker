@@ -322,7 +322,7 @@ export default function BugsPage() {
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
               <SelectTrigger className="w-32 md:w-40 h-12 rounded-2xl border-transparent bg-white shadow-sm font-bold text-[10px] md:text-xs shrink-0">
-                <SelectValue placeholder="Lifecycle" />
+                <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
@@ -632,8 +632,8 @@ export default function BugsPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                       <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Functional Impact</h4>
-                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{bug.description || "No context provided."}</p>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Description</h4>
+                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{bug.description || "No description provided."}</p>
                       </div>
 
                       {bug.stepsToReproduce && (
@@ -658,7 +658,7 @@ export default function BugsPage() {
                       )}
 
                       <div className="premium-card !p-6 bg-slate-50 border-slate-200">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Resolution Ownership</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Assigned To</h4>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
@@ -666,11 +666,15 @@ export default function BugsPage() {
                             </Avatar>
                             <div>
                               <p className="text-sm font-bold text-slate-900">{assignee?.name || "Unassigned"}</p>
-                              <p className="text-[10px] font-bold text-slate-400">LEAD RESOLVER</p>
+                              <p className="text-[10px] font-bold text-slate-400">ASSIGNEE</p>
                             </div>
                           </div>
                           {!assignee && permissions.changeBugStatus && (
-                            <Button size="sm" variant="outline" className="rounded-xl font-black text-[10px] uppercase tracking-widest">Assign Now</Button>
+                            <Button size="sm" variant="outline"
+                              onClick={() => { if (showDetailDialog) handleMarkResolved(showDetailDialog); }}
+                              className="rounded-xl font-black text-[10px] uppercase tracking-widest">
+                              Assign
+                            </Button>
                           )}
                         </div>
                       </div>
@@ -680,8 +684,8 @@ export default function BugsPage() {
                   {/* ── Chat/Comments ── */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Collaboration Feed</h4>
-                      <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500">{comments.length} MESSAGES</span>
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Comments</h4>
+                      <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-[10px] font-black text-slate-500">{comments.length}</span>
                     </div>
 
                     <div className="space-y-4">
