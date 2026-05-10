@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useStore } from "@/lib/store-api";
 import { Bug } from "lucide-react";
 
-// This page handles magic link auto-login from email links.
-// URL format: /auth/email-login?jwt=<token>&redirect=/dashboard/bugs
-export default function EmailLoginPage() {
+function EmailLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { fetchCurrentUser, logout } = useStore();
@@ -27,7 +25,7 @@ export default function EmailLoginPage() {
     // Log out any existing session first
     logout();
 
-    // Store the new JWT
+    // Store the new JWT for this user
     localStorage.setItem("token", jwt);
 
     // Fetch the user profile to populate the store
@@ -35,7 +33,6 @@ export default function EmailLoginPage() {
       .then(() => {
         const state = useStore.getState();
         if (state.isAuthenticated && state.currentUser) {
-          // Redirect to the intended page
           router.replace(redirect);
         } else {
           setError("Login failed. Please log in manually.");
@@ -43,7 +40,7 @@ export default function EmailLoginPage() {
         }
       })
       .catch(() => {
-        setError("Login failed. The link may have expired. Please log in manually.");
+        setError("Login failed. The link may have expired.");
         setStatus("error");
       });
   }, []);
@@ -57,10 +54,8 @@ export default function EmailLoginPage() {
           </div>
           <h2 className="text-xl font-bold text-slate-900">Login Link Expired</h2>
           <p className="text-sm text-slate-500">{error}</p>
-          <a
-            href="/login"
-            className="inline-block px-6 py-3 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-colors"
-          >
+          <a href="/login"
+            className="inline-block px-6 py-3 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-colors">
             Go to Login
           </a>
         </div>
@@ -81,5 +76,23 @@ export default function EmailLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Suspense wrapper required for useSearchParams() in Next.js static export
+export default function EmailLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto">
+            <Bug className="h-8 w-8 text-indigo-500 animate-pulse" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900">Loading...</h2>
+        </div>
+      </div>
+    }>
+      <EmailLoginContent />
+    </Suspense>
   );
 }
