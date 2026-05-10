@@ -210,23 +210,23 @@ export default function RegisterPage() {
 
           {/* — STEP 1 — */}
           {step === 1 && (
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-5">
               <div>
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Create account</h2>
-                <p className="text-slate-500 text-sm mt-0.5">Fill in your details to get started.</p>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Create account</h2>
+                <p className="text-slate-500 text-sm mt-1">Fill in your details to get started.</p>
               </div>
 
               <div className="space-y-3">
                 {/* Name */}
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Full Name</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1.5">Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className={cn(inputBase, "pl-10 h-11 text-sm")}
+                      className={cn(inputBase, "pl-11 h-12 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -236,15 +236,15 @@ export default function RegisterPage() {
 
                 {/* Email */}
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Email Address</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1.5">Email Address</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       type="email"
                       placeholder="you@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={cn(inputBase, "pl-10 h-11 text-sm")}
+                      className={cn(inputBase, "pl-11 h-12 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -254,29 +254,29 @@ export default function RegisterPage() {
 
                 {/* Password */}
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Password</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1.5">Password</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       type={showPw ? "text" : "password"}
                       placeholder="Min 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={cn(inputBase, "pl-10 pr-10 h-11 text-sm")}
+                      className={cn(inputBase, "pl-11 pr-11 h-12 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
                     />
                     <button type="button" onClick={() => setShowPw(!showPw)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
                       {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   {password.length > 0 && (
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-2 mt-1.5">
                       <div className="flex gap-1 flex-1">
                         {[1,2,3].map((i) => (
-                          <div key={i} className={cn("h-1 flex-1 rounded-full transition-all",
+                          <div key={i} className={cn("h-1.5 flex-1 rounded-full transition-all",
                             i <= pwStrength ? pwBar[pwStrength] : "bg-slate-100"
                           )} />
                         ))}
@@ -290,11 +290,11 @@ export default function RegisterPage() {
 
                 {/* Role */}
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Your Role</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1.5">Your Role</label>
                   <div className="relative">
-                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 z-10 pointer-events-none" />
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 z-10 pointer-events-none" />
                     <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-                      <SelectTrigger className={cn(inputBase, "pl-10 h-11 text-sm border border-slate-200")} style={inputStyle}>
+                      <SelectTrigger className={cn(inputBase, "pl-11 h-12 text-sm border border-slate-200")} style={inputStyle}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -326,14 +326,14 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 text-xs rounded-xl px-3 py-2.5 border border-rose-100 bg-rose-50">
+                <div className="flex items-start gap-2 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
                   <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
                   <span className="text-rose-600 font-medium">{error}</span>
                 </div>
               )}
 
               <button onClick={handleNext} style={{ transform: "none" }}
-                className="w-full h-11 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                className="w-full h-12 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
                 <span>Continue</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -347,14 +347,13 @@ export default function RegisterPage() {
 
           {/* — STEP 2 — */}
           {step === 2 && (
-            <form onSubmit={handleSubmit} className="animate-scale-in space-y-4">
-              <div className="space-y-1">
+            <form onSubmit={handleSubmit} className="animate-scale-in space-y-5">
+              <div>
                 <h2 className="text-3xl font-black text-slate-900 tracking-tight">Your skills</h2>
-                <p className="text-slate-500 font-medium text-sm">Optional — add skills so your team knows what you work on.</p>
+                <p className="text-slate-500 text-sm mt-1">Optional — add skills so your team knows what you work on.</p>
               </div>
 
-              {/* Skills */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {skills.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {skills.map((s) => (
@@ -375,10 +374,10 @@ export default function RegisterPage() {
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill(newSkill))}
-                    className="h-11 rounded-2xl text-sm flex-1 text-slate-900 placeholder:text-slate-300 border-slate-200 bg-white shadow-sm"
+                    className="h-12 rounded-2xl text-sm flex-1 text-slate-900 placeholder:text-slate-300 border-slate-200 bg-white shadow-sm"
                   />
                   <button type="button" onClick={() => addSkill(newSkill)} style={{ transform: "none" }}
-                    className="w-11 h-11 rounded-2xl flex items-center justify-center border border-slate-200 bg-white hover:bg-slate-50 text-indigo-600 shadow-sm transition-colors">
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center border border-slate-200 bg-white hover:bg-slate-50 text-indigo-600 shadow-sm transition-colors">
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
@@ -386,7 +385,7 @@ export default function RegisterPage() {
                 <div className="flex flex-wrap gap-1.5">
                   {SKILL_SUGGESTIONS.filter((s) => !skills.includes(s)).slice(0, 6).map((s) => (
                     <button key={s} type="button" onClick={() => addSkill(s)} style={{ transform: "none" }}
-                      className="px-2 py-0.5 rounded-full text-xs font-medium text-slate-400 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 bg-white transition-colors">
+                      className="px-2.5 py-1 rounded-full text-xs font-medium text-slate-400 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 bg-white transition-colors">
                       + {s}
                     </button>
                   ))}
@@ -394,7 +393,7 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
+                <div className="flex items-start gap-2 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
                   <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
                   <span className="text-rose-600 font-medium">{error}</span>
                 </div>
