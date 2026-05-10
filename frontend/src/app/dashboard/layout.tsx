@@ -388,10 +388,15 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-100 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all text-slate-500 w-64 group">
-                  <Search className="h-4 w-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
-                  <span className="text-sm font-medium">Search anything...</span>
-                  <kbd className="ml-auto text-[10px] font-bold text-slate-300">⌘K</kbd>
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-indigo-200 hover:border-indigo-400 transition-all text-slate-500 w-64 group"
+                  style={{
+                    background: "linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf4ff 100%)",
+                    boxShadow: "0 2px 8px rgba(99,102,241,0.08)",
+                  }}
+                >
+                  <Search className="h-4 w-4 text-indigo-400 group-hover:text-indigo-600 transition-colors" />
+                  <span className="text-sm font-medium text-indigo-400 group-hover:text-indigo-600 transition-colors">Search anything...</span>
+                  <kbd className="ml-auto text-[10px] font-bold text-indigo-300 bg-white/70 px-1.5 py-0.5 rounded-lg border border-indigo-100">⌘K</kbd>
                 </button>
               </div>
 
