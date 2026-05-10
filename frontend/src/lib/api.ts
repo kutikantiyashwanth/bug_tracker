@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1
 // â”€â”€ In-memory request cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface CacheEntry { data: any; ts: number }
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL = 120_000; // 2 minutes â€” longer TTL = fewer round trips
+const CACHE_TTL = 180_000; // 3 minutes
 
 // Pending requests deduplication â€” prevents double-fetching same endpoint
 const pending = new Map<string, Promise<any>>();

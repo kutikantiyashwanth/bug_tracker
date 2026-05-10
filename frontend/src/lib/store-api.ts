@@ -154,9 +154,11 @@ export const useStore = create<AppState>()(
           });
           // Start keep-alive to prevent Render cold starts
           startKeepAlive();
-          // Fetch projects and notifications after login
-          get().fetchProjects().catch(() => {});
-          get().fetchNotifications().catch(() => {});
+          // Fire all initial data fetches in parallel — don't wait for each other
+          Promise.all([
+            get().fetchProjects(),
+            get().fetchNotifications(),
+          ]).catch(() => {});
           // Connect real-time socket
           setTimeout(() => get().connectSocket(), 100);
         } catch (error: any) {
@@ -251,9 +253,12 @@ export const useStore = create<AppState>()(
           const hasTasks = state.tasks.some((t) => t.projectId === id);
           const hasBugs  = state.bugs.some((b)  => b.projectId === id);
           const hasActs  = state.activities.some((a) => a.projectId === id);
-          if (!hasTasks) get().fetchTasks(id);
-          if (!hasBugs)  get().fetchBugs(id);
-          if (!hasActs)  get().fetchActivities(id);
+          // Fetch all missing data in parallel
+          const fetches: Promise<void>[] = [];
+          if (!hasTasks) fetches.push(get().fetchTasks(id).catch(() => {}));
+          if (!hasBugs)  fetches.push(get().fetchBugs(id).catch(() => {}));
+          if (!hasActs)  fetches.push(get().fetchActivities(id).catch(() => {}));
+          if (fetches.length > 0) Promise.all(fetches).catch(() => {});
           // Switch socket room
           const { getExistingSocket } = require('./socket');
           const sock = getExistingSocket();
@@ -275,9 +280,12 @@ export const useStore = create<AppState>()(
             const hasTasks = state.tasks.some((t) => t.projectId === targetId);
             const hasBugs  = state.bugs.some((b)  => b.projectId === targetId);
             const hasActs  = state.activities.some((a) => a.projectId === targetId);
-            if (!hasTasks) get().fetchTasks(targetId).catch(() => {});
-            if (!hasBugs)  get().fetchBugs(targetId).catch(() => {});
-            if (!hasActs)  get().fetchActivities(targetId).catch(() => {});
+            // Fetch missing data in parallel
+            const fetches: Promise<void>[] = [];
+            if (!hasTasks) fetches.push(get().fetchTasks(targetId).catch(() => {}));
+            if (!hasBugs)  fetches.push(get().fetchBugs(targetId).catch(() => {}));
+            if (!hasActs)  fetches.push(get().fetchActivities(targetId).catch(() => {}));
+            if (fetches.length > 0) Promise.all(fetches).catch(() => {});
           }
         } catch (error: any) {
           console.error('Failed to fetch projects:', error);
