@@ -187,14 +187,12 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════
-          RIGHT PANEL — Register Form
-      ══════════════════════════════════════ */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-10 overflow-y-auto">
-        <div className="w-full max-w-[400px] py-4">
+      {/* RIGHT PANEL */}
+      <div className="flex-1 flex items-start justify-center p-6 lg:p-8 overflow-y-auto min-h-screen">
+        <div className="w-full max-w-[400px] py-6">
 
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-6 lg:hidden">
+          <div className="flex items-center gap-2 mb-5 lg:hidden">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-indigo-600">
               <Bug className="h-4 w-4 text-white" />
             </div>
@@ -202,7 +200,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Progress bar */}
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-100">
               <div className="h-full rounded-full transition-all duration-500 bg-indigo-600"
                 style={{ width: step === 1 ? "50%" : "100%" }} />
@@ -212,23 +210,23 @@ export default function RegisterPage() {
 
           {/* — STEP 1 — */}
           {step === 1 && (
-            <div className="animate-fade-in space-y-5">
-              <div className="space-y-1">
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Create account</h2>
-                <p className="text-slate-500 font-medium text-sm">Fill in your details to get started.</p>
+            <div className="animate-fade-in space-y-4">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Create account</h2>
+                <p className="text-slate-500 text-sm mt-0.5">Fill in your details to get started.</p>
               </div>
 
               <div className="space-y-3">
                 {/* Name */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Full Name</label>
-                  <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm")}
+                      className={cn(inputBase, "pl-10 h-11 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -237,16 +235,16 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Email */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email Address</label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Email Address</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       type="email"
                       placeholder="you@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm")}
+                      className={cn(inputBase, "pl-10 h-11 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
@@ -255,30 +253,30 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Password */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Password</label>
-                  <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Password</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
                       type={showPw ? "text" : "password"}
                       placeholder="Min 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={cn(inputBase, "pl-11 pr-11 h-12 text-sm shadow-sm")}
+                      className={cn(inputBase, "pl-10 pr-10 h-11 text-sm")}
                       style={inputStyle}
                       onFocus={onFocusInput}
                       onBlur={onBlurInput}
                     />
                     <button type="button" onClick={() => setShowPw(!showPw)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
                       {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   {password.length > 0 && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-1">
                       <div className="flex gap-1 flex-1">
                         {[1,2,3].map((i) => (
-                          <div key={i} className={cn("h-1 flex-1 rounded-full transition-all duration-300",
+                          <div key={i} className={cn("h-1 flex-1 rounded-full transition-all",
                             i <= pwStrength ? pwBar[pwStrength] : "bg-slate-100"
                           )} />
                         ))}
@@ -291,13 +289,12 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Role */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Your Role</label>
-                  <div className="relative group">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 z-10 pointer-events-none" />
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 block mb-1">Your Role</label>
+                  <div className="relative">
+                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 z-10 pointer-events-none" />
                     <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-                      <SelectTrigger className={cn(inputBase, "pl-11 h-12 text-sm shadow-sm border border-slate-200")}
-                        style={inputStyle}>
+                      <SelectTrigger className={cn(inputBase, "pl-10 h-11 text-sm border border-slate-200")} style={inputStyle}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -329,19 +326,19 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2.5 text-xs rounded-xl px-3.5 py-3 border border-rose-100 bg-rose-50">
+                <div className="flex items-start gap-2 text-xs rounded-xl px-3 py-2.5 border border-rose-100 bg-rose-50">
                   <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-rose-500" />
                   <span className="text-rose-600 font-medium">{error}</span>
                 </div>
               )}
 
               <button onClick={handleNext} style={{ transform: "none" }}
-                className="w-full h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors">
+                className="w-full h-11 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
                 <span>Continue</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
 
-              <p className="text-center text-sm font-medium text-slate-500">
+              <p className="text-center text-sm text-slate-500">
                 Already have an account?{" "}
                 <Link href="/login" className="font-bold text-indigo-600 hover:underline underline-offset-4">Sign in here</Link>
               </p>
