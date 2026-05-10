@@ -345,13 +345,6 @@ export default function RegisterPage() {
             </div>
           )}
 
-              <p className="text-center text-sm text-slate-500">
-                Already have an account?{" "}
-                <Link href="/login" className="font-bold text-indigo-600 hover:underline underline-offset-4">Sign in here</Link>
-              </p>
-            </div>
-          )}
-
           {/* — STEP 2 — */}
           {step === 2 && (
             <form onSubmit={handleSubmit} className="animate-scale-in space-y-6">
